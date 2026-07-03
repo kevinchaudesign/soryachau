@@ -9,6 +9,7 @@ import type { Session } from "@supabase/supabase-js";
 import "../styles/admin.css";
 import { supabase } from "../lib/supabase";
 import type { Lang } from "../i18n";
+import MediaTab from "./AdminMedia";
 
 const CACHE_KEY = "sorya-content-v1";
 const clearPublicCache = () => { try { localStorage.removeItem(CACHE_KEY); } catch (e) {} };
@@ -529,9 +530,21 @@ function ImagesTab() {
   );
 }
 
+/* ---------- Médiathèque (statut partagé) ---------- */
+
+function MediaTabWrapper() {
+  const [status, setStatus] = useStatus();
+  return (
+    <div>
+      {status}
+      <MediaTab setStatus={setStatus} />
+    </div>
+  );
+}
+
 /* ---------- shell ---------- */
 
-const TABS: [string, string][] = [["textes", "Textes"], ["projets", "Projets"], ["journal", "Journal"], ["images", "Images"]];
+const TABS: [string, string][] = [["textes", "Textes"], ["projets", "Projets"], ["journal", "Journal"], ["images", "Images"], ["media", "Médiathèque"]];
 
 export default function AdminPage() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
@@ -575,6 +588,7 @@ export default function AdminPage() {
           {tab === "projets" ? <ProjetsTab /> : null}
           {tab === "journal" ? <JournalTab /> : null}
           {tab === "images" ? <ImagesTab /> : null}
+          {tab === "media" ? <MediaTabWrapper /> : null}
         </div>
       </div>
     </div>

@@ -127,10 +127,59 @@
   .adm-nav {
     position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 60;
     flex-direction: row; min-height: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(4, 1fr);
     border-right: none; border-top: 1px solid var(--line);
     background: color-mix(in oklab, var(--bg-deep) 92%, transparent); backdrop-filter: blur(10px);
   }
-  .adm-nav__item { text-align: center; padding: 15px 4px; font-size: 10.5px; letter-spacing: 0.08em; }
+  .adm-nav__item { flex: 1 1 0; min-width: 0; }
+  .adm-nav__item { text-align: center; padding: 15px 4px; font-size: 10.5px; letter-spacing: 0.08em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .adm-nav__item.is-on { box-shadow: inset 0 2px 0 var(--accent); }
+}
+
+/* — médiathèque — */
+.med-crumbs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.med-crumb {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: none; border: 1px solid transparent; color: var(--txt-3); padding: 5px 9px; cursor: pointer; border-radius: 0;
+}
+.med-crumb:hover { color: var(--txt-2); }
+.med-crumb.is-on { color: var(--txt); }
+.med-crumb.is-drop { border-color: var(--accent-line); background: var(--accent-dim); color: var(--txt); }
+.med-crumb-sep { color: var(--txt-faint); font-family: var(--mono); }
+
+.med-zone { border: 1px dashed var(--line); padding: 18px; min-height: 220px; }
+.med-zone.is-drop { border-color: var(--accent-line); background: var(--accent-dim); }
+.med-empty { margin: 40px 0; text-align: center; }
+
+.med-folders { list-style: none; margin: 0 0 20px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.med-folder { border: 1px solid var(--line); background: var(--surface); padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; cursor: grab; }
+.med-folder.is-drop { border-color: var(--accent-line); background: var(--accent-dim); }
+.med-folder__open { display: inline-flex; align-items: center; gap: 9px; background: none; border: none; color: var(--txt); font: inherit; font-size: 14px; cursor: pointer; padding: 0; min-width: 0; flex: 1; }
+.med-folder__glyph { color: var(--accent-soft); }
+.med-folder__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.med-folder__tools { display: inline-flex; gap: 4px; }
+
+.med-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.med-card { border: 1px solid var(--line); background: var(--surface); padding: 8px; cursor: grab; }
+.med-card.is-on { border-color: var(--accent-line); box-shadow: inset 0 0 0 1px var(--accent-line); }
+.med-card__open { display: block; width: 100%; padding: 0; border: none; background: var(--bg-deep); cursor: pointer; }
+.med-card__open img { display: block; width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+.med-card__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: 8px; }
+.med-card__name { font-family: var(--mono); font-size: 10px; color: var(--txt-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.med-badge { flex: none; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-soft); border: 1px solid var(--line); padding: 2px 6px; }
+.med-badge--warn { color: oklch(0.72 0.16 30); border-color: oklch(0.72 0.16 30 / 0.4); }
+
+.med-move { display: flex; align-items: center; gap: 6px; margin-top: 8px; width: 100%; }
+.med-move__l { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--txt-faint); }
+.med-move select { flex: 1; min-width: 0; font: inherit; font-size: 11px; color: var(--txt-2); background: var(--bg-deep); border: 1px solid var(--line); border-radius: 0; padding: 3px 6px; }
+
+.med-editor { margin-top: 22px; display: grid; grid-template-columns: 280px 1fr; gap: 22px; align-items: start; }
+.med-editor__preview img { max-width: 100%; height: auto; border: 1px solid var(--line); }
+@media (max-width: 860px) {
+  .med-editor { grid-template-columns: 1fr; }
+}
+
+/* focus clavier visible (a11y) */
+.med-crumb:focus-visible, .med-folder__open:focus-visible, .med-card__open:focus-visible,
+.adm-btn:focus-visible, .adm-nav__item:focus-visible, .med-move select:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
 }
