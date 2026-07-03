@@ -564,16 +564,18 @@ export default function AdminPage() {
         <span className="adm-bar__user">{session.user.email}</span>
         <button className="adm-btn adm-btn--sm adm-btn--ghost" onClick={() => supabase.auth.signOut()}>Déconnexion</button>
       </div>
-      <div className="adm-tabs">
-        {TABS.map(([k, l]) => (
-          <button key={k} className={"adm-tab" + (tab === k ? " is-on" : "")} onClick={() => setTab(k)}>{l}</button>
-        ))}
-      </div>
-      <div className="adm-main">
-        {tab === "textes" ? <TextesTab /> : null}
-        {tab === "projets" ? <ProjetsTab /> : null}
-        {tab === "journal" ? <JournalTab /> : null}
-        {tab === "images" ? <ImagesTab /> : null}
+      <div className="adm-body">
+        <nav className="adm-nav" aria-label="Sections">
+          {TABS.map(([k, l]) => (
+            <button key={k} className={"adm-nav__item" + (tab === k ? " is-on" : "")} onClick={() => setTab(k)} aria-current={tab === k ? "page" : undefined}>{l}</button>
+          ))}
+        </nav>
+        <div className="adm-main">
+          {tab === "textes" ? <TextesTab /> : null}
+          {tab === "projets" ? <ProjetsTab /> : null}
+          {tab === "journal" ? <JournalTab /> : null}
+          {tab === "images" ? <ImagesTab /> : null}
+        </div>
       </div>
     </div>
   );
