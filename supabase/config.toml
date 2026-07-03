@@ -1,0 +1,26 @@
+project_id = "nlgfcrkmeslbkqqgatzq"
+
+# Seule la section [auth] est gérée ici. Attention : `supabase config push`
+# pousse les valeurs PAR DÉFAUT du CLI pour toute clé non déclarée — toujours
+# déclarer explicitement les valeurs des clés qu'on ne veut pas voir changer.
+
+[auth]
+# Site mono-admin : les comptes se créent uniquement depuis le dashboard.
+enable_signup = false
+site_url = "https://soryachau.com"
+additional_redirect_urls = ["https://soryachau.com"]
+
+[auth.email]
+enable_signup = true # sans effet tant que auth.enable_signup = false ; valeur d'origine
+double_confirm_changes = true
+enable_confirmations = true
+
+[auth.mfa]
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[storage.vector]
+enabled = false # aligné sur le palier gratuit — évite le 402 à chaque push
