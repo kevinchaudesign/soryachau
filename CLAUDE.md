@@ -4,8 +4,11 @@ Règles persistantes pour le développement de ce projet. (Copier à la racine d
 
 ## Nature du projet
 Portfolio bilingue (FR/EN) de Sorya Chau, Directrice de Production « augmentée par l'IA ».
-Direction artistique « table de montage / cinéma » : monochrome filmique chaud, **un seul accent
-ambre**, serif éditorial (Instrument Serif) × grotesque (Switzer) × mono (JetBrains Mono).
+Direction artistique « table de montage / cinéma » : **thème clair** (papier ivoire chaud, texte
+encre), **un seul accent rouge Cartier** (Pantone 1797 C — `oklch(0.559 0.188 23.2)`), serif
+éditorial (Instrument Serif) × grotesque (Switzer) × mono (JetBrains Mono). Les éléments-écrans
+(moniteur du hero, intro amorce, barre de montage, lightbox, cartes-films et zones média)
+restent sombres via les « dark islands » de `styles.css` — mêmes noms de tokens, re-scopés.
 
 ## Priorité absolue : fidélité visuelle
 - Reproduire le design **au pixel près**. Ne pas réinterpréter l'esthétique.

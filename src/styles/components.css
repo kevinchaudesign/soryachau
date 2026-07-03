@@ -19,14 +19,18 @@
   display: inline-block;
 }
 
-/* ---------- Nav ---------- */
+/* ---------- Nav ----------
+   Permanent ivory backdrop: the light theme needs legible ink text
+   even over the dark hero monitor. */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   transition: background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s var(--ease);
+  background: oklch(0.965 0.008 85 / 0.82);
+  backdrop-filter: blur(14px) saturate(1.1);
   border-bottom: 1px solid transparent;
 }
 .nav--scrolled {
-  background: oklch(0.158 0.006 56 / 0.72);
+  background: oklch(0.965 0.008 85 / 0.92);
   backdrop-filter: blur(18px) saturate(1.15);
   border-bottom-color: var(--line-soft);
 }
@@ -120,7 +124,7 @@
 .portrait { position: relative; aspect-ratio: 4 / 5; border: 1px solid var(--line); overflow: hidden; background: var(--surface); }
 .portrait image-slot { position: absolute; inset: 0; }
 .portrait .regmark { opacity: 0.7; z-index: 4; }
-.portrait__tally { position: absolute; top: 14px; left: 14px; z-index: 4; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--txt); background: oklch(0.138 0.006 54 / 0.7); backdrop-filter: blur(6px); padding: 5px 9px; }
+.portrait__tally { position: absolute; top: 14px; left: 14px; z-index: 4; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: oklch(0.948 0.012 82); background: oklch(0.138 0.006 54 / 0.7); backdrop-filter: blur(6px); padding: 5px 9px; }
 .portrait__tally b { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .portrait__cap { display: flex; flex-direction: column; gap: 3px; margin-top: 16px; }
 .portrait__cap b { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--txt); }
@@ -268,7 +272,7 @@ a.cdetail__v:hover { color: var(--accent); }
 @media (max-width: 760px) {
   .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
   .nav__burger { display: block; }
-  .nav__mobile { display: block; position: fixed; top: 76px; left: 0; right: 0; background: oklch(0.158 0.006 56 / 0.97); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line-soft); padding: 12px var(--pad) 28px; transform: translateY(-12px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); z-index: 99; }
+  .nav__mobile { display: block; position: fixed; top: 76px; left: 0; right: 0; background: oklch(0.965 0.008 85 / 0.97); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line-soft); padding: 12px var(--pad) 28px; transform: translateY(-12px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); z-index: 99; }
   .nav__mobile.is-open { transform: none; opacity: 1; pointer-events: auto; }
   .nav__mlink { display: block; padding: 14px 0; font-size: 18px; border-bottom: 1px solid var(--line-soft); }
   .nav__mfoot { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }

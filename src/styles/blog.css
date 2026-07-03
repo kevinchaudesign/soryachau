@@ -97,7 +97,7 @@
 .reader__title { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -0.015em; margin: 18px 0 0; text-wrap: balance; }
 .reader__dek { color: var(--txt-2); font-size: clamp(17px, 1.6vw, 21px); line-height: 1.5; margin-top: 20px; font-style: italic; font-family: var(--serif); }
 .reader__byline { display: flex; align-items: center; gap: 13px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line-soft); }
-.reader__avatar { width: 42px; height: 42px; flex: none; display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: oklch(0.96 0.012 80); background: linear-gradient(155deg, oklch(0.32 0.05 54), oklch(0.18 0.012 54)); }
+.reader__avatar { width: 42px; height: 42px; flex: none; display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: oklch(0.96 0.012 80); background: linear-gradient(155deg, oklch(0.46 0.13 25), oklch(0.24 0.03 25)); }
 .reader__byline b { display: block; font-size: 14.5px; font-weight: 600; color: var(--txt); }
 .reader__byline span { font-family: var(--mono); font-size: 11.5px; color: var(--txt-3); }
 

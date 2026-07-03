@@ -1,30 +1,32 @@
 /* ============================================================
    SORYA CHAU — Portfolio
    Art direction: "La table de montage" — editorial cinema.
-   Warm filmic monochrome · one restrained ember accent ·
+   Warm paper monochrome · one restrained Cartier-red accent ·
    high-contrast serif display × grotesk × mono.
+   Screen-like elements (hero monitor, intro leader, edit bar,
+   lightbox, film cards) stay dark — see the dark-island block.
    ============================================================ */
 
 :root {
-  /* — Surfaces: warm near-black (darkroom) — */
-  --bg:            oklch(0.158 0.006 56);
-  --bg-deep:       oklch(0.138 0.006 54);
-  --surface:       oklch(0.196 0.007 56);
-  --surface-2:     oklch(0.238 0.008 58);
-  --line:          oklch(0.315 0.009 58);
-  --line-soft:     oklch(0.252 0.008 56);
+  /* — Surfaces: warm ivory paper — */
+  --bg:            oklch(0.965 0.008 85);
+  --bg-deep:       oklch(0.935 0.010 83);
+  --surface:       oklch(0.985 0.005 88);
+  --surface-2:     oklch(0.945 0.009 84);
+  --line:          oklch(0.845 0.012 78);
+  --line-soft:     oklch(0.900 0.010 80);
 
-  /* — Text: warm ivory — */
-  --txt:           oklch(0.948 0.012 82);
-  --txt-2:         oklch(0.770 0.012 76);
-  --txt-3:         oklch(0.605 0.012 70);
-  --txt-faint:     oklch(0.470 0.011 64);
+  /* — Text: warm ink — */
+  --txt:           oklch(0.235 0.012 40);
+  --txt-2:         oklch(0.420 0.012 40);
+  --txt-3:         oklch(0.545 0.012 45);
+  --txt-faint:     oklch(0.660 0.010 50);
 
-  /* — Single ember accent (used sparingly) — */
-  --accent:        oklch(0.715 0.130 54);
-  --accent-soft:   oklch(0.770 0.095 62);
-  --accent-dim:    oklch(0.715 0.130 54 / 0.14);
-  --accent-line:   oklch(0.715 0.130 54 / 0.42);
+  /* — Single Cartier-red accent (Pantone 1797 C, used sparingly) — */
+  --accent:        oklch(0.559 0.188 23.2);
+  --accent-soft:   oklch(0.500 0.165 24);
+  --accent-dim:    oklch(0.559 0.188 23.2 / 0.10);
+  --accent-line:   oklch(0.559 0.188 23.2 / 0.42);
 
   /* — Type — */
   --serif: "Instrument Serif", "Times New Roman", Georgia, serif;
@@ -36,6 +38,31 @@
   --pad: clamp(22px, 5vw, 72px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* — Dark islands: the screen-like layers keep the darkroom palette.
+     Same token names, re-scoped — the single red accent stays global. — */
+.hero, .intro, .editbar, .lightbox, .work-card,
+.filmrow__media, .jcard__media, .bp__feat-media, .bp__card-media {
+  --bg:        oklch(0.158 0.006 56);
+  --bg-deep:   oklch(0.138 0.006 54);
+  --surface:   oklch(0.196 0.007 56);
+  --surface-2: oklch(0.238 0.008 58);
+  --line:      oklch(0.315 0.009 58);
+  --line-soft: oklch(0.252 0.008 56);
+  --txt:       oklch(0.948 0.012 82);
+  --txt-2:     oklch(0.770 0.012 76);
+  --txt-3:     oklch(0.605 0.012 70);
+  --txt-faint: oklch(0.470 0.011 64);
+  color: var(--txt);
+}
+/* red reads brighter on the dark islands */
+.hero, .intro, .editbar, .lightbox, .work-card,
+.filmrow__media, .jcard__media, .bp__feat-media, .bp__card-media {
+  --accent:      oklch(0.635 0.205 25);
+  --accent-soft: oklch(0.700 0.160 26);
+  --accent-dim:  oklch(0.635 0.205 25 / 0.16);
+  --accent-line: oklch(0.635 0.205 25 / 0.5);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -127,7 +154,7 @@ img { display: block; max-width: 100%; }
 .btn-primary::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(120deg, transparent 35%, oklch(1 0 0 / 0.42) 50%, transparent 65%);
+  background: linear-gradient(120deg, transparent 35%, oklch(1 0 0 / 0.30) 50%, transparent 65%);
   transform: translateX(-130%);
   transition: transform .85s var(--ease);
 }
@@ -184,7 +211,7 @@ img { display: block; max-width: 100%; }
   border-radius: 0;
   padding: 5px 11px;
   white-space: nowrap;
-  background: oklch(0.196 0.007 56 / 0.6);
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
   backdrop-filter: blur(6px);
 }
 .chip-ai {
