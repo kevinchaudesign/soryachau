@@ -162,7 +162,8 @@
 .med-card { border: 1px solid var(--line); background: var(--surface); padding: 8px; cursor: grab; }
 .med-card.is-on { border-color: var(--accent-line); box-shadow: inset 0 0 0 1px var(--accent-line); }
 .med-card__open { display: block; width: 100%; padding: 0; border: none; background: var(--bg-deep); cursor: pointer; }
-.med-card__open img { display: block; width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+/* height:auto — l'attribut height (anti-CLS) primerait sinon sur aspect-ratio */
+.med-card__open img { display: block; width: 100%; height: auto; aspect-ratio: 16/10; object-fit: cover; }
 .med-card__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: 8px; }
 .med-card__name { font-family: var(--mono); font-size: 10px; color: var(--txt-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .med-badge { flex: none; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-soft); border: 1px solid var(--line); padding: 2px 6px; }
