@@ -16,17 +16,17 @@
   --line:          oklch(0.845 0.012 78);
   --line-soft:     oklch(0.900 0.010 80);
 
-  /* — Text: warm ink — */
+  /* — Text: warm ink (txt-3/faint calés AA sur --bg-deep) — */
   --txt:           oklch(0.235 0.012 40);
   --txt-2:         oklch(0.420 0.012 40);
-  --txt-3:         oklch(0.545 0.012 45);
-  --txt-faint:     oklch(0.660 0.010 50);
+  --txt-3:         oklch(0.500 0.012 45);
+  --txt-faint:     oklch(0.520 0.010 50);
 
-  /* — Single Cartier-red accent (Pantone 1797 C, used sparingly) — */
-  --accent:        oklch(0.559 0.188 23.2);
-  --accent-soft:   oklch(0.500 0.165 24);
-  --accent-dim:    oklch(0.559 0.188 23.2 / 0.10);
-  --accent-line:   oklch(0.559 0.188 23.2 / 0.42);
+  /* — Single Cartier-red accent, deep "écrin" shade (AA on paper) — */
+  --accent:        oklch(0.505 0.183 24);
+  --accent-soft:   oklch(0.445 0.160 24);
+  --accent-dim:    oklch(0.505 0.183 24 / 0.10);
+  --accent-line:   oklch(0.505 0.183 24 / 0.42);
 
   /* — Type — */
   --serif: "Instrument Serif", "Times New Roman", Georgia, serif;
@@ -265,3 +265,4 @@ image-slot {
 .marquee__track { display: flex; align-items: center; gap: clamp(36px, 5vw, 76px); width: max-content; animation: scroll-x 44s linear infinite; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 @keyframes scroll-x { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }

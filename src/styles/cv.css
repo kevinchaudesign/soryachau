@@ -52,7 +52,7 @@
   border: 1px solid var(--line-soft);
   --ink:       oklch(0.22 0.008 56);
   --ink-2:     oklch(0.43 0.008 56);
-  --ink-3:     oklch(0.56 0.008 56);
+  --ink-3:     oklch(0.525 0.008 56); /* AA sur le blanc de la feuille */
   --rule:      oklch(0.90 0.005 56);
   --rule-soft: oklch(0.94 0.004 56);
   --accent:    oklch(0.559 0.188 23.2);

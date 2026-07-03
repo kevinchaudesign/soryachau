@@ -163,13 +163,13 @@ export function WorkCard({ p, t, lang, span }: { p: Project; t: Messages; lang: 
   return (
     <article
       className={"work-card work-card--" + span + (p.featured ? " is-feat" : "") + (p.ai ? " work-card--ai" : "") + (hasFilm ? " work-card--film" : "") + (isPending ? " work-card--pending" : "")}
-      onClick={hasFilm ? openFilm : undefined}
       data-cursor={hasFilm ? "" : undefined}
-      role={hasFilm ? "button" : undefined}
-      tabIndex={hasFilm ? 0 : undefined}
-      onKeyDown={hasFilm ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openFilm(); } } : undefined}
-      aria-label={hasFilm ? p.client + " — " + p.title + " · " + watch : undefined}
     >
+      {hasFilm ? (
+        /* vrai bouton en surcouche : sémantique et clavier natifs
+           (article[role=button] n'est pas un rôle autorisé) */
+        <button type="button" className="card-hit" onClick={openFilm} aria-label={p.client + " — " + p.title + " · " + watch}></button>
+      ) : null}
       {p.still ? (
         <div className="work-card__media">
           <img className="work-card__img" src={p.still} alt={p.client + " — " + p.title} loading="lazy" decoding="async" />
@@ -255,7 +255,7 @@ export function Journal({ t }: { t: Messages }) {
         </div>
         <div className="journalt__grid">
           <Link to={"/journal#" + feat.id} className="jcard jcard--feat reveal" data-cursor>
-            <div className="jcard__media" aria-hidden="true">
+            <div className="jcard__media" aria-hidden="true" {...({ inert: "" } as object)}>
               <image-slot id={"jslot-" + feat.id} shape="rect" placeholder={feat.cat} src={slots["jslot-" + feat.id] || undefined}></image-slot>
               <span className="jcard__veil"></span>
               <span className="jcard__badge">{j.featured}</span>

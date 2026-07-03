@@ -78,7 +78,7 @@ function Login() {
   };
 
   return (
-    <div className="adm-login">
+    <main id="main" className="adm-login">
       <form className="adm-login__box" onSubmit={submit}>
         <div className="adm-login__brand">SC · Régie</div>
         <h1 className="adm-login__title">Administration</h1>
@@ -91,7 +91,7 @@ function Login() {
         <p className={"adm-status" + (error ? " adm-error" : "")}>{error}</p>
         <button className="adm-btn adm-btn--primary" disabled={busy} type="submit">{busy ? "Connexion…" : "Se connecter"}</button>
       </form>
-    </div>
+    </main>
   );
 }
 
@@ -570,26 +570,26 @@ export default function AdminPage() {
 
   return (
     <div className="adm">
-      <div className="adm-bar">
+      <header className="adm-bar">
         <span className="adm-bar__mark">SC · Régie</span>
-        <span className="adm-bar__title">Administration du portfolio</span>
+        <h1 className="adm-bar__title">Administration du portfolio</h1>
         <span className="adm-bar__spacer"></span>
         <span className="adm-bar__user">{session.user.email}</span>
         <button className="adm-btn adm-btn--sm adm-btn--ghost" onClick={() => supabase.auth.signOut()}>Déconnexion</button>
-      </div>
+      </header>
       <div className="adm-body">
         <nav className="adm-nav" aria-label="Sections">
           {TABS.map(([k, l]) => (
             <button key={k} className={"adm-nav__item" + (tab === k ? " is-on" : "")} onClick={() => setTab(k)} aria-current={tab === k ? "page" : undefined}>{l}</button>
           ))}
         </nav>
-        <div className="adm-main">
+        <main id="main" className="adm-main">
           {tab === "textes" ? <TextesTab /> : null}
           {tab === "projets" ? <ProjetsTab /> : null}
           {tab === "journal" ? <JournalTab /> : null}
           {tab === "images" ? <ImagesTab /> : null}
           {tab === "media" ? <MediaTabWrapper /> : null}
-        </div>
+        </main>
       </div>
     </div>
   );

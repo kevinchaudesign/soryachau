@@ -18,7 +18,7 @@ export default function CVPage() {
   return (
     <div className="cv">
       {/* top bar */}
-      <div className="cv-bar">
+      <nav className="cv-bar" aria-label={lang === "fr" ? "Actions du CV" : "Résumé actions"}>
         <div className="container cv-bar__inner">
           <Link to="/" className="cv-back">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M8.5 11L4.5 7L8.5 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -33,11 +33,11 @@ export default function CVPage() {
             </a>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* sheet */}
+      {/* sheet — c'est elle le contenu principal de la page */}
       <div className="container">
-        <article className="sheet">
+        <main id="main" className="sheet">
           <header className="sheet__head">
             <div className="sheet__id">
               <div className="sheet__mark">SC</div>
@@ -55,7 +55,7 @@ export default function CVPage() {
 
           <div className="sheet__grid">
             {/* main column */}
-            <main className="sheet__main">
+            <div className="sheet__main">
               <section className="cv-block">
                 <h2 className="cv-h2">{c.profilTitle}</h2>
                 <p className="cv-profil">{c.profil}</p>
@@ -81,7 +81,7 @@ export default function CVPage() {
                   ))}
                 </ol>
               </section>
-            </main>
+            </div>
 
             {/* side column */}
             <aside className="sheet__side">
@@ -115,8 +115,8 @@ export default function CVPage() {
               </section>
             </aside>
           </div>
-        </article>
-        <div className="cv-foot">© {new Date().getFullYear()} Sorya Chau — {t.footer.built}</div>
+        </main>
+        <footer className="cv-foot">© {new Date().getFullYear()} Sorya Chau — {t.footer.built}</footer>
       </div>
     </div>
   );

@@ -259,7 +259,8 @@ export function ProductionHUD({ lang }: { lang: Lang }) {
   return (
     <React.Fragment>
       {guides ? <FramingGuides /> : null}
-      <div className={"editbar" + (expanded ? " is-expanded" : " is-collapsed") + (playing ? " is-playing" : "")}>
+      <div className={"editbar" + (expanded ? " is-expanded" : " is-collapsed") + (playing ? " is-playing" : "")}
+           role="region" aria-label={lang === "fr" ? "Barre de montage" : "Edit bar"}>
         <div className="editbar__status">
           <span className="editbar__rec"><b></b>REC</span>
           <span className="editbar__tc" ref={tcRef}>00:00:00:00</span>
@@ -284,7 +285,9 @@ export function ProductionHUD({ lang }: { lang: Lang }) {
               <span className="editbar__lanelbl">V1</span>
               <div className="editbar__clips">
                 {clips.map((c, i) => (
-                  <button key={i} className="editbar__clip" style={{ left: c.left + "%", width: c.width + "%" }} onClick={() => goClip(c.sel)} title={c.t}>
+                  /* timeline décorative (aria-hidden) : clips hors tabulation,
+                     la navigation clavier passe par J/L et la nav du site */
+                  <button key={i} tabIndex={-1} className="editbar__clip" style={{ left: c.left + "%", width: c.width + "%" }} onClick={() => goClip(c.sel)} title={c.t}>
                     <span className="editbar__clip-n">{c.n}</span>
                     <span className="editbar__clip-t">{c.t}</span>
                   </button>
@@ -365,9 +368,17 @@ type Film = { id: string; client: string; title: string };
 
 export function Lightbox({ lang }: { lang: Lang }) {
   const [film, setFilm] = useState<Film | null>(null);
-  const close = () => { setFilm(null); document.body.style.overflow = ""; };
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
+  const close = () => {
+    setFilm(null); document.body.style.overflow = "";
+    lastFocusRef.current?.focus?.();
+  };
   useEffect(() => {
-    const onPlay = (e: Event) => { setFilm((e as CustomEvent<Film>).detail); document.body.style.overflow = "hidden"; };
+    const onPlay = (e: Event) => {
+      lastFocusRef.current = document.activeElement as HTMLElement;
+      setFilm((e as CustomEvent<Film>).detail); document.body.style.overflow = "hidden";
+    };
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     window.addEventListener("sorya:play", onPlay);
     window.addEventListener("keydown", onKey);
@@ -377,6 +388,7 @@ export function Lightbox({ lang }: { lang: Lang }) {
       document.body.style.overflow = "";
     };
   }, []);
+  useEffect(() => { if (film) closeRef.current?.focus(); }, [film]);
   if (!film) return null;
   const src = `https://player.vimeo.com/video/${film.id}?autoplay=1&color=d98b4e&byline=0&title=0&portrait=0&dnt=1`;
   return (
@@ -386,7 +398,7 @@ export function Lightbox({ lang }: { lang: Lang }) {
           <span className="lightbox__rec"><b></b>{lang === "fr" ? "Lecture" : "Now playing"}</span>
           <span><b>{film.client}</b> — {film.title}</span>
         </span>
-        <button className="lightbox__close" data-cursor onClick={close}>{lang === "fr" ? "Fermer" : "Close"} ✕</button>
+        <button ref={closeRef} className="lightbox__close" data-cursor onClick={close}>{lang === "fr" ? "Fermer" : "Close"} ✕</button>
       </div>
       <div className="lightbox__stage" onClick={close}>
         <div className="lightbox__frame" onClick={(e) => e.stopPropagation()}>

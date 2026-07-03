@@ -64,7 +64,7 @@ export default function Home() {
     <>
       <Experience lang={lang} />
       <Nav page="home" />
-      <main>
+      <main id="main">
         <Hero t={t} lang={lang} />
         <Profile t={t} />
         <Workflow t={t} />

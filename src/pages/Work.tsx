@@ -30,13 +30,12 @@ function FilmRow({ p, lang, n }: { p: Project; t: Messages; lang: Lang; n: numbe
   return (
     <article
       className={"filmrow reveal" + (hasFilm ? " filmrow--film" : "") + (isPending ? " filmrow--pending" : "")}
-      onClick={hasFilm ? open : undefined}
       data-cursor={hasFilm ? "" : undefined}
-      role={hasFilm ? "button" : undefined}
-      tabIndex={hasFilm ? 0 : undefined}
-      onKeyDown={hasFilm ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } } : undefined}
-      aria-label={hasFilm ? p.client + " — " + p.title + " · " + watch : undefined}
+      style={{ position: "relative" }}
     >
+      {hasFilm ? (
+        <button type="button" className="card-hit" onClick={open} aria-label={p.client + " — " + p.title + " · " + watch}></button>
+      ) : null}
       <div className="filmrow__media">
         {p.still ? (
           <img className="filmrow__img" src={p.still} alt={p.client + " — " + p.title} loading="lazy" decoding="async" />
@@ -98,7 +97,7 @@ export default function WorkPage() {
       <Experience lang={lang} intro={false} />
       <Nav page="work" />
 
-      <main className="wp">
+      <main id="main" className="wp">
         <header className="wp__head">
           <div className="container">
             <Link to="/" className="wp__back" data-cursor>

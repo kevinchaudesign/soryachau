@@ -30,6 +30,13 @@ function ArticleMeta({ a, j }: { a: Article; j: JournalT }) {
 
 function Reader({ a, idx, all, j, lang, onClose, onNext }: { a: Article; idx: number; all: Article[]; j: JournalT; lang: Lang; onClose: () => void; onNext: () => void }) {
   const { slots } = useLang();
+  const closeRef = React.useRef<HTMLButtonElement>(null);
+  const lastFocusRef = React.useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    lastFocusRef.current = document.activeElement as HTMLElement;
+    closeRef.current?.focus();
+    return () => { lastFocusRef.current?.focus?.(); };
+  }, []);
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -45,7 +52,7 @@ function Reader({ a, idx, all, j, lang, onClose, onNext }: { a: Article; idx: nu
       <div className="reader__backdrop" onClick={onClose}></div>
       <article className="reader__sheet">
         <div className="reader__bar">
-          <button className="reader__close" onClick={onClose} data-cursor aria-label={j.back}>
+          <button ref={closeRef} className="reader__close" onClick={onClose} data-cursor aria-label={j.back}>
             <span className="reader__close-x">←</span>{j.back}
           </button>
           <span className="reader__bar-meta">{j.kicker} · {String(idx + 1).padStart(2, "0")} / {String(all.length).padStart(2, "0")}</span>
@@ -65,7 +72,7 @@ function Reader({ a, idx, all, j, lang, onClose, onNext }: { a: Article; idx: nu
             </div>
           </header>
 
-          <div className="reader__media" aria-hidden="true">
+          <div className="reader__media" aria-hidden="true" {...({ inert: "" } as object)}>
             <image-slot id={"rslot-" + a.id} shape="rect" placeholder={a.cat} src={slots["rslot-" + a.id] || undefined}></image-slot>
             <span className="reader__media-cap">{a.cat}</span>
           </div>
@@ -136,7 +143,7 @@ export default function JournalPage() {
       <Experience lang={lang} intro={false} editbar={false} />
       <Nav page="journal" />
 
-      <main className="bp">
+      <main id="main" className="bp">
         <header className="bp__head">
           <div className="container">
             <Link to="/" className="bp__back" data-cursor>
@@ -149,9 +156,10 @@ export default function JournalPage() {
         </header>
 
         <div className="container">
-          <a className="bp__feat reveal" onClick={() => goTo(feat.id)} data-cursor role="button" tabIndex={0}
-             onKeyDown={(e) => { if (e.key === "Enter") goTo(feat.id); }}>
-            <div className="bp__feat-media" aria-hidden="true">
+          {/* liens de hash natifs : le listener hashchange ouvre le lecteur,
+              la sémantique et le clavier sont ceux d'un vrai lien */}
+          <a className="bp__feat reveal" href={"#" + feat.id} data-cursor>
+            <div className="bp__feat-media" aria-hidden="true" {...({ inert: "" } as object)}>
               <image-slot id={"bslot-" + feat.id} shape="rect" placeholder={feat.cat} src={slots["bslot-" + feat.id] || undefined}></image-slot>
               <span className="bp__feat-veil"></span>
               <span className="jcard__badge">{j.featured}</span>
@@ -166,10 +174,9 @@ export default function JournalPage() {
 
           <div className="bp__grid">
             {grid.map((a, i) => (
-              <a className="bp__card reveal" key={a.id} onClick={() => goTo(a.id)} data-cursor role="button" tabIndex={0}
-                 style={{ "--rd": (i % 3) * 80 + "ms" }}
-                 onKeyDown={(e) => { if (e.key === "Enter") goTo(a.id); }}>
-                <div className="bp__card-media" aria-hidden="true">
+              <a className="bp__card reveal" key={a.id} href={"#" + a.id} data-cursor
+                 style={{ "--rd": (i % 3) * 80 + "ms" }}>
+                <div className="bp__card-media" aria-hidden="true" {...({ inert: "" } as object)}>
                   <image-slot id={"bgslot-" + a.id} shape="rect" placeholder={a.cat} src={slots["bgslot-" + a.id] || undefined}></image-slot>
                   <span className="bp__card-num">{String(i + 2).padStart(2, "0")}</span>
                 </div>

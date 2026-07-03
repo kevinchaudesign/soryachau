@@ -11,7 +11,7 @@
   background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: blur(10px);
 }
 .adm-bar__mark { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
-.adm-bar__title { font-family: var(--serif); font-size: 22px; }
+.adm-bar__title { font-family: var(--serif); font-size: 22px; font-weight: 400; margin: 0; }
 .adm-bar__spacer { flex: 1; }
 .adm-bar__user { font-family: var(--mono); font-size: 11px; color: var(--txt-3); }
 
