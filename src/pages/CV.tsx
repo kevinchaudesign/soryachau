@@ -1,15 +1,26 @@
 /* ============================================================
    CV page — bilingual résumé, print + PDF download
+   La barre de montage est présente comme partout ailleurs, avec
+   la piste de la feuille (en-tête, profil, expériences) ; elle
+   disparaît à l'impression (cf. cv.css).
    ============================================================ */
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "../styles/cv.css";
 import { useLang } from "../lang";
+import { Experience, scene } from "../components/experience";
 import { LangToggle } from "../components/nav";
 
 export default function CVPage() {
   const { lang, setLang, t } = useLang();
   const c = t.cv;
+  /* La colonne latérale (formation, langues, outils) n'est pas une
+     étape de défilement : la piste suit la colonne principale. */
+  const scenes = useMemo(() => [
+    scene(lang, "01", ".sheet__head"),
+    { sel: "#cv-profil", n: "02", t: c.profilTitle },
+    { sel: "#cv-exp", n: "03", t: c.expTitle },
+  ], [lang, c]);
 
   useEffect(() => {
     document.title = lang === "fr" ? "Sorya Chau — CV" : "Sorya Chau — Résumé";
@@ -17,6 +28,7 @@ export default function CVPage() {
 
   return (
     <div className="cv">
+      <Experience lang={lang} intro={false} scenes={scenes} />
       {/* top bar */}
       <nav className="cv-bar" aria-label={lang === "fr" ? "Actions du CV" : "Résumé actions"}>
         <div className="container cv-bar__inner">
@@ -56,12 +68,12 @@ export default function CVPage() {
           <div className="sheet__grid">
             {/* main column */}
             <div className="sheet__main">
-              <section className="cv-block">
+              <section className="cv-block" id="cv-profil">
                 <h2 className="cv-h2">{c.profilTitle}</h2>
                 <p className="cv-profil">{c.profil}</p>
               </section>
 
-              <section className="cv-block">
+              <section className="cv-block" id="cv-exp">
                 <h2 className="cv-h2">{c.expTitle}</h2>
                 <ol className="cv-exp">
                   {c.exp.map((e, i) => (

@@ -9,7 +9,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Lang } from "../i18n";
 
-const SCENES = {
+export type Scene = { sel: string; n: string; t: string };
+
+/* Découpage « site » : l'accueil déroule les 7 scènes, les pages
+   dédiées n'en montrent qu'une partie. Une page peut fournir sa
+   propre liste (prop `scenes`) quand son contenu ne porte pas les
+   ancres de l'accueil — cf. scene() juste en dessous. */
+const SCENES: Record<Lang, Scene[]> = {
   fr: [
     { sel: "#top", n: "01", t: "Ouverture" },
     { sel: "#profil", n: "02", t: "Profil" },
@@ -29,6 +35,14 @@ const SCENES = {
     { sel: "#contact", n: "07", t: "Contact" },
   ],
 };
+
+/* Reprend le libellé d'une scène du site pour un autre point
+   d'ancrage : scene(lang, "04", ".wp__list") → « SC 04 · Réalisations ». */
+export function scene(lang: Lang, n: string, sel: string): Scene {
+  const list = SCENES[lang] || SCENES.fr;
+  const found = list.find((s) => s.n === n) || list[0];
+  return { ...found, sel };
+}
 
 const pad = (x: number) => String(x).padStart(2, "0");
 
@@ -119,8 +133,8 @@ export function FramingGuides() {
 
 type Clip = { n: string; t: string; sel: string; left: number; width: number };
 
-export function ProductionHUD({ lang }: { lang: Lang }) {
-  const all = SCENES[lang] || SCENES.fr;
+export function ProductionHUD({ lang, scenes: pageScenes }: { lang: Lang; scenes?: Scene[] }) {
+  const all = pageScenes || SCENES[lang] || SCENES.fr;
   /* Site multi-pages : la barre de montage ne garde que les scènes
      réellement présentes sur la page courante — sinon les sections
      absentes s'empilent à 0 et écrasent la timeline. */
@@ -129,7 +143,7 @@ export function ProductionHUD({ lang }: { lang: Lang }) {
     const present = all.filter((s) => document.querySelector(s.sel));
     setScenes(present.length ? present : all.slice(0, 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lang]);
+  }, [lang, pageScenes]);
   const fine = typeof matchMedia !== "undefined" && matchMedia("(pointer: fine)").matches;
   const [expanded, setExpanded] = useState(fine && typeof window !== "undefined" && window.innerWidth > 1100);
   const [guides, setGuides] = useState(false);
@@ -246,6 +260,9 @@ export function ProductionHUD({ lang }: { lang: Lang }) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const tag = (e.target && (e.target as HTMLElement).tagName) || "";
       if (tag === "INPUT" || tag === "TEXTAREA") return;
+      /* Une couche modale a la main sur le clavier : lecteur du
+         Journal, lightbox Vimeo. La barre reste derrière elles. */
+      if (document.querySelector(".reader, .lightbox")) return;
       const k = e.key.toLowerCase();
       if (e.key === " " || e.code === "Space") {
         if (tag !== "BUTTON" && tag !== "A") { e.preventDefault(); setPlaying((v) => !v); }
@@ -425,11 +442,11 @@ export function Lightbox({ lang }: { lang: Lang }) {
   );
 }
 
-export function Experience({ lang, intro = true, editbar = true }: { lang: Lang; intro?: boolean; editbar?: boolean }) {
+export function Experience({ lang, intro = true, editbar = true, scenes }: { lang: Lang; intro?: boolean; editbar?: boolean; scenes?: Scene[] }) {
   return (
     <React.Fragment>
       {intro ? <Intro /> : null}
-      {editbar ? <ProductionHUD lang={lang} /> : null}
+      {editbar ? <ProductionHUD lang={lang} scenes={scenes} /> : null}
       <Reticle />
       <Lightbox lang={lang} />
     </React.Fragment>

@@ -1,20 +1,24 @@
 /* ============================================================
    Journal page — editorial magazine: featured + grid, in-page
    article reader driven by the URL hash (#article-id).
-   Reuses Nav, Experience, Contact. No edit-bar timeline on the
-   reading page.
+   Reuses Nav, Experience, Contact — la barre de montage est là
+   comme sur les autres pages ; le lecteur d'article passe devant.
    ============================================================ */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/blog.css";
 import type { Article, Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
-import { Experience } from "../components/experience";
+import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
 import { Contact } from "../components/sections";
 import { ArrowUR } from "../components/icons";
 
 type JournalT = Messages["journal"];
+
+/* Piste de montage de la page : en-tête, sommaire, contact.
+   Le lecteur d'article passe au-dessus (z-index 130 > 60). */
+const BP_SCENES = (lang: Lang) => [scene(lang, "01", ".bp__head"), scene(lang, "05", ".bp__feat"), scene(lang, "07", "#contact")];
 
 function ArticleMeta({ a, j }: { a: Article; j: JournalT }) {
   return (
@@ -99,6 +103,7 @@ function Reader({ a, idx, all, j, lang, onClose, onNext }: { a: Article; idx: nu
 
 export default function JournalPage() {
   const { lang, t, slots } = useLang();
+  const scenes = useMemo(() => BP_SCENES(lang), [lang]);
   const j = t.journal;
   const location = useLocation();
 
@@ -140,7 +145,7 @@ export default function JournalPage() {
 
   return (
     <React.Fragment>
-      <Experience lang={lang} intro={false} editbar={false} />
+      <Experience lang={lang} intro={false} scenes={scenes} />
       <Nav page="journal" />
 
       <main id="main" className="bp">

@@ -162,7 +162,8 @@
   html, body { background: #fff !important; }
   body::before { display: none !important; }     /* kill grain */
   .cv { background: #fff !important; padding: 0 !important; }
-  .cv-bar, .cv-foot { display: none !important; }
+  .cv-bar, .cv-foot, .editbar, .guides, .reticle { display: none !important; }
+  html.edit-expanded body, html.edit-collapsed body { padding-bottom: 0 !important; }
   .container { max-width: none !important; padding: 0 !important; }
   .sheet {
     max-width: none !important; margin: 0 !important; box-shadow: none !important;

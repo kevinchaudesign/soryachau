@@ -2,12 +2,12 @@
    Work page — full filmography: wide film-strip rows +
    category filters. Reuses Nav, Experience, Contact, PlayGlyph.
    ============================================================ */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/work.css";
 import type { Lang, Messages, Project } from "../i18n";
 import { useLang } from "../lang";
-import { Experience } from "../components/experience";
+import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
 import { Contact } from "../components/sections";
 import { ArrowUR, PlayGlyph } from "../components/icons";
@@ -19,6 +19,9 @@ const WP_CATS: Record<Lang, [string, string][]> = {
 /* Fallback for content cached before the category column existed */
 const WP_CATMAP: Record<string, string> = { kinder: "brand", tagheuer: "brand", krys: "brand", avene: "post", asics: "doc", fiat: "vfx", pmu: "ai" };
 const catOf = (p: Project) => p.category || WP_CATMAP[p.id] || "brand";
+
+/* Piste de montage de la page : en-tête, filmographie, contact */
+const WP_SCENES = (lang: Lang) => [scene(lang, "01", ".wp__head"), scene(lang, "04", ".wp__list"), scene(lang, "07", "#contact")];
 
 function FilmRow({ p, lang, n }: { p: Project; t: Messages; lang: Lang; n: number }) {
   const { slots } = useLang();
@@ -72,6 +75,7 @@ function FilmRow({ p, lang, n }: { p: Project; t: Messages; lang: Lang; n: numbe
 export default function WorkPage() {
   const { lang, t, projects } = useLang();
   const [cat, setCat] = useState("all");
+  const scenes = useMemo(() => WP_SCENES(lang), [lang]);
 
   useEffect(() => {
     document.title = lang === "fr" ? "Réalisations — Sorya Chau" : "Work — Sorya Chau";
@@ -94,7 +98,7 @@ export default function WorkPage() {
 
   return (
     <React.Fragment>
-      <Experience lang={lang} intro={false} />
+      <Experience lang={lang} intro={false} scenes={scenes} />
       <Nav page="work" />
 
       <main id="main" className="wp">
