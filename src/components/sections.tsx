@@ -9,6 +9,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import type { Lang, Messages, Project } from "./../i18n";
 import { useLang } from "../lang";
+import { CV_PDF } from "../lib/assets";
 import { ArrowUR, DownloadIcon, PlayGlyph } from "./icons";
 
 export function SectionHead({ idx, eyebrow, title, lead, light, h1 }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean; h1?: boolean }) {
@@ -503,7 +504,7 @@ export function CVBand({ t, lang }: { t: Messages; lang: Lang }) {
             <p className="cvband__role">{c.role}</p>
           </div>
           <div className="cvband__actions">
-            <a href="/assets/Sorya-Chau-CV.pdf" download className="btn btn-ghost"><DownloadIcon />{c.download}</a>
+            <a href={CV_PDF[lang]} download className="btn btn-ghost"><DownloadIcon />{c.download}</a>
             <Link to="/cv" className="btn btn-primary">{lang === "fr" ? "Voir le CV" : "View résumé"}<ArrowUR /></Link>
           </div>
         </div>
@@ -538,6 +539,7 @@ export function Clients({ t }: { t: Messages }) {
 /* — 07 · Contact / Footer — */
 export function Contact({ t }: { t: Messages }) {
   const c = t.contact;
+  const { lang } = useLang(); /* le PDF servi suit la langue affichée */
   const LINKEDIN = "https://www.linkedin.com/in/sorya-chau/";
   const rows = [
     { l: c.labels.email, v: c.email, href: "mailto:" + c.email },
@@ -557,7 +559,7 @@ export function Contact({ t }: { t: Messages }) {
 
         <div className="contact__actions reveal" style={{ "--rd": "200ms" }}>
           <a href={"mailto:" + c.email} className="btn btn-primary">{c.cta}<ArrowUR /></a>
-          <a href="/assets/Sorya-Chau-CV.pdf" download className="btn btn-ghost"><DownloadIcon />CV PDF</a>
+          <a href={CV_PDF[lang]} download className="btn btn-ghost"><DownloadIcon />CV PDF</a>
         </div>
 
         <div className="contact__grid reveal" style={{ "--rd": "260ms" }}>

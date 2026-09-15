@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
+import { CV_PDF } from "../lib/assets";
 import { ArrowDown, ArrowUR, DownloadIcon } from "./icons";
 
 const pad2 = (x: number) => String(x).padStart(2, "0");
@@ -120,7 +121,7 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
         <p className="hero__sub reveal" style={{ "--rd": "140ms" }}>{h.sub}</p>
 
         <div className="hero__cta reveal" style={{ "--rd": "220ms" }}>
-          <a href="/assets/Sorya-Chau-CV.pdf" download className="btn btn-primary">
+          <a href={CV_PDF[lang]} download className="btn btn-primary">
             <DownloadIcon />{h.ctaCV}
           </a>
           <Link to="/work" className="btn btn-ghost">

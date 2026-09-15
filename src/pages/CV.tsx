@@ -8,6 +8,7 @@ import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "../styles/cv.css";
 import { useLang } from "../lang";
+import { CV_PDF } from "../lib/assets";
 import { Experience, scene } from "../components/experience";
 import { LangToggle } from "../components/nav";
 
@@ -39,7 +40,7 @@ export default function CVPage() {
           <div className="cv-bar__right">
             <LangToggle lang={lang} setLang={setLang} />
             <button className="cv-btn" onClick={() => window.print()}>{c.print}</button>
-            <a href="/assets/Sorya-Chau-CV.pdf" download className="cv-btn cv-btn--primary">
+            <a href={CV_PDF[lang]} download className="cv-btn cv-btn--primary">
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1V9.5M7 9.5L3.2 5.7M7 9.5L10.8 5.7M1.5 12.5H12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
               {c.download}
             </a>
