@@ -33,7 +33,7 @@ export default function ParcoursPage() {
           </div>
         </div>
 
-        <Parcours t={t} h1 />
+        <Parcours t={t} lang={lang} h1 />
         <Clients t={t} />
       </main>
 

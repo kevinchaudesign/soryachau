@@ -269,6 +269,16 @@ html.has-reticle .card-hit { cursor: none; }
 .tl__role { font-size: clamp(20px, 1.9vw, 26px); font-weight: 600; letter-spacing: -0.02em; }
 .tl__company { color: var(--accent); font-size: 13.5px; margin-top: 6px; font-family: var(--mono); }
 .tl__desc { margin-top: 15px; color: var(--txt-3); font-size: 14.5px; line-height: 1.62; max-width: 64ch; }
+/* Détail du poste sur /parcours — même partition que la fiche CV,
+   transposée aux tokens du site (le CV a ses propres --ink-*). */
+.tl__pts { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 9px; max-width: 72ch; }
+.tl__pts li { position: relative; padding-left: 18px; color: var(--txt-3); font-size: 14.5px; line-height: 1.6; }
+.tl__pts li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 1px; background: var(--line); }
+.tl__clients { margin-top: 16px; color: var(--txt-3); font-size: 13.5px; line-height: 1.55; max-width: 72ch; }
+.tl__clients span {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-right: 6px;
+}
 
 /* ---------- Clients ---------- */
 .clients { padding: clamp(60px, 8vw, 96px) 0; border-block: 1px solid var(--line-soft); background: var(--bg-deep); }

@@ -394,26 +394,50 @@ export function Journal({ t }: { t: Messages }) {
   );
 }
 
-/* — 06 · Parcours — */
-export function Parcours({ t, h1 }: { t: Messages; h1?: boolean }) {
+/* — 06 · Parcours —
+   Le détail de chaque poste (puces + clients clés) vient de la
+   fiche CV : même carrière, une seule source à corriger. On
+   rapproche les deux listes par employeur normalisé — « Geometry
+   (WPP) » côté CV, « Geometry — WPP » ici — et à défaut de
+   correspondance on retombe sur le résumé du poste. */
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+export function Parcours({ t, lang, h1 }: { t: Messages; lang: Lang; h1?: boolean }) {
   const p = t.parcours;
   const HRole = h1 ? "h2" : "h3"; /* cf. Profile : ordre des titres continu */
+  const detailFor = (company: string) => t.cv.exp.find((e) => norm(e.c) === norm(company));
   return (
     <section className="section" id="parcours">
       <div className="container">
         <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} h1={h1} />
         <ol className="timeline">
-          {p.items.map((it, i) => (
-            <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
-              <div className="tl__year">{it.y}</div>
-              <div className="tl__node" aria-hidden="true"><span></span></div>
-              <div className="tl__body">
-                <HRole className="tl__role">{it.r}</HRole>
-                <div className="tl__company">{it.c}</div>
-                <p className="tl__desc">{it.d}</p>
-              </div>
-            </li>
-          ))}
+          {p.items.map((it, i) => {
+            const det = detailFor(it.c);
+            return (
+              <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
+                <div className="tl__year">{it.y}</div>
+                <div className="tl__node" aria-hidden="true"><span></span></div>
+                <div className="tl__body">
+                  <HRole className="tl__role">{it.r}</HRole>
+                  <div className="tl__company">{it.c}</div>
+                  {det ? (
+                    <>
+                      <ul className="tl__pts">
+                        {det.pts.map((pt, j) => <li key={j}>{pt}</li>)}
+                      </ul>
+                      {det.clients ? (
+                        <p className="tl__clients">
+                          <span>{lang === "fr" ? "Clients clés" : "Key clients"}</span> {det.clients}
+                        </p>
+                      ) : null}
+                    </>
+                  ) : (
+                    <p className="tl__desc">{it.d}</p>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </div>
     </section>
