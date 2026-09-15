@@ -1,27 +1,23 @@
 /* ============================================================
-   CV page — bilingual résumé, print + PDF download
-   La barre de montage est présente comme partout ailleurs, avec
-   la piste de la feuille (en-tête, profil, expériences) ; elle
-   disparaît à l'impression (cf. cv.css).
+   CV page — le PDF fourni s'affiche tel quel, un fichier par
+   langue (cf. lib/assets). La feuille HTML qui occupait cette
+   route reste dans l'historique git ; ses données (t.cv.exp)
+   servent toujours au détail des postes de /parcours.
    ============================================================ */
 import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "../styles/cv.css";
 import { useLang } from "../lang";
 import { CV_PDF } from "../lib/assets";
-import { Experience, scene } from "../components/experience";
+import { Experience } from "../components/experience";
 import { LangToggle } from "../components/nav";
 
 export default function CVPage() {
   const { lang, setLang, t } = useLang();
   const c = t.cv;
-  /* La colonne latérale (formation, langues, outils) n'est pas une
-     étape de défilement : la piste suit la colonne principale. */
-  const scenes = useMemo(() => [
-    scene(lang, "01", ".sheet__head"),
-    { sel: "#cv-profil", n: "02", t: c.profilTitle },
-    { sel: "#cv-exp", n: "03", t: c.expTitle },
-  ], [lang, c]);
+  const src = CV_PDF[lang];
+  /* Un seul plan sur cette page : le document. */
+  const scenes = useMemo(() => [{ sel: ".cv-doc", n: "01", t: c.title }], [c]);
 
   useEffect(() => {
     document.title = lang === "fr" ? "Sorya Chau — CV" : "Sorya Chau — Résumé";
@@ -30,7 +26,8 @@ export default function CVPage() {
   return (
     <div className="cv">
       <Experience lang={lang} intro={false} scenes={scenes} />
-      {/* top bar */}
+
+      {/* barre d'actions */}
       <nav className="cv-bar" aria-label={lang === "fr" ? "Actions du CV" : "Résumé actions"}>
         <div className="container cv-bar__inner">
           <Link to="/" className="cv-back">
@@ -39,8 +36,10 @@ export default function CVPage() {
           </Link>
           <div className="cv-bar__right">
             <LangToggle lang={lang} setLang={setLang} />
-            <button className="cv-btn" onClick={() => window.print()}>{c.print}</button>
-            <a href={CV_PDF[lang]} download className="cv-btn cv-btn--primary">
+            <a href={src} target="_blank" rel="noopener" className="cv-btn">
+              {lang === "fr" ? "Ouvrir le PDF" : "Open the PDF"}
+            </a>
+            <a href={src} download className="cv-btn cv-btn--primary">
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1V9.5M7 9.5L3.2 5.7M7 9.5L10.8 5.7M1.5 12.5H12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
               {c.download}
             </a>
@@ -48,89 +47,28 @@ export default function CVPage() {
         </div>
       </nav>
 
-      {/* sheet — c'est elle le contenu principal de la page */}
+      {/* le document : le PDF de la langue courante */}
       <div className="container">
-        <main id="main" className="sheet">
-          <header className="sheet__head">
-            <div className="sheet__id">
-              <div className="sheet__mark">SC</div>
-              <div>
-                <h1 className="sheet__name">Sorya Chau</h1>
-                <p className="sheet__role">{c.role}</p>
-              </div>
-            </div>
-            <div className="sheet__meta">
-              <a href="mailto:chausorya@gmail.com">chausorya@gmail.com</a>
-              <a href="tel:+33626921720">06 26 92 17 20</a>
-              <span>Paris / Île-de-France</span>
-            </div>
-          </header>
-
-          <div className="sheet__grid">
-            {/* main column */}
-            <div className="sheet__main">
-              <section className="cv-block" id="cv-profil">
-                <h2 className="cv-h2">{c.profilTitle}</h2>
-                <p className="cv-profil">{c.profil}</p>
-              </section>
-
-              <section className="cv-block" id="cv-exp">
-                <h2 className="cv-h2">{c.expTitle}</h2>
-                <ol className="cv-exp">
-                  {c.exp.map((e, i) => (
-                    <li className="cv-job" key={i}>
-                      <div className="cv-job__head">
-                        <h3 className="cv-job__role">{e.r}</h3>
-                        <span className="cv-job__year">{e.y}</span>
-                      </div>
-                      <div className="cv-job__company">{e.c}</div>
-                      <ul className="cv-job__pts">
-                        {e.pts.map((p, j) => <li key={j}>{p}</li>)}
-                      </ul>
-                      {e.clients ? (
-                        <p className="cv-job__clients"><span>{lang === "fr" ? "Clients clés" : "Key clients"}</span> {e.clients}</p>
-                      ) : null}
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            </div>
-
-            {/* side column */}
-            <aside className="sheet__side">
-              <section className="cv-block">
-                <h2 className="cv-h2">{c.formTitle}</h2>
-                <ul className="cv-list">
-                  {c.form.map((f, i) => (
-                    <li className="cv-edu" key={i}>
-                      <div className="cv-edu__t">{f.t}</div>
-                      <div className="cv-edu__s">{f.s}</div>
-                      <div className="cv-edu__y">{f.y}</div>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              <section className="cv-block">
-                <h2 className="cv-h2">{c.langTitle}</h2>
-                <ul className="cv-list cv-langs">
-                  {c.langs.map((l, i) => (
-                    <li key={i}><span>{l.l}</span><em>{l.v}</em></li>
-                  ))}
-                </ul>
-              </section>
-
-              <section className="cv-block">
-                <h2 className="cv-h2">{c.toolsTitle}</h2>
-                <div className="cv-tools">
-                  {c.tools.map((tool, i) => <span className="cv-tool" key={i}>{tool}</span>)}
-                </div>
-              </section>
-            </aside>
-          </div>
+        <main id="main" className="cv-doc">
+          <h1 className="cv-doc__title">Sorya Chau — {c.title}</h1>
+          {/* <iframe> et non <object> : la visionneuse PDF de Chrome
+              reste blanche par intermittence dans un <object>, et
+              la clé force un remontage propre au changement de
+              langue plutôt qu'une mutation de la source. */}
+          <iframe
+            key={src}
+            className="cv-doc__frame"
+            src={src + "#view=FitH"}
+            title={"Sorya Chau — " + c.title}
+          ></iframe>
+          <p className="cv-doc__hint">
+            {lang === "fr" ? "Le PDF ne s'affiche pas ?" : "PDF not showing?"}{" "}
+            <a href={src} download>{c.download}</a>
+          </p>
         </main>
-        <footer className="cv-foot">© {new Date().getFullYear()} Sorya Chau — {t.footer.built}</footer>
       </div>
+
+      <footer className="cv-foot">© {new Date().getFullYear()} Sorya Chau — {t.footer.built}</footer>
     </div>
   );
 }
