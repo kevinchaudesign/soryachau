@@ -1,5 +1,7 @@
 /* ============================================================
-   Home — language state, scroll-reveal observer, section order
+   Home — hero + amorces Work / Journal. Profil, Workflow,
+   Parcours et Clients vivent sur /profil et /parcours ;
+   le footer Contact est commun à toutes les pages.
    ============================================================ */
 import { useEffect } from "react";
 import "../styles/blog.css"; /* Journal teaser reuses jcard classes */
@@ -7,7 +9,7 @@ import { useLang } from "../lang";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
 import { Hero } from "../components/hero";
-import { Clients, Contact, Journal, Parcours, Profile, Work, Workflow } from "../components/sections";
+import { Contact, Journal, Work } from "../components/sections";
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -66,12 +68,8 @@ export default function Home() {
       <Nav page="home" />
       <main id="main">
         <Hero t={t} lang={lang} />
-        <Profile t={t} />
-        <Workflow t={t} />
         <Work t={t} lang={lang} />
         <Journal t={t} />
-        <Parcours t={t} />
-        <Clients t={t} />
       </main>
       <Contact t={t} />
     </>

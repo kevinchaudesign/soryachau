@@ -120,7 +120,16 @@ export function FramingGuides() {
 type Clip = { n: string; t: string; sel: string; left: number; width: number };
 
 export function ProductionHUD({ lang }: { lang: Lang }) {
-  const scenes = SCENES[lang] || SCENES.fr;
+  const all = SCENES[lang] || SCENES.fr;
+  /* Site multi-pages : la barre de montage ne garde que les scènes
+     réellement présentes sur la page courante — sinon les sections
+     absentes s'empilent à 0 et écrasent la timeline. */
+  const [scenes, setScenes] = useState(all);
+  useEffect(() => {
+    const present = all.filter((s) => document.querySelector(s.sel));
+    setScenes(present.length ? present : all.slice(0, 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
   const fine = typeof matchMedia !== "undefined" && matchMedia("(pointer: fine)").matches;
   const [expanded, setExpanded] = useState(fine && typeof window !== "undefined" && window.innerWidth > 1100);
   const [guides, setGuides] = useState(false);
@@ -160,7 +169,7 @@ export function ProductionHUD({ lang }: { lang: Lang }) {
     window.addEventListener("resize", measure);
     window.addEventListener("load", measure);
     return () => { window.removeEventListener("resize", measure); window.removeEventListener("load", measure); clearTimeout(t1); };
-  }, [lang, expanded]);
+  }, [lang, expanded, scenes]);
 
   // scroll → timecode, playhead, active clip
   useEffect(() => {

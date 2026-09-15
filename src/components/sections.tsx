@@ -8,26 +8,33 @@ import type { Lang, Messages, Project } from "./../i18n";
 import { useLang } from "../lang";
 import { ArrowUR, DownloadIcon, PlayGlyph } from "./icons";
 
-export function SectionHead({ idx, eyebrow, title, lead, light }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean }) {
+export function SectionHead({ idx, eyebrow, title, lead, light, h1 }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean; h1?: boolean }) {
+  /* h1 : la section porte le titre principal d'une page dédiée
+     (même classe, donc même rendu — seul le niveau change). */
+  const H = h1 ? "h1" : "h2";
   return (
     <div className="sec-head">
       <span className="eyebrow reveal"><span className="idx">{idx}</span>{eyebrow}</span>
-      <h2 className={"section-title reveal" + (light ? " sec-head__title--wide" : "")} style={{ "--rd": "80ms" }}>{title}</h2>
+      <H className={"section-title reveal" + (light ? " sec-head__title--wide" : "")} style={{ "--rd": "80ms" }}>{title}</H>
       {lead ? <p className="sec-head__lead reveal" style={{ "--rd": "140ms" }}>{lead}</p> : null}
     </div>
   );
 }
 
 /* — 02 · Profile & Vision — */
-export function Profile({ t }: { t: Messages }) {
+export function Profile({ t, h1 }: { t: Messages; h1?: boolean }) {
   const p = t.profil;
+  /* Page dédiée : le titre monte en h1, les compétences suivent en h2
+     (même classe, même rendu) pour garder l'ordre des titres continu. */
+  const H = h1 ? "h1" : "h2";
+  const HSkill = h1 ? "h2" : "h3";
   const { slots } = useLang();
   return (
     <section className="section profile" id="profil">
       <div className="container">
         <div className="sec-head">
           <span className="eyebrow reveal"><span className="idx">02</span>{p.eyebrow}</span>
-          <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{p.title}</h2>
+          <H className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{p.title}</H>
         </div>
 
         <div className="profile__top">
@@ -61,10 +68,10 @@ export function Profile({ t }: { t: Messages }) {
               <li className="skill reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
                 <span className="skill__k">{s.k}</span>
                 <div className="skill__body">
-                  <h3 className="skill__t">
+                  <HSkill className="skill__t">
                     {s.t}
                     {s.ai ? <span className="chip chip-ai skill__ai">IA</span> : null}
-                  </h3>
+                  </HSkill>
                   <p className="skill__d">{s.d}</p>
                 </div>
               </li>
@@ -287,19 +294,20 @@ export function Journal({ t }: { t: Messages }) {
 }
 
 /* — 06 · Parcours — */
-export function Parcours({ t }: { t: Messages }) {
+export function Parcours({ t, h1 }: { t: Messages; h1?: boolean }) {
   const p = t.parcours;
+  const HRole = h1 ? "h2" : "h3"; /* cf. Profile : ordre des titres continu */
   return (
     <section className="section" id="parcours">
       <div className="container">
-        <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} />
+        <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} h1={h1} />
         <ol className="timeline">
           {p.items.map((it, i) => (
             <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
               <div className="tl__year">{it.y}</div>
               <div className="tl__node" aria-hidden="true"><span></span></div>
               <div className="tl__body">
-                <h3 className="tl__role">{it.r}</h3>
+                <HRole className="tl__role">{it.r}</HRole>
                 <div className="tl__company">{it.c}</div>
                 <p className="tl__desc">{it.d}</p>
               </div>

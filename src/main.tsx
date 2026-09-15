@@ -15,8 +15,10 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { LangProvider } from "./lang";
 import Home from "./pages/Home";
 
+const ProfilPage = lazy(() => import("./pages/Profil"));
 const WorkPage = lazy(() => import("./pages/Work"));
 const JournalPage = lazy(() => import("./pages/Journal"));
+const ParcoursPage = lazy(() => import("./pages/Parcours"));
 const CVPage = lazy(() => import("./pages/CV"));
 const AdminPage = lazy(() => import("./pages/Admin"));
 
@@ -50,8 +52,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/profil" element={<ProfilPage />} />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/journal" element={<JournalPage />} />
+          <Route path="/parcours" element={<ParcoursPage />} />
           <Route path="/cv" element={<CVPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<Home />} />

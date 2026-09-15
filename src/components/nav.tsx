@@ -28,9 +28,15 @@ export function Nav({ page = "home" }: { page?: string }) {
   }, []);
 
   const home = page === "home";
-  /* Prototype URLs → routes: work.html → /work · blog.html → /journal ·
-     other entries are home anchors (plain hash on the home page itself). */
-  const toFor = (id: string) => (id === "work" ? "/work" : id === "journal" ? "/journal" : "/#" + id);
+  /* Site multi-pages : chaque entrée de nav est une route à part entière.
+     Seul Contact reste une ancre — le footer #contact est présent sur
+     toutes les pages, on scrolle donc vers celui de la page courante. */
+  const ROUTES: Record<string, string> = {
+    profil: "/profil",
+    work: "/work",
+    journal: "/journal",
+    parcours: "/parcours",
+  };
 
   const links = [
     { id: "profil", label: t.nav.profil },
@@ -42,10 +48,11 @@ export function Nav({ page = "home" }: { page?: string }) {
 
   const navLink = (l: { id: string; label: string }, cls: string, onClick?: () => void) => {
     const cur = page === l.id ? "page" : undefined;
-    if (home && l.id !== "work" && l.id !== "journal") {
+    const to = ROUTES[l.id];
+    if (!to) {
       return <a key={l.id} href={"#" + l.id} className={cls} aria-current={cur} onClick={onClick}>{l.label}</a>;
     }
-    return <Link key={l.id} to={toFor(l.id)} className={cls} aria-current={cur} onClick={onClick}>{l.label}</Link>;
+    return <Link key={l.id} to={to} className={cls} aria-current={cur} onClick={onClick}>{l.label}</Link>;
   };
 
   return (

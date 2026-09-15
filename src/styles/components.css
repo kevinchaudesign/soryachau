@@ -6,6 +6,20 @@
 
 /* ---------- Section base ---------- */
 .section { padding: clamp(88px, 13vh, 180px) 0; position: relative; }
+
+/* Pages de contenu (Profil, Parcours) : bandeau de retour partagé.
+   La nav fixe fait 76px — on la dégage, puis la première section
+   reprend un rythme vertical plus court qu'en pleine page. */
+.pg-head { padding: calc(76px + clamp(26px, 4vw, 44px)) 0 0; }
+.pg-back {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--txt-2); transition: color .25s var(--ease);
+}
+.pg-back:hover { color: var(--accent); }
+.pg-back__arrow { display: inline-block; transition: transform .3s var(--ease); }
+.pg-back:hover .pg-back__arrow { transform: translateX(-3px); }
+.pg-head + .section { padding-top: clamp(40px, 5vw, 64px); }
 .sec-head { max-width: 880px; margin-bottom: clamp(52px, 7vw, 96px); }
 .sec-head .section-title { margin-top: 22px; }
 .sec-head__title--wide { max-width: 17ch; }
