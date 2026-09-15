@@ -1,7 +1,8 @@
 /* ============================================================
-   Home — hero + amorces Work / Journal. Profil, Workflow,
-   Parcours et Clients vivent sur /profil et /parcours ;
-   le footer Contact est commun à toutes les pages.
+   Home — sommaire du site : le hero puis un aperçu de chaque
+   page (profil & workflow, réalisations, journal, parcours, CV),
+   chacun renvoyant vers sa page. Le contenu complet vit sur les
+   pages ; le footer Contact est commun à toutes.
    ============================================================ */
 import { useEffect } from "react";
 import "../styles/blog.css"; /* Journal teaser reuses jcard classes */
@@ -9,7 +10,7 @@ import { useLang } from "../lang";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
 import { Hero } from "../components/hero";
-import { Contact, Journal, Work } from "../components/sections";
+import { CVBand, Clients, Contact, Journal, ParcoursTeaser, ProfileTeaser, Work } from "../components/sections";
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -68,8 +69,12 @@ export default function Home() {
       <Nav page="home" />
       <main id="main">
         <Hero t={t} lang={lang} />
+        <ProfileTeaser t={t} lang={lang} />
         <Work t={t} lang={lang} />
         <Journal t={t} />
+        <ParcoursTeaser t={t} lang={lang} />
+        <Clients t={t} />
+        <CVBand t={t} lang={lang} />
       </main>
       <Contact t={t} />
     </>

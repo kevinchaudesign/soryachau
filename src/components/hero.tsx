@@ -138,10 +138,10 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
         </div>
       </div>
 
-      <Link to="/profil" className="hero__scroll reveal" style={{ "--rd": "380ms" }} aria-label={h.scroll}>
+      <a href="#profil" className="hero__scroll reveal" style={{ "--rd": "380ms" }} aria-label={h.scroll}>
         <span>{h.scroll}</span>
         <ArrowDown />
-      </Link>
+      </a>
     </section>
   );
 }

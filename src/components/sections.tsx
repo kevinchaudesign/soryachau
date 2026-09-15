@@ -1,6 +1,9 @@
 /* ============================================================
-   Content sections → Profile, Workflow, Work, Journal (teaser),
-   Parcours, Clients, Contact
+   Sections de contenu. Deux usages :
+   · version pleine (Profile, Workflow, Parcours) → pages dédiées
+   · version aperçu (…Teaser) → accueil, avec lien vers la page
+   Work et Journal n'existent que comme aperçus ; leur version
+   pleine vit dans les pages Work et Journal.
    ============================================================ */
 import React from "react";
 import { Link } from "react-router-dom";
@@ -150,6 +153,104 @@ export function Workflow({ t }: { t: Messages }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* — Lien « voir la page » commun aux aperçus de l'accueil — */
+export function SecAll({ to, label }: { to: string; label: string }) {
+  return (
+    <Link to={to} className="sec-all reveal" data-cursor>
+      <span>{label}</span>
+      <ArrowUR />
+    </Link>
+  );
+}
+
+/* — 02+03 · Aperçu Profil & Workflow → /profil — */
+export function ProfileTeaser({ t, lang }: { t: Messages; lang: Lang }) {
+  const p = t.profil;
+  const w = t.workflow;
+  const { slots } = useLang();
+  return (
+    <>
+      <section className="section profile" id="profil">
+        <div className="container">
+          <div className="sec-head">
+            <span className="eyebrow reveal"><span className="idx">02</span>{p.eyebrow}</span>
+            <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{p.title}</h2>
+          </div>
+
+          <div className="profile__top">
+            <div className="profile__text">
+              <p className="profile__lead reveal">{p.lead}</p>
+            </div>
+
+            <figure className="profile__portrait reveal" style={{ "--rd": "180ms" }}>
+              <div className="portrait">
+                <image-slot id="sorya-portrait" shape="rect" placeholder={p.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+                <span className="regmark regmark--tr"></span>
+                <span className="regmark regmark--bl"></span>
+                <span className="portrait__tally"><b></b>PORTRAIT</span>
+              </div>
+              <figcaption className="portrait__cap">
+                <b>{p.portraitName}</b>
+                <span>{p.portraitRole}</span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <div className="profile__skills-block">
+            <span className="profile__skills-label reveal">{p.skillsTitle}</span>
+            <ul className="skills skills--grid">
+              {p.skills.map((sk, i) => (
+                <li className="skill reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
+                  <span className="skill__k">{sk.k}</span>
+                  <div className="skill__body">
+                    <h3 className="skill__t">
+                      {sk.t}
+                      {sk.ai ? <span className="chip chip-ai skill__ai">IA</span> : null}
+                    </h3>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* bandeau workflow compact : les 4 étapes, sans leur descriptif */}
+      <section className="section workflow workflow--teaser">
+        <div className="container">
+          <div className="workflow__head">
+            <span className="eyebrow reveal"><span className="idx">03</span>{w.eyebrow}</span>
+            <h2 className="section-title reveal workflow__title" style={{ "--rd": "80ms" }}>{w.title}</h2>
+          </div>
+          <div className="workflow__pipe reveal" aria-hidden="true">
+            <span className="workflow__pipe-fill"></span>
+            <span className="workflow__pipe-head"></span>
+            {w.steps.map((_, i) => (
+              <span
+                className="workflow__pipe-node"
+                key={i}
+                style={{ left: ((i * 2 + 1) / 8 * 100) + "%", transitionDelay: (0.25 + i * 0.5) + "s" }}
+              ></span>
+            ))}
+          </div>
+          <div className="workflow__steps">
+            {w.steps.map((st, i) => (
+              <div className="wstep reveal" key={i} style={{ "--rd": i * 90 + "ms" }}>
+                <div className="wstep__top">
+                  <span className="wstep__n">0{i + 1}</span>
+                  <span className="wstep__dot"></span>
+                </div>
+                <h3 className="wstep__t">{st.t}</h3>
+              </div>
+            ))}
+          </div>
+          <SecAll to="/profil" label={lang === "fr" ? "Voir le profil" : "View profile"} />
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -314,6 +415,54 @@ export function Parcours({ t, h1 }: { t: Messages; h1?: boolean }) {
             </li>
           ))}
         </ol>
+      </div>
+    </section>
+  );
+}
+
+/* — 06 · Aperçu Parcours → /parcours — */
+export function ParcoursTeaser({ t, lang }: { t: Messages; lang: Lang }) {
+  const p = t.parcours;
+  const items = p.items.slice(0, 3);
+  return (
+    <section className="section" id="parcours">
+      <div className="container">
+        <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} />
+        <ol className="timeline">
+          {items.map((it, i) => (
+            <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
+              <div className="tl__year">{it.y}</div>
+              <div className="tl__node" aria-hidden="true"><span></span></div>
+              <div className="tl__body">
+                <h3 className="tl__role">{it.r}</h3>
+                <div className="tl__company">{it.c}</div>
+                <p className="tl__desc">{it.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <SecAll to="/parcours" label={lang === "fr" ? "Voir tout le parcours" : "View full career"} />
+      </div>
+    </section>
+  );
+}
+
+/* — Bandeau CV → /cv — */
+export function CVBand({ t, lang }: { t: Messages; lang: Lang }) {
+  const c = t.cv;
+  return (
+    <section className="section cvband-sec">
+      <div className="container">
+        <div className="cvband reveal">
+          <div className="cvband__main">
+            <h2 className="cvband__title">{c.title}</h2>
+            <p className="cvband__role">{c.role}</p>
+          </div>
+          <div className="cvband__actions">
+            <a href="/assets/Sorya-Chau-CV.pdf" download className="btn btn-ghost"><DownloadIcon />{c.download}</a>
+            <Link to="/cv" className="btn btn-primary">{lang === "fr" ? "Voir le CV" : "View résumé"}<ArrowUR /></Link>
+          </div>
+        </div>
       </div>
     </section>
   );

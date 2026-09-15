@@ -183,6 +183,18 @@ html.has-reticle .card-hit { cursor: none; }
 .workflow__steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
 .wstep { background: var(--bg-deep); padding: clamp(26px, 2.6vw, 40px); transition: background .45s var(--ease); }
 .wstep:hover { background: var(--surface); }
+/* Aperçu accueil : étapes sans descriptif — on resserre la carte
+   pour qu'elle ne garde pas la hauteur réservée au paragraphe. */
+.workflow--teaser .wstep__top { margin-bottom: clamp(26px, 3vw, 40px); }
+
+/* Bandeau CV de l'accueil */
+.cvband {
+  display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 4vw, 56px);
+  flex-wrap: wrap; padding: clamp(28px, 3.4vw, 46px); border: 1px solid var(--line-soft);
+}
+.cvband__title { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.05; letter-spacing: -0.01em; }
+.cvband__role { margin-top: 10px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--txt-3); }
+.cvband__actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .wstep__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(40px, 5vw, 72px); }
 .wstep__n { font-family: var(--mono); font-size: 12.5px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .wstep__dot { width: 6px; height: 6px; background: var(--txt-faint); transform: rotate(45deg); transition: background .4s; }
@@ -199,6 +211,9 @@ html.has-reticle .card-hit { cursor: none; }
 .work-cell--md { grid-column: span 6; }
 .work-cell--third { grid-column: span 4; }
 
+/* Lien « voir la page » : .work-all à l'origine, partagé depuis par
+   tous les aperçus de l'accueil sous le nom .sec-all. */
+.sec-all,
 .work-all {
   display: flex; align-items: center; justify-content: center; gap: 12px;
   margin-top: clamp(28px, 3vw, 44px); padding: clamp(22px, 2.4vw, 30px);
@@ -206,7 +221,9 @@ html.has-reticle .card-hit { cursor: none; }
   font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
   transition: border-color .35s var(--ease), color .35s var(--ease), background .35s var(--ease);
 }
+.sec-all:hover,
 .work-all:hover { border-color: var(--accent-line); color: var(--txt); background: var(--surface); }
+.sec-all:hover .arrow,
 .work-all:hover .arrow { transform: translate(3px, -3px); }
 
 .work-card { position: relative; height: 100%; min-height: 360px; overflow: hidden; border: 1px solid var(--line-soft); isolation: isolate; transition: border-color .5s var(--ease), transform .5s var(--ease); }
