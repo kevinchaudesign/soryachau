@@ -402,6 +402,21 @@ export function Journal({ t }: { t: Messages }) {
    correspondance on retombe sur le résumé du poste. */
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
+/* Les puces du CV sont écrites « Intitulé : détail ». On isole
+   l'intitulé pour lui donner le poids du texte courant, comme sur
+   le PDF. Sans deux-points, la puce reste d'un seul tenant. */
+function Bullet({ text, lang }: { text: string; lang: Lang }) {
+  const i = text.indexOf(":");
+  if (i < 1) return <>{text}</>;
+  return (
+    <>
+      <b className="tl__pt-l">{text.slice(0, i).trim()}</b>
+      {lang === "fr" ? " : " : ": "}
+      {text.slice(i + 1).trim()}
+    </>
+  );
+}
+
 export function Parcours({ t, lang, h1 }: { t: Messages; lang: Lang; h1?: boolean }) {
   const p = t.parcours;
   const HRole = h1 ? "h2" : "h3"; /* cf. Profile : ordre des titres continu */
@@ -423,12 +438,17 @@ export function Parcours({ t, lang, h1 }: { t: Messages; lang: Lang; h1?: boolea
                   {det ? (
                     <>
                       <ul className="tl__pts">
-                        {det.pts.map((pt, j) => <li key={j}>{pt}</li>)}
+                        {det.pts.map((pt, j) => <li key={j}><Bullet text={pt} lang={lang} /></li>)}
                       </ul>
                       {det.clients ? (
-                        <p className="tl__clients">
-                          <span>{lang === "fr" ? "Clients clés" : "Key clients"}</span> {det.clients}
-                        </p>
+                        <div className="tl__clients">
+                          <span className="tl__clients-l">{lang === "fr" ? "Clients clés" : "Key clients"}</span>
+                          <div className="tl__chips">
+                            {det.clients.split(",").map((cl) => cl.trim()).filter(Boolean).map((cl) => (
+                              <span className="chip" key={cl}>{cl}</span>
+                            ))}
+                          </div>
+                        </div>
                       ) : null}
                     </>
                   ) : (
