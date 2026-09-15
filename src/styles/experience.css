@@ -59,7 +59,15 @@
 .intro__progress { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--accent); width: 0; animation: intro-prog 2.4s linear forwards; }
 @keyframes intro-prog { to { width: 100%; } }
 
-/* ---------------- Edit bar — NLE timeline ---------------- */
+/* ---------------- Edit bar — NLE timeline ----------------
+   Contraste : la barre est translucide et floute la page derrière
+   elle — sur les pages claires le papier ivoire remontait dans le
+   fond composité, et les libellés mono (8.5-11px) tombaient sous
+   AA. Deux réglages, sans nouvelle couleur : opacité 0.86 → 0.92
+   (le verre et le flou restent), et libellés en --accent-soft /
+   --txt-2 au lieu de --accent / --txt-3 / --txt-faint. AA vérifié
+   dans le pire cas, barre au-dessus du papier. Le rouge pur reste
+   sur les éléments graphiques (témoin REC, playhead, scrub). */
 :root { --editbar-h: 0px; }
 html.edit-expanded { --editbar-h: 132px; }
 html.edit-collapsed { --editbar-h: 40px; }
@@ -67,7 +75,7 @@ html.edit-expanded body, html.edit-collapsed body { padding-bottom: var(--editba
 
 .editbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-  background: oklch(0.138 0.006 54 / 0.86); backdrop-filter: blur(18px) saturate(1.15);
+  background: oklch(0.138 0.006 54 / 0.92); backdrop-filter: blur(18px) saturate(1.15);
   border-top: 1px solid var(--line-soft);
   font-family: var(--mono); color: var(--txt-3);
   transition: transform .5s var(--ease);
@@ -79,13 +87,13 @@ html.edit-expanded body, html.edit-collapsed body { padding-bottom: var(--editba
   border-bottom: 1px solid transparent; white-space: nowrap; overflow: hidden;
 }
 .editbar.is-expanded .editbar__status { border-bottom-color: var(--line-soft); }
-.editbar__rec { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); }
+.editbar__rec { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-soft); }
 .editbar__rec b { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: rec-blink 1.4s steps(1) infinite; }
 .editbar__tc { color: var(--txt); font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
-.editbar__chip { color: var(--txt-3); border: 1px solid var(--line); padding: 3px 8px; }
-.editbar__hint { color: var(--txt-faint); letter-spacing: 0.08em; }
+.editbar__chip { color: var(--txt-2); border: 1px solid var(--line); padding: 3px 8px; }
+.editbar__hint { color: var(--txt-2); letter-spacing: 0.08em; }
 .editbar__spacer { flex: 1; }
-.editbar__scene { color: var(--accent); }
+.editbar__scene { color: var(--accent-soft); }
 .editbar__btn {
   width: 26px; height: 24px; display: grid; place-items: center;
   background: var(--surface); border: 1px solid var(--line); color: var(--txt-2);
@@ -105,7 +113,7 @@ html.edit-expanded body, html.edit-collapsed body { padding-bottom: var(--editba
 .editbar__tick.is-major { height: 9px; background: var(--line); opacity: 0.9; }
 
 .editbar__lane { position: relative; margin-top: 7px; }
-.editbar__lanelbl { position: absolute; left: -30px; top: 50%; transform: translateY(-50%); font-size: 9px; letter-spacing: 0.1em; color: var(--txt-faint); }
+.editbar__lanelbl { position: absolute; left: -30px; top: 50%; transform: translateY(-50%); font-size: 9px; letter-spacing: 0.1em; color: var(--txt-2); }
 .editbar__clips { position: relative; height: 30px; }
 .editbar__clip {
   position: absolute; top: 0; height: 30px; overflow: hidden;
@@ -116,7 +124,7 @@ html.edit-expanded body, html.edit-collapsed body { padding-bottom: var(--editba
 }
 .editbar__clip:hover { background: var(--surface-2); color: var(--txt); border-left-color: var(--accent-soft); }
 .editbar__clip.is-on { background: var(--accent-dim); border-color: var(--accent-line); border-left-color: var(--accent); color: var(--txt); }
-.editbar__clip-n { font-size: 8.5px; letter-spacing: 0.08em; color: var(--accent); line-height: 1; }
+.editbar__clip-n { font-size: 8.5px; letter-spacing: 0.08em; color: var(--accent-soft); line-height: 1; }
 .editbar__clip-t { font-size: 9.5px; letter-spacing: 0.04em; white-space: nowrap; line-height: 1; }
 
 .editbar__lane--a { margin-top: 6px; height: 22px; }
