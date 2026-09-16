@@ -17,6 +17,7 @@
 
 .adm-tabs { display: flex; gap: 2px; padding: 18px var(--pad) 0; border-bottom: 1px solid var(--line-soft); }
 .adm-tab {
+  display: inline-block; /* aussi rendu en <a> (routes de langue) */
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
   padding: 10px 16px; border: 1px solid transparent; border-bottom: none;
   background: none; color: var(--txt-3); cursor: pointer;
@@ -32,6 +33,7 @@
   padding: 20px 0;
 }
 .adm-nav__item {
+  display: block; /* <a> depuis le passage aux routes */
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
   text-align: left; padding: 13px 22px;
   background: none; border: none; border-radius: 0; color: var(--txt-3); cursor: pointer;
@@ -67,6 +69,7 @@
 
 /* — buttons — */
 .adm-btn {
+  display: inline-flex; align-items: center; gap: 8px; /* <button> ou <a> */
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
   border: 1px solid var(--line); background: var(--surface-2); color: var(--txt);
   padding: 9px 16px; cursor: pointer; border-radius: 0;

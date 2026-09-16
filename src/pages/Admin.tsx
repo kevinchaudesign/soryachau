@@ -3,8 +3,14 @@
    Tout le contenu du site s'édite ici : textes FR/EN, projets,
    articles du Journal, images (Storage). Lecture publique via
    RLS ; écriture réservée aux utilisateurs authentifiés.
+
+   Chaque rubrique et sous-rubrique a sa route : /admin/textes/fr,
+   /admin/projets/:id, /admin/journal/:id/:lang,
+   /admin/mediatheque/:folderId… L'URL est donc partageable et le
+   bouton Retour du navigateur fait ce qu'on attend.
    ============================================================ */
 import React, { useEffect, useRef, useState } from "react";
+import { NavLink, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
 import "../styles/admin.css";
 import { supabase } from "../lib/supabase";
@@ -14,6 +20,9 @@ import MediaTab from "./AdminMedia";
 
 const CACHE_KEY = "sorya-content-v1";
 const clearPublicCache = () => { try { localStorage.removeItem(CACHE_KEY); } catch (e) {} };
+
+/* Segment d'URL du brouillon de création (projet ou article) */
+const NEW_ID = "nouveau";
 
 /* ---------- small helpers ---------- */
 
@@ -151,7 +160,8 @@ function JsonNode({ value, path, onSet }: { value: unknown; path: (string | numb
 
 function TextesTab() {
   const [data, setData] = useState<Record<Lang, unknown> | null>(null);
-  const [langTab, setLangTab] = useState<Lang>("fr");
+  const { lang } = useParams();
+  const langTab: Lang = lang === "en" ? "en" : "fr";
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useStatus();
 
@@ -183,7 +193,7 @@ function TextesTab() {
       <p className="adm-note">Tous les textes du site (navigation, accueil, CV…). Les articles du Journal s'éditent dans l'onglet Journal.</p>
       <div className="adm-tabs" style={{ padding: 0, marginBottom: 18 }}>
         {(["fr", "en"] as Lang[]).map((l) => (
-          <button key={l} className={"adm-tab" + (langTab === l ? " is-on" : "")} onClick={() => setLangTab(l)}>{l.toUpperCase()}</button>
+          <NavLink key={l} to={"/admin/textes/" + l} className={"adm-tab" + (langTab === l ? " is-on" : "")}>{l.toUpperCase()}</NavLink>
         ))}
       </div>
       <div className="adm-editor">
@@ -217,9 +227,13 @@ const NEW_PROJECT: ProjectRow = {
 function ProjetsTab() {
   const [rows, setRows] = useState<ProjectRow[] | null>(null);
   const [sel, setSel] = useState<ProjectRow | null>(null);
-  const [isNew, setIsNew] = useState(false);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useStatus();
+  /* Le projet ouvert est dans l'URL ; « nouveau » est le brouillon
+     de création. `sel` reste le tampon d'édition local. */
+  const { id: routeId } = useParams();
+  const navigate = useNavigate();
+  const isNew = routeId === NEW_ID;
 
   const load = () => supabase.from("projects").select("*").order("sort_order").then(({ data, error }) => {
     if (error || !data) { setStatus("Chargement impossible : " + (error?.message || "?"), true); return; }
@@ -228,9 +242,23 @@ function ProjetsTab() {
   // eslint-disable-next-line
   useEffect(() => { load(); }, []);
 
+  /* L'URL fait foi : on recharge le tampon d'édition quand elle
+     change (clic dans la liste, Retour, lien collé). */
+  useEffect(() => {
+    if (!rows) return;
+    if (!routeId) { setSel(null); return; }
+    if (routeId === NEW_ID) { setSel(clone(NEW_PROJECT)); return; }
+    const found = rows.find((r) => r.id === routeId);
+    if (found) { setSel(clone(found)); return; }
+    /* juste après une création : l'URL porte déjà le nouveau slug
+       alors que la liste n'est pas encore rechargée */
+    if (sel && sel.id === routeId) return;
+    setSel(null); setStatus("Projet introuvable : " + routeId, true);
+    // eslint-disable-next-line
+  }, [routeId, rows]);
+
   if (!rows) return <p className="adm-note">Chargement…</p>;
 
-  const edit = (p: ProjectRow) => { setSel(clone(p)); setIsNew(false); };
   const set = (patch: Partial<ProjectRow>) => setSel((s) => (s ? { ...s, ...patch } : s));
 
   const save = async () => {
@@ -239,7 +267,8 @@ function ProjetsTab() {
     const { error } = await supabase.from("projects").upsert({ ...sel, updated_at: new Date().toISOString() });
     setBusy(false);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    clearPublicCache(); setStatus("Projet enregistré."); setIsNew(false); load();
+    clearPublicCache(); setStatus("Projet enregistré."); load();
+    if (isNew) navigate("/admin/projets/" + sel.id, { replace: true });
   };
 
   const remove = async () => {
@@ -249,7 +278,7 @@ function ProjetsTab() {
     const { error } = await supabase.from("projects").delete().eq("id", sel.id);
     setBusy(false);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    clearPublicCache(); setStatus("Projet supprimé."); setSel(null); load();
+    clearPublicCache(); setStatus("Projet supprimé."); load(); navigate("/admin/projets");
   };
 
   return (
@@ -257,14 +286,14 @@ function ProjetsTab() {
       <div>
         <div className="adm-list">
           {rows.map((p) => (
-            <button key={p.id} className={"adm-list__item" + (sel && !isNew && sel.id === p.id ? " is-on" : "")} onClick={() => edit(p)}>
+            <NavLink key={p.id} to={"/admin/projets/" + p.id} className={"adm-list__item" + (routeId === p.id ? " is-on" : "")}>
               <span>{p.client} — {p.title}</span>
               <small>{p.year}</small>
-            </button>
+            </NavLink>
           ))}
         </div>
         <div className="adm-actions">
-          <button className="adm-btn" onClick={() => { setSel(clone(NEW_PROJECT)); setIsNew(true); }}>+ Nouveau projet</button>
+          <NavLink className="adm-btn" to={"/admin/projets/" + NEW_ID}>+ Nouveau projet</NavLink>
         </div>
       </div>
 
@@ -375,10 +404,13 @@ function SideEditor({ side, onChange }: { side: ArticleSide; onChange: (s: Artic
 function JournalTab() {
   const [rows, setRows] = useState<ArticleRow[] | null>(null);
   const [sel, setSel] = useState<ArticleRow | null>(null);
-  const [isNew, setIsNew] = useState(false);
-  const [langTab, setLangTab] = useState<Lang>("fr");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useStatus();
+  /* Article et langue d'édition dans l'URL, comme les projets. */
+  const { id: routeId, lang } = useParams();
+  const navigate = useNavigate();
+  const isNew = routeId === NEW_ID;
+  const langTab: Lang = lang === "en" ? "en" : "fr";
 
   const load = () => supabase.from("articles").select("*").order("sort_order").then(({ data, error }) => {
     if (error || !data) { setStatus("Chargement impossible : " + (error?.message || "?"), true); return; }
@@ -386,6 +418,17 @@ function JournalTab() {
   });
   // eslint-disable-next-line
   useEffect(() => { load(); }, []);
+
+  useEffect(() => {
+    if (!rows) return;
+    if (!routeId) { setSel(null); return; }
+    if (routeId === NEW_ID) { setSel(clone(NEW_ARTICLE)); return; }
+    const found = rows.find((r) => r.id === routeId);
+    if (found) { setSel(clone(found)); return; }
+    if (sel && sel.id === routeId) return; /* cf. Projets : création */
+    setSel(null); setStatus("Article introuvable : " + routeId, true);
+    // eslint-disable-next-line
+  }, [routeId, rows]);
 
   if (!rows) return <p className="adm-note">Chargement…</p>;
 
@@ -395,7 +438,8 @@ function JournalTab() {
     const { error } = await supabase.from("articles").upsert({ ...sel, updated_at: new Date().toISOString() });
     setBusy(false);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    clearPublicCache(); setStatus("Article enregistré."); setIsNew(false); load();
+    clearPublicCache(); setStatus("Article enregistré."); load();
+    if (isNew) navigate("/admin/journal/" + sel.id + "/" + langTab, { replace: true });
   };
 
   const remove = async () => {
@@ -405,7 +449,7 @@ function JournalTab() {
     const { error } = await supabase.from("articles").delete().eq("id", sel.id);
     setBusy(false);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    clearPublicCache(); setStatus("Article supprimé."); setSel(null); load();
+    clearPublicCache(); setStatus("Article supprimé."); load(); navigate("/admin/journal");
   };
 
   return (
@@ -413,14 +457,14 @@ function JournalTab() {
       <div>
         <div className="adm-list">
           {rows.map((a) => (
-            <button key={a.id} className={"adm-list__item" + (sel && !isNew && sel.id === a.id ? " is-on" : "")} onClick={() => { setSel(clone(a)); setIsNew(false); }}>
+            <NavLink key={a.id} to={"/admin/journal/" + a.id + "/" + langTab} className={"adm-list__item" + (routeId === a.id ? " is-on" : "")}>
               <span>{a.fr.title || a.id}</span>
               <small>{a.fr.date}</small>
-            </button>
+            </NavLink>
           ))}
         </div>
         <div className="adm-actions">
-          <button className="adm-btn" onClick={() => { setSel(clone(NEW_ARTICLE)); setIsNew(true); }}>+ Nouvel article</button>
+          <NavLink className="adm-btn" to={"/admin/journal/" + NEW_ID + "/" + langTab}>+ Nouvel article</NavLink>
         </div>
         <p className="adm-note" style={{ marginTop: 12 }}>Le premier article (ordre le plus bas) est « À la une ».</p>
       </div>
@@ -433,7 +477,7 @@ function JournalTab() {
           </div>
           <div className="adm-tabs" style={{ padding: 0, marginBottom: 18 }}>
             {(["fr", "en"] as Lang[]).map((l) => (
-              <button key={l} className={"adm-tab" + (langTab === l ? " is-on" : "")} onClick={() => setLangTab(l)}>{l.toUpperCase()}</button>
+              <NavLink key={l} to={"/admin/journal/" + (routeId || NEW_ID) + "/" + l} className={"adm-tab" + (langTab === l ? " is-on" : "")}>{l.toUpperCase()}</NavLink>
             ))}
           </div>
           <SideEditor side={sel[langTab]} onChange={(s) => setSel({ ...sel, [langTab]: s })} />
@@ -555,11 +599,21 @@ function MediaTabWrapper() {
 
 /* ---------- shell ---------- */
 
-const TABS: [string, string][] = [["textes", "Textes"], ["projets", "Projets"], ["journal", "Journal"], ["images", "Images"], ["media", "Médiathèque"]];
+/* Rubriques : clé de section (1er segment après /admin) + route
+   d'entrée (les rubriques à sous-rubriques pointent sur la
+   première d'entre elles). */
+const TABS: { key: string; label: string; to: string }[] = [
+  { key: "textes", label: "Textes", to: "/admin/textes/fr" },
+  { key: "projets", label: "Projets", to: "/admin/projets" },
+  { key: "journal", label: "Journal", to: "/admin/journal" },
+  { key: "images", label: "Images", to: "/admin/images" },
+  { key: "mediatheque", label: "Médiathèque", to: "/admin/mediatheque" },
+];
 
 export default function AdminPage() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
-  const [tab, setTab] = useState("textes");
+  const { pathname } = useLocation();
+  const section = pathname.split("/")[2] || "textes"; /* rubrique active */
 
   useEffect(() => {
     document.title = "Administration — Sorya Chau";
@@ -590,16 +644,26 @@ export default function AdminPage() {
       </header>
       <div className="adm-body">
         <nav className="adm-nav" aria-label="Sections">
-          {TABS.map(([k, l]) => (
-            <button key={k} className={"adm-nav__item" + (tab === k ? " is-on" : "")} onClick={() => setTab(k)} aria-current={tab === k ? "page" : undefined}>{l}</button>
+          {TABS.map((t) => (
+            <NavLink key={t.key} to={t.to} className={"adm-nav__item" + (section === t.key ? " is-on" : "")}
+                     aria-current={section === t.key ? "page" : undefined}>{t.label}</NavLink>
           ))}
         </nav>
         <main id="main" className="adm-main">
-          {tab === "textes" ? <TextesTab /> : null}
-          {tab === "projets" ? <ProjetsTab /> : null}
-          {tab === "journal" ? <JournalTab /> : null}
-          {tab === "images" ? <ImagesTab /> : null}
-          {tab === "media" ? <MediaTabWrapper /> : null}
+          <Routes>
+            <Route index element={<Navigate to="textes/fr" replace />} />
+            <Route path="textes" element={<Navigate to="/admin/textes/fr" replace />} />
+            <Route path="textes/:lang" element={<TextesTab />} />
+            <Route path="projets" element={<ProjetsTab />} />
+            <Route path="projets/:id" element={<ProjetsTab />} />
+            <Route path="journal" element={<JournalTab />} />
+            <Route path="journal/:id" element={<Navigate to="fr" replace />} />
+            <Route path="journal/:id/:lang" element={<JournalTab />} />
+            <Route path="images" element={<ImagesTab />} />
+            <Route path="mediatheque" element={<MediaTabWrapper />} />
+            <Route path="mediatheque/:folderId" element={<MediaTabWrapper />} />
+            <Route path="*" element={<Navigate to="/admin/textes/fr" replace />} />
+          </Routes>
         </main>
       </div>
     </div>

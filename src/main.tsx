@@ -57,7 +57,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/journal" element={<JournalPage />} />
           <Route path="/parcours" element={<ParcoursPage />} />
           <Route path="/cv" element={<CVPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/*" element={<AdminPage />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Suspense>

@@ -2,9 +2,11 @@
    Médiathèque — dossiers/sous-dossiers, rangement par
    glisser-déposer (avec alternative clavier), conversion AVIF
    côté navigateur (seul l'AVIF est stocké), alt/titre FR/EN
-   pour le SEO et l'accessibilité.
+   pour le SEO et l'accessibilité. Le dossier ouvert vit dans
+   l'URL — cf. la route /admin/mediatheque/:folderId.
    ============================================================ */
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { convertToAvif, slugify } from "../lib/avif";
 
@@ -56,7 +58,12 @@ function flatTree(folders: Folder[], parent: string | null = null, depth = 0): {
 export default function MediaTab({ setStatus }: { setStatus: (m: string, err?: boolean) => void }) {
   const [folders, setFolders] = useState<Folder[] | null>(null);
   const [items, setItems] = useState<Item[]>([]);
-  const [cwd, setCwd] = useState<string | null>(null); // dossier courant (null = racine)
+  /* Le dossier courant est dans l'URL : /admin/mediatheque/:folderId
+     (sans segment = racine). Chaque dossier a donc son adresse. */
+  const { folderId } = useParams();
+  const navigate = useNavigate();
+  const cwd = folderId ?? null;
+  const setCwd = (id: string | null) => navigate("/admin/mediatheque" + (id ? "/" + id : ""));
   const [sel, setSel] = useState<Item | null>(null);
   const [uploading, setUploading] = useState(0);
   const [dropHover, setDropHover] = useState<string | "zone" | null>(null);
@@ -109,7 +116,11 @@ export default function MediaTab({ setStatus }: { setStatus: (m: string, err?: b
     if (!window.confirm(`Supprimer le dossier « ${f.name} »${count ? ` ? Les ${count} image(s) qu'il contient remonteront à la racine` : " ?"}`)) return;
     const { error } = await supabase.from("media_folders").delete().eq("id", f.id);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    setStatus("Dossier supprimé."); loadFolders(); loadItems(cwd);
+    setStatus("Dossier supprimé."); loadFolders();
+    /* Si on supprime le dossier ouvert (ou un de ses parents),
+       l'URL pointerait dans le vide : on remonte à la racine. */
+    if (cwd && (cwd === f.id || inside.has(cwd))) setCwd(null);
+    else loadItems(cwd);
   };
 
   const moveItem = async (id: string, folder: string | null) => {
