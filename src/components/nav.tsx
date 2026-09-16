@@ -32,17 +32,19 @@ export function Nav({ page = "home" }: { page?: string }) {
      Seul Contact reste une ancre — le footer #contact est présent sur
      toutes les pages, on scrolle donc vers celui de la page courante. */
   const ROUTES: Record<string, string> = {
-    profil: "/profil",
-    work: "/work",
+    approche: "/approche",
+    expertises: "/expertises",
+    projets: "/projets",
+    apropos: "/a-propos",
     journal: "/journal",
-    parcours: "/parcours",
   };
 
   const links = [
-    { id: "profil", label: t.nav.profil },
-    { id: "work", label: t.nav.work },
+    { id: "approche", label: t.nav.approche },
+    { id: "expertises", label: t.nav.expertises },
+    { id: "projets", label: t.nav.projets },
+    { id: "apropos", label: t.nav.apropos },
     { id: "journal", label: t.nav.journal },
-    { id: "parcours", label: t.nav.parcours },
     { id: "contact", label: t.nav.contact },
   ];
 

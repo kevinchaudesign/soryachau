@@ -1,6 +1,6 @@
 /* ============================================================
-   Parcours — page dédiée : timeline (06) + marquee clients.
-   Sections déplacées depuis l'accueil, à l'identique.
+   À propos — biographie. Remplace l'ancienne page Parcours ;
+   le CV détaillé reste téléchargeable sur /cv.
    ============================================================ */
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -8,13 +8,13 @@ import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
-import { Clients, Contact, Parcours } from "../components/sections";
+import { Contact, APropos, Clients } from "../components/sections";
 
-export default function ParcoursPage() {
+export default function AProposPage() {
   const { lang, t } = useLang();
 
   useEffect(() => {
-    document.title = t.nav.parcours + " — Sorya Chau";
+    document.title = t.nav.apropos + " \u2014 Sorya Chau";
   }, [t, lang]);
 
   useReveal([lang]);
@@ -22,7 +22,7 @@ export default function ParcoursPage() {
   return (
     <>
       <Experience lang={lang} intro={false} />
-      <Nav page="parcours" />
+      <Nav page="apropos" />
 
       <main id="main">
         <div className="pg-head">
@@ -33,7 +33,7 @@ export default function ParcoursPage() {
           </div>
         </div>
 
-        <Parcours t={t} lang={lang} h1 />
+        <APropos t={t} h1 />
         <Clients t={t} />
       </main>
 

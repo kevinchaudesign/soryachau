@@ -11,14 +11,15 @@ import "./lib/image-slot.js";
 
 import { Suspense, lazy, useLayoutEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { LangProvider } from "./lang";
 import Home from "./pages/Home";
 
-const ProfilPage = lazy(() => import("./pages/Profil"));
+const ApprochePage = lazy(() => import("./pages/Approche"));
+const ExpertisesPage = lazy(() => import("./pages/Expertises"));
 const WorkPage = lazy(() => import("./pages/Work"));
 const JournalPage = lazy(() => import("./pages/Journal"));
-const ParcoursPage = lazy(() => import("./pages/Parcours"));
+const AProposPage = lazy(() => import("./pages/APropos"));
 const CVPage = lazy(() => import("./pages/CV"));
 const AdminPage = lazy(() => import("./pages/Admin"));
 
@@ -52,10 +53,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profil" element={<ProfilPage />} />
-          <Route path="/work" element={<WorkPage />} />
+          <Route path="/approche" element={<ApprochePage />} />
+          <Route path="/expertises" element={<ExpertisesPage />} />
+          <Route path="/projets" element={<WorkPage />} />
           <Route path="/journal" element={<JournalPage />} />
-          <Route path="/parcours" element={<ParcoursPage />} />
+          <Route path="/a-propos" element={<AProposPage />} />
+          {/* anciennes adresses : on ne casse pas les liens déjà partagés */}
+          <Route path="/profil" element={<Navigate to="/approche" replace />} />
+          <Route path="/work" element={<Navigate to="/projets" replace />} />
+          <Route path="/parcours" element={<Navigate to="/a-propos" replace />} />
           <Route path="/cv" element={<CVPage />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="*" element={<Home />} />

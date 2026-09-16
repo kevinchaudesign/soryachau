@@ -84,10 +84,11 @@ export function HeroMonitor({ lang }: { lang: Lang }) {
 
 export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
   const h = t.hero;
+  /* Deux chiffres depuis les textes def : le troisième (talents par
+     production) a été retiré à la demande de Sorya. */
   const stats = [
     { n: h.m1n, l: h.m1l },
     { n: h.m2n, l: h.m2l },
-    { n: h.m3n, l: h.m3l },
   ];
   return (
     <section className="hero" id="top">
@@ -106,7 +107,8 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
 
       <div className="container hero__inner">
         <div className="hero__top reveal">
-          <span className="eyebrow"><span className="idx">00</span>{h.role} · Paris</span>
+          {/* « Paris » retiré de l'accroche à la demande de Sorya */}
+          <span className="eyebrow"><span className="idx">00</span>{h.role}</span>
           <span className="hero__avail">
             <span className="avail-mark"></span>{t.avail}
           </span>

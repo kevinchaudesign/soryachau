@@ -18,20 +18,20 @@ export type Scene = { sel: string; n: string; t: string };
 const SCENES: Record<Lang, Scene[]> = {
   fr: [
     { sel: "#top", n: "01", t: "Ouverture" },
-    { sel: "#profil", n: "02", t: "Profil" },
-    { sel: ".workflow", n: "03", t: "Workflow IA" },
-    { sel: "#work", n: "04", t: "Réalisations" },
+    { sel: "#approche", n: "02", t: "Approche" },
+    { sel: "#expertises", n: "03", t: "Expertises" },
+    { sel: "#work", n: "04", t: "Projets" },
     { sel: "#journal", n: "05", t: "Journal" },
-    { sel: "#parcours", n: "06", t: "Parcours" },
+    { sel: "#apropos", n: "06", t: "À propos" },
     { sel: "#contact", n: "07", t: "Contact" },
   ],
   en: [
     { sel: "#top", n: "01", t: "Opening" },
-    { sel: "#profil", n: "02", t: "Profile" },
-    { sel: ".workflow", n: "03", t: "AI Workflow" },
-    { sel: "#work", n: "04", t: "Work" },
+    { sel: "#approche", n: "02", t: "Approach" },
+    { sel: "#expertises", n: "03", t: "Services" },
+    { sel: "#work", n: "04", t: "Projects" },
     { sel: "#journal", n: "05", t: "Journal" },
-    { sel: "#parcours", n: "06", t: "Career" },
+    { sel: "#apropos", n: "06", t: "About" },
     { sel: "#contact", n: "07", t: "Contact" },
   ],
 };

@@ -1,6 +1,6 @@
 /* ============================================================
-   Profil — page dédiée : Profil & Vision (02) + Workflow IA (03).
-   Sections déplacées depuis l'accueil, à l'identique.
+   Expertises — les trois façons de travailler ensemble, les types
+   de productions et de projets, l'encart pratique.
    ============================================================ */
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -8,13 +8,13 @@ import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
-import { Contact, Profile, Workflow } from "../components/sections";
+import { Contact, Expertises } from "../components/sections";
 
-export default function ProfilPage() {
+export default function ExpertisesPage() {
   const { lang, t } = useLang();
 
   useEffect(() => {
-    document.title = t.nav.profil + " — Sorya Chau";
+    document.title = t.nav.expertises + " \u2014 Sorya Chau";
   }, [t, lang]);
 
   useReveal([lang]);
@@ -22,7 +22,7 @@ export default function ProfilPage() {
   return (
     <>
       <Experience lang={lang} intro={false} />
-      <Nav page="profil" />
+      <Nav page="expertises" />
 
       <main id="main">
         <div className="pg-head">
@@ -33,8 +33,7 @@ export default function ProfilPage() {
           </div>
         </div>
 
-        <Profile t={t} h1 />
-        <Workflow t={t} />
+        <Expertises t={t} h1 />
       </main>
 
       <Contact t={t} />

@@ -10,15 +10,15 @@ import { useLang } from "../lang";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
 import { Hero } from "../components/hero";
-import { CVBand, Clients, Contact, Journal, ParcoursTeaser, ProfileTeaser, Work } from "../components/sections";
+import { AProposTeaser, ApprocheTeaser, CVBand, Clients, Contact, Journal, Work } from "../components/sections";
 
 export default function Home() {
   const { lang, t } = useLang();
 
   useEffect(() => {
     document.title = lang === "fr"
-      ? "Sorya Chau — Directrice de Production augmentée"
-      : "Sorya Chau — AI-augmented Production Director";
+      ? "Sorya Chau — Directrice de production"
+      : "Sorya Chau — Production Director";
   }, [lang]);
 
   // Scroll reveal
@@ -69,10 +69,10 @@ export default function Home() {
       <Nav page="home" />
       <main id="main">
         <Hero t={t} lang={lang} />
-        <ProfileTeaser t={t} lang={lang} />
+        <ApprocheTeaser t={t} lang={lang} />
         <Work t={t} lang={lang} />
         <Journal t={t} />
-        <ParcoursTeaser t={t} lang={lang} />
+        <AProposTeaser t={t} lang={lang} />
         <Clients t={t} />
         <CVBand t={t} lang={lang} />
       </main>

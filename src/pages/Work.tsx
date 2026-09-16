@@ -78,7 +78,7 @@ export default function WorkPage() {
   const scenes = useMemo(() => WP_SCENES(lang), [lang]);
 
   useEffect(() => {
-    document.title = lang === "fr" ? "Réalisations — Sorya Chau" : "Work — Sorya Chau";
+    document.title = t.nav.projets + " — Sorya Chau";
   }, [lang]);
 
   // scroll reveal (re-run on filter change)
@@ -99,7 +99,7 @@ export default function WorkPage() {
   return (
     <React.Fragment>
       <Experience lang={lang} intro={false} scenes={scenes} />
-      <Nav page="work" />
+      <Nav page="projets" />
 
       <main id="main" className="wp">
         <header className="wp__head">
@@ -108,7 +108,7 @@ export default function WorkPage() {
               <span className="wp__back-arrow">←</span>{lang === "fr" ? "Retour" : "Back"}
             </Link>
             <span className="eyebrow wp__eyebrow"><span className="idx">{String(count).padStart(2, "0")}</span>{t.work.eyebrow}</span>
-            <h1 className="wp__title display">{lang === "fr" ? "Réalisations" : "Selected work"}</h1>
+            <h1 className="wp__title display">{t.nav.projets}</h1>
             <p className="wp__lead">{t.work.lead}</p>
 
             <div className="wp__filters" role="tablist" aria-label={t.work.eyebrow}>

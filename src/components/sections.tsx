@@ -25,133 +25,107 @@ export function SectionHead({ idx, eyebrow, title, lead, light, h1 }: { idx: str
   );
 }
 
-/* — 02 · Profile & Vision — */
-export function Profile({ t, h1 }: { t: Messages; h1?: boolean }) {
-  const p = t.profil;
-  /* Page dédiée : le titre monte en h1, les compétences suivent en h2
-     (même classe, même rendu) pour garder l'ordre des titres continu. */
-  const H = h1 ? "h1" : "h2";
-  const HSkill = h1 ? "h2" : "h3";
+/* — 02 · Approche (page /approche) — */
+export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
+  const a = t.approche;
   const { slots } = useLang();
+  const H = h1 ? "h1" : "h2";
+  const HSub = h1 ? "h2" : "h3";
   return (
-    <section className="section profile" id="profil">
+    <section className="section profile" id="approche">
       <div className="container">
         <div className="sec-head">
-          <span className="eyebrow reveal"><span className="idx">02</span>{p.eyebrow}</span>
-          <H className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{p.title}</H>
+          <span className="eyebrow reveal"><span className="idx">02</span>{a.eyebrow}</span>
+          <H className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{a.title}</H>
         </div>
 
         <div className="profile__top">
           <div className="profile__text">
-            <p className="profile__lead reveal">{p.lead}</p>
-            <figure className="profile__quote reveal" style={{ "--rd": "120ms" }}>
-              <span className="profile__quote-mark" aria-hidden="true">“</span>
-              <blockquote>{p.vision}</blockquote>
-              <figcaption><span className="profile__quote-rule"></span>{p.visionBy}</figcaption>
-            </figure>
+            <p className="profile__lead reveal">{a.lead}</p>
+            {a.body.map((para, i) => (
+              <p className="approche__p reveal" key={i} style={{ "--rd": 90 + i * 70 + "ms" }}>{para}</p>
+            ))}
           </div>
 
           <figure className="profile__portrait reveal" style={{ "--rd": "180ms" }}>
             <div className="portrait">
-              <image-slot id="sorya-portrait" shape="rect" placeholder={p.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+              <image-slot id="sorya-portrait" shape="rect" placeholder={a.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
               <span className="regmark regmark--tr"></span>
               <span className="regmark regmark--bl"></span>
               <span className="portrait__tally"><b></b>PORTRAIT</span>
             </div>
             <figcaption className="portrait__cap">
-              <b>{p.portraitName}</b>
-              <span>{p.portraitRole}</span>
+              <b>{a.portraitName}</b>
+              <span>{a.portraitRole}</span>
             </figcaption>
           </figure>
         </div>
 
-        <div className="profile__skills-block">
-          <span className="profile__skills-label reveal">{p.skillsTitle}</span>
-          <ul className="skills skills--grid">
-            {p.skills.map((s, i) => (
-              <li className="skill reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
-                <span className="skill__k">{s.k}</span>
-                <div className="skill__body">
-                  <HSkill className="skill__t">
-                    {s.t}
-                    {s.ai ? <span className="chip chip-ai skill__ai">IA</span> : null}
-                  </HSkill>
-                  <p className="skill__d">{s.d}</p>
-                </div>
+        <div className="method">
+          <HSub className="method__title reveal">{a.methodTitle}</HSub>
+          <p className="method__lead reveal" style={{ "--rd": "80ms" }}>{a.methodLead}</p>
+          <ol className="method__list">
+            {a.principles.map((pr, i) => (
+              <li className="method__item reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
+                <span className="method__n">{String(i + 1).padStart(2, "0")}</span>
+                <span className="method__t">{pr}</span>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
 
-        <div className="profile__creds">
-          <div className="cred reveal">
-            <span className="cred__l">{p.formTitle}</span>
-            <div className="cred__body">
-              {p.form.map((f, i) => (
-                <div className="cred__edu" key={i}>
-                  <b>{f.t}</b>
-                  <span>{f.s} · {f.y}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="cred cred--wide reveal" style={{ "--rd": "90ms" }}>
-            <span className="cred__l">{p.domainsTitle}</span>
-            <div className="cred__tags">
-              {p.domains.map((d, i) => <span className="chip" key={i}>{d}</span>)}
-            </div>
-          </div>
-          <div className="cred reveal" style={{ "--rd": "160ms" }}>
-            <span className="cred__l">{p.langTitle}</span>
-            <div className="cred__body">
-              {p.langs.map((l, i) => (
-                <div className="cred__lang" key={i}><span>{l.l}</span><em>{l.v}</em></div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <figure className="profile__quote approche__signature reveal" style={{ "--rd": "120ms" }}>
+          <span className="profile__quote-mark" aria-hidden="true">“</span>
+          <blockquote>{a.signature}</blockquote>
+          <figcaption><span className="profile__quote-rule"></span>{a.signatureBy}</figcaption>
+        </figure>
       </div>
     </section>
   );
 }
 
-/* — 03 · AI Workflow — */
-export function Workflow({ t }: { t: Messages }) {
-  const w = t.workflow;
+/* — 03 · Expertises (page /expertises) — */
+export function Expertises({ t, h1 }: { t: Messages; h1?: boolean }) {
+  const e = t.expertises;
+  /* cf. Approche : sur la page dédiée le titre monte en h1, les
+     cartes suivent en h2 pour garder l'ordre des titres continu. */
+  const HCard = h1 ? "h2" : "h3";
   return (
-    <section className="section workflow">
+    <section className="section expertises" id="expertises">
       <div className="container">
-        <div className="workflow__head">
-          <span className="eyebrow reveal"><span className="idx">03</span>{w.eyebrow}</span>
-          <h2 className="section-title reveal workflow__title" style={{ "--rd": "80ms" }}>{w.title}</h2>
-        </div>
-        <div className="workflow__pipe reveal" aria-hidden="true">
-          <span className="workflow__pipe-fill"></span>
-          <span className="workflow__pipe-head"></span>
-          {w.steps.map((_, i) => (
-            <span
-              className="workflow__pipe-node"
-              key={i}
-              style={{ left: ((i * 2 + 1) / 8 * 100) + "%", transitionDelay: (0.25 + i * 0.5) + "s" }}
-            ></span>
+        <SectionHead idx="03" eyebrow={e.eyebrow} title={e.title} h1={h1} />
+
+        <div className="xp-grid">
+          {e.items.map((it, i) => (
+            <article className="xp reveal" key={it.k} style={{ "--rd": i * 90 + "ms" }}>
+              <span className="xp__k">{it.k}</span>
+              <HCard className="xp__t">{it.t}</HCard>
+              <p className="xp__hook">{it.hook}</p>
+              <p className="xp__d">{it.d}</p>
+              <p className="xp__out">{it.out}</p>
+            </article>
           ))}
         </div>
-        <div className="workflow__steps">
-          {w.steps.map((s, i) => (
-            <div className="wstep reveal" key={i} style={{ "--rd": i * 90 + "ms" }}>
-              <div className="wstep__top">
-                <span className="wstep__n">0{i + 1}</span>
-                <span className="wstep__dot"></span>
-              </div>
-              <h3 className="wstep__t">{s.t}</h3>
-              <p className="wstep__d">{s.d}</p>
+
+        <div className="xp-bands">
+          <div className="xp-band reveal">
+            <span className="xp-band__l">{e.prodLabel}</span>
+            <div className="xp-band__tags">
+              {e.prod.map((x) => <span className="chip" key={x}>{x}</span>)}
+              <span className="xp-band__note">{e.prodNote}</span>
             </div>
-          ))}
+          </div>
+          <div className="xp-band reveal" style={{ "--rd": "90ms" }}>
+            <span className="xp-band__l">{e.projLabel}</span>
+            <div className="xp-band__tags">
+              {e.proj.map((x) => <span className="chip" key={x}>{x}</span>)}
+            </div>
+          </div>
         </div>
-        <div className="workflow__note reveal">
-          <span className="avail-mark"></span>
-          <span>{w.note}</span>
-        </div>
+
+        <p className="xp-note reveal">
+          <span className="avail-mark"></span>{e.note}
+        </p>
       </div>
     </section>
   );
@@ -167,88 +141,57 @@ export function SecAll({ to, label }: { to: string; label: string }) {
   );
 }
 
-/* — 02+03 · Aperçu Profil & Workflow → /profil — */
-export function ProfileTeaser({ t, lang }: { t: Messages; lang: Lang }) {
-  const p = t.profil;
-  const w = t.workflow;
+/* — 02+03 · Aperçu Approche & Expertises → /approche, /expertises — */
+export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
+  const a = t.approche;
+  const e = t.expertises;
   const { slots } = useLang();
   return (
     <>
-      <section className="section profile" id="profil">
+      <section className="section profile" id="approche">
         <div className="container">
           <div className="sec-head">
-            <span className="eyebrow reveal"><span className="idx">02</span>{p.eyebrow}</span>
-            <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{p.title}</h2>
+            <span className="eyebrow reveal"><span className="idx">02</span>{a.eyebrow}</span>
+            <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{a.title}</h2>
           </div>
 
           <div className="profile__top">
             <div className="profile__text">
-              <p className="profile__lead reveal">{p.lead}</p>
+              <p className="profile__lead reveal">{a.lead}</p>
+              <p className="approche__p reveal" style={{ "--rd": "90ms" }}>{a.body[1]}</p>
             </div>
 
             <figure className="profile__portrait reveal" style={{ "--rd": "180ms" }}>
               <div className="portrait">
-                <image-slot id="sorya-portrait" shape="rect" placeholder={p.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+                <image-slot id="sorya-portrait" shape="rect" placeholder={a.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
                 <span className="regmark regmark--tr"></span>
                 <span className="regmark regmark--bl"></span>
                 <span className="portrait__tally"><b></b>PORTRAIT</span>
               </div>
               <figcaption className="portrait__cap">
-                <b>{p.portraitName}</b>
-                <span>{p.portraitRole}</span>
+                <b>{a.portraitName}</b>
+                <span>{a.portraitRole}</span>
               </figcaption>
             </figure>
           </div>
 
-          <div className="profile__skills-block">
-            <span className="profile__skills-label reveal">{p.skillsTitle}</span>
-            <ul className="skills skills--grid">
-              {p.skills.map((sk, i) => (
-                <li className="skill reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
-                  <span className="skill__k">{sk.k}</span>
-                  <div className="skill__body">
-                    <h3 className="skill__t">
-                      {sk.t}
-                      {sk.ai ? <span className="chip chip-ai skill__ai">IA</span> : null}
-                    </h3>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <SecAll to="/approche" label={lang === "fr" ? "Voir mon approche" : "See my approach"} />
         </div>
       </section>
 
-      {/* bandeau workflow compact : les 4 étapes, sans leur descriptif */}
-      <section className="section workflow workflow--teaser">
+      <section className="section expertises" id="expertises">
         <div className="container">
-          <div className="workflow__head">
-            <span className="eyebrow reveal"><span className="idx">03</span>{w.eyebrow}</span>
-            <h2 className="section-title reveal workflow__title" style={{ "--rd": "80ms" }}>{w.title}</h2>
-          </div>
-          <div className="workflow__pipe reveal" aria-hidden="true">
-            <span className="workflow__pipe-fill"></span>
-            <span className="workflow__pipe-head"></span>
-            {w.steps.map((_, i) => (
-              <span
-                className="workflow__pipe-node"
-                key={i}
-                style={{ left: ((i * 2 + 1) / 8 * 100) + "%", transitionDelay: (0.25 + i * 0.5) + "s" }}
-              ></span>
+          <SectionHead idx="03" eyebrow={e.eyebrow} title={e.title} />
+          <div className="xp-grid xp-grid--teaser">
+            {e.items.map((it, i) => (
+              <article className="xp reveal" key={it.k} style={{ "--rd": i * 90 + "ms" }}>
+                <span className="xp__k">{it.k}</span>
+                <h3 className="xp__t">{it.t}</h3>
+                <p className="xp__hook">{it.hook}</p>
+              </article>
             ))}
           </div>
-          <div className="workflow__steps">
-            {w.steps.map((st, i) => (
-              <div className="wstep reveal" key={i} style={{ "--rd": i * 90 + "ms" }}>
-                <div className="wstep__top">
-                  <span className="wstep__n">0{i + 1}</span>
-                  <span className="wstep__dot"></span>
-                </div>
-                <h3 className="wstep__t">{st.t}</h3>
-              </div>
-            ))}
-          </div>
-          <SecAll to="/profil" label={lang === "fr" ? "Voir le profil" : "View profile"} />
+          <SecAll to="/expertises" label={lang === "fr" ? "Voir les expertises" : "See the services"} />
         </div>
       </section>
     </>
@@ -297,7 +240,7 @@ export function WorkCard({ p, t, lang, span }: { p: Project; t: Messages; lang: 
       <div className="work-card__meta">
         <div className="work-card__top">
           <span className="work-card__client">{p.client}</span>
-          <span className={"chip" + (p.ai ? " chip-ai" : "")}>{p.ai ? "◇ " : ""}{p.tag[lang]}</span>
+          <span className="chip">{p.tag[lang]}</span>
         </div>
         <div className="work-card__bottom">
           <div className="work-card__headline">
@@ -395,98 +338,53 @@ export function Journal({ t }: { t: Messages }) {
   );
 }
 
-/* — 06 · Parcours —
-   Le détail de chaque poste (puces + clients clés) vient de la
-   fiche CV : même carrière, une seule source à corriger. On
-   rapproche les deux listes par employeur normalisé — « Geometry
-   (WPP) » côté CV, « Geometry — WPP » ici — et à défaut de
-   correspondance on retombe sur le résumé du poste. */
-const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-/* Les puces du CV sont écrites « Intitulé : détail ». On isole
-   l'intitulé pour lui donner le poids du texte courant, comme sur
-   le PDF. Sans deux-points, la puce reste d'un seul tenant. */
-function Bullet({ text, lang }: { text: string; lang: Lang }) {
-  const i = text.indexOf(":");
-  if (i < 1) return <>{text}</>;
+/* — 06 · À propos (page /a-propos) — */
+export function APropos({ t, h1 }: { t: Messages; h1?: boolean }) {
+  const a = t.apropos;
+  const { slots } = useLang();
   return (
-    <>
-      <b className="tl__pt-l">{text.slice(0, i).trim()}</b>
-      {lang === "fr" ? " : " : ": "}
-      {text.slice(i + 1).trim()}
-    </>
-  );
-}
-
-export function Parcours({ t, lang, h1 }: { t: Messages; lang: Lang; h1?: boolean }) {
-  const p = t.parcours;
-  const HRole = h1 ? "h2" : "h3"; /* cf. Profile : ordre des titres continu */
-  const detailFor = (company: string) => t.cv.exp.find((e) => norm(e.c) === norm(company));
-  return (
-    <section className="section" id="parcours">
+    <section className="section" id="apropos">
       <div className="container">
-        <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} h1={h1} />
-        <ol className="timeline">
-          {p.items.map((it, i) => {
-            const det = detailFor(it.c);
-            return (
-              <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
-                <div className="tl__year">{it.y}</div>
-                <div className="tl__node" aria-hidden="true"><span></span></div>
-                <div className="tl__body">
-                  <HRole className="tl__role">{it.r}</HRole>
-                  <div className="tl__company">{it.c}</div>
-                  {det ? (
-                    <>
-                      <ul className="tl__pts">
-                        {det.pts.map((pt, j) => <li key={j}><Bullet text={pt} lang={lang} /></li>)}
-                      </ul>
-                      {det.clients ? (
-                        <div className="tl__clients">
-                          <span className="tl__clients-l">{lang === "fr" ? "Clients clés" : "Key clients"}</span>
-                          <div className="tl__chips">
-                            {det.clients.split(",").map((cl) => cl.trim()).filter(Boolean).map((cl) => (
-                              <span className="chip" key={cl}>{cl}</span>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </>
-                  ) : (
-                    <p className="tl__desc">{it.d}</p>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+        <SectionHead idx="06" eyebrow={a.eyebrow} title={a.title} h1={h1} />
+        <div className="apropos">
+          <div className="apropos__text">
+            {a.body.map((para, i) => (
+              <p className="apropos__p reveal" key={i} style={{ "--rd": i * 80 + "ms" }}>{para}</p>
+            ))}
+          </div>
+          <figure className="profile__portrait apropos__portrait reveal" style={{ "--rd": "160ms" }}>
+            <div className="portrait">
+              <image-slot id="sorya-portrait" shape="rect" placeholder={t.approche.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+              <span className="regmark regmark--tr"></span>
+              <span className="regmark regmark--bl"></span>
+              <span className="portrait__tally"><b></b>PORTRAIT</span>
+            </div>
+            <figcaption className="portrait__cap">
+              <b>{t.approche.portraitName}</b>
+              <span>{t.approche.portraitRole}</span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </section>
   );
 }
 
-/* — 06 · Aperçu Parcours → /parcours — */
-export function ParcoursTeaser({ t, lang }: { t: Messages; lang: Lang }) {
-  const p = t.parcours;
-  const items = p.items.slice(0, 3);
+/* — 06 · Aperçu À propos → /a-propos — */
+export function AProposTeaser({ t, lang }: { t: Messages; lang: Lang }) {
+  const a = t.apropos;
   return (
-    <section className="section" id="parcours">
+    <section className="section" id="apropos">
       <div className="container">
-        <SectionHead idx="06" eyebrow={p.eyebrow} title={p.title} />
-        <ol className="timeline">
-          {items.map((it, i) => (
-            <li className="tl reveal" key={i} style={{ "--rd": i * 60 + "ms" }}>
-              <div className="tl__year">{it.y}</div>
-              <div className="tl__node" aria-hidden="true"><span></span></div>
-              <div className="tl__body">
-                <h3 className="tl__role">{it.r}</h3>
-                <div className="tl__company">{it.c}</div>
-                <p className="tl__desc">{it.d}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <SecAll to="/parcours" label={lang === "fr" ? "Voir tout le parcours" : "View full career"} />
+        <SectionHead idx="06" eyebrow={a.eyebrow} title={a.title} />
+        <div className="apropos">
+          <div className="apropos__text">
+            {a.body.slice(0, 2).map((para, i) => (
+              <p className="apropos__p reveal" key={i} style={{ "--rd": i * 80 + "ms" }}>{para}</p>
+            ))}
+          </div>
+        </div>
+        <SecAll to="/a-propos" label={lang === "fr" ? "En savoir plus" : "Read more"} />
       </div>
     </section>
   );
@@ -552,6 +450,8 @@ export function Contact({ t }: { t: Messages }) {
       <div className="container contact__inner">
         <span className="eyebrow reveal"><span className="idx">07</span>{c.eyebrow}</span>
         <h2 className="contact__title display reveal" style={{ "--rd": "80ms" }}>{c.title}</h2>
+
+        <p className="contact__lead reveal" style={{ "--rd": "110ms" }}>{c.lead}</p>
 
         <div className="contact__status reveal" style={{ "--rd": "140ms" }}>
           <span className="avail-mark"></span>{c.status}
