@@ -50,6 +50,29 @@
 }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
 .nav__brand { display: flex; align-items: center; gap: 13px; }
+
+/* — Logo (cf. components/logo.tsx) — */
+.logo { display: inline-flex; align-items: center; gap: 12px; }
+.logo-mono { display: block; flex: none; }
+.logo-mono__bg { fill: var(--txt); }
+.logo-mono__sc {
+  /* Instrument Serif est plus étroit que le Playfair de la maquette :
+     on compense pour garder le même remplissage du carré. */
+  font-family: var(--serif); font-size: 96px; letter-spacing: 1px;
+  fill: var(--bg);
+}
+.logo-mono__dot { fill: var(--accent); }
+.logo-mono--inv .logo-mono__bg { fill: var(--bg); }
+.logo-mono--inv .logo-mono__sc { fill: var(--txt); }
+.logo__text { display: flex; flex-direction: column; gap: 2px; line-height: 1; }
+.logo__name { font-family: var(--serif); font-size: 21px; letter-spacing: -0.005em; color: var(--txt); }
+.logo__dot { color: var(--accent); }
+.logo__baseline {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--txt-3);
+}
+
+
 .nav__mark {
   font-family: var(--mono); font-weight: 700; font-size: 12.5px; letter-spacing: 0.06em;
   width: 34px; height: 34px; display: grid; place-items: center;
@@ -310,6 +333,10 @@ a.cdetail__v:hover { color: var(--accent); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1040px) {
+  /* Six entrées de nav + le lockup : on resserre avant que ça déborde. */
+  .logo__baseline { display: none; }
+  .nav__inner { gap: 16px; }
+  .nav__links { gap: 22px; }
   .work-cell--lg, .work-cell--sm, .work-cell--md { grid-column: span 6; }
   .work-cell--third { grid-column: span 6; }
   .profile__grid { grid-template-columns: 1fr; gap: 48px; }
@@ -324,7 +351,9 @@ a.cdetail__v:hover { color: var(--accent); }
   .workflow__steps { grid-template-columns: repeat(2, 1fr); }
   .hero__rail { display: none; }
 }
-@media (max-width: 760px) {
+/* Six rubriques, le lockup et les actions : au-delà de 1000 px la
+   barre ne tient plus sur une ligne, on bascule sur le menu. */
+@media (max-width: 1000px) {
   .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
   .nav__burger { display: block; }
   .nav__mobile { display: block; position: fixed; top: 76px; left: 0; right: 0; background: oklch(0.965 0.008 85 / 0.97); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line-soft); padding: 12px var(--pad) 28px; transform: translateY(-12px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); z-index: 99; }
@@ -332,6 +361,8 @@ a.cdetail__v:hover { color: var(--accent); }
   .nav__mlink { display: block; padding: 14px 0; font-size: 18px; border-bottom: 1px solid var(--line-soft); }
   .nav__mfoot { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
   .nav__mfoot .lang-toggle { display: inline-flex; font-size: 14px; }
+}
+@media (max-width: 760px) {
   .work-cell--lg, .work-cell--sm, .work-cell--md, .work-cell--third { grid-column: span 12; }
   .work-card { min-height: 360px !important; }
   .tl { grid-template-columns: 1fr; gap: 6px; }

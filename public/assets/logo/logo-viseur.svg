@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <path d="M8 42 V8 H42 M158 8 H192 V42 M192 158 V192 H158 M42 192 H8 V158" fill="none" stroke="#141210" stroke-width="7"/>
+  <text x="100" y="124" text-anchor="middle" font-family="Playfair Display, Didot, Georgia, serif" font-size="68" fill="#141210">SC</text>
+  <circle cx="167" cy="34" r="9" fill="#D64545"/>
+</svg>

@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLang } from "../lang";
+import { Logo } from "./logo";
 import type { Lang } from "../i18n";
 
 export function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
@@ -62,13 +63,11 @@ export function Nav({ page = "home" }: { page?: string }) {
       <div className="nav__inner container">
         {home ? (
           <a href="#top" className="nav__brand" aria-label="Sorya Chau">
-            <span className="nav__mark">SC</span>
-            <span className="nav__name">Sorya&nbsp;Chau</span>
+            <Logo baseline={t.hero.role} />
           </a>
         ) : (
           <Link to="/" className="nav__brand" aria-label="Sorya Chau">
-            <span className="nav__mark">SC</span>
-            <span className="nav__name">Sorya&nbsp;Chau</span>
+            <Logo baseline={t.hero.role} />
           </Link>
         )}
 

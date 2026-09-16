@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect x="0" y="0" width="200" height="200" fill="#141210"/>
+  <text x="100" y="128" text-anchor="middle" font-family="Playfair Display, Didot, Georgia, serif" font-size="82" fill="#F2EFE8" letter-spacing="2">SC</text>
+  <circle cx="180" cy="20" r="9" fill="#D64545"/>
+</svg>
