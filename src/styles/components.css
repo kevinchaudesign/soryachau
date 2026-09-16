@@ -356,11 +356,34 @@ a.cdetail__v:hover { color: var(--accent); }
 @media (max-width: 1000px) {
   .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
   .nav__burger { display: block; }
-  .nav__mobile { display: block; position: fixed; top: 76px; left: 0; right: 0; background: oklch(0.965 0.008 85 / 0.97); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line-soft); padding: 12px var(--pad) 28px; transform: translateY(-12px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); z-index: 99; }
-  .nav__mobile.is-open { transform: none; opacity: 1; pointer-events: auto; }
-  .nav__mlink { display: block; padding: 14px 0; font-size: 18px; border-bottom: 1px solid var(--line-soft); }
-  .nav__mfoot { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
-  .nav__mfoot .lang-toggle { display: inline-flex; font-size: 14px; }
+  /* Menu plein écran. Il s'arrête sous la barre (z-index 90 < 100)
+     pour que la marque et la croix restent visibles et cliquables. */
+  .nav__mobile {
+    display: flex; flex-direction: column;
+    position: fixed; inset: 0; z-index: 90;
+    padding: calc(76px + clamp(20px, 5vh, 48px)) var(--pad) clamp(22px, 5vh, 44px);
+    background: var(--bg);
+    opacity: 0; transform: translateY(-10px); pointer-events: none;
+    transition: opacity .34s var(--ease), transform .34s var(--ease);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .nav__mobile.is-open { opacity: 1; transform: none; pointer-events: auto; }
+  .nav__mlink {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: clamp(13px, 2.4vh, 20px) 0; border-bottom: 1px solid var(--line-soft);
+    font-family: var(--serif); font-size: clamp(26px, 7vw, 40px); line-height: 1.1;
+    letter-spacing: -0.01em; color: var(--txt);
+  }
+  .nav__mlink[aria-current="page"] { color: var(--accent); }
+  .nav__mlink::before {
+    content: attr(data-n);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--txt-3);
+  }
+  .nav__mfoot {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    margin-top: auto; padding-top: clamp(24px, 5vh, 40px);
+  }
+  .nav__mfoot .lang-toggle { display: inline-flex; font-size: 15px; }
 }
 @media (max-width: 760px) {
   .work-cell--lg, .work-cell--sm, .work-cell--md, .work-cell--third { grid-column: span 12; }

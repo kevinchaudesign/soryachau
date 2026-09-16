@@ -28,6 +28,17 @@ export function Nav({ page = "home" }: { page?: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Menu plein écran : on bloque le défilement derrière lui et on
+     ferme à Échap, comme les autres couches modales du site. */
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  }, [open]);
+
   const home = page === "home";
   /* Site multi-pages : chaque entrée de nav est une route à part entière.
      Seul Contact reste une ancre — le footer #contact est présent sur
@@ -49,16 +60,21 @@ export function Nav({ page = "home" }: { page?: string }) {
     { id: "contact", label: t.nav.contact },
   ];
 
-  const navLink = (l: { id: string; label: string }, cls: string, onClick?: () => void) => {
+  const navLink = (l: { id: string; label: string }, cls: string, onClick?: () => void, n?: string) => {
     const cur = page === l.id ? "page" : undefined;
     const to = ROUTES[l.id];
     if (!to) {
-      return <a key={l.id} href={"#" + l.id} className={cls} aria-current={cur} onClick={onClick}>{l.label}</a>;
+      return <a key={l.id} href={"#" + l.id} className={cls} aria-current={cur} onClick={onClick} data-n={n}>{l.label}</a>;
     }
-    return <Link key={l.id} to={to} className={cls} aria-current={cur} onClick={onClick}>{l.label}</Link>;
+    return <Link key={l.id} to={to} className={cls} aria-current={cur} onClick={onClick} data-n={n}>{l.label}</Link>;
   };
 
   return (
+    /* Le menu plein écran vit hors du <header> : celui-ci porte un
+       backdrop-filter, qui ferait de lui le bloc conteneur d'un
+       enfant en position fixed — le menu se serait limité à la
+       hauteur de la barre. */
+    <>
     <header className={"nav" + (scrolled ? " nav--scrolled" : "")}>
       <div className="nav__inner container">
         {home ? (
@@ -81,20 +97,26 @@ export function Nav({ page = "home" }: { page?: string }) {
           <a href={"mailto:" + t.contact.email} className="btn btn-primary nav__cta">
             {t.nav.cta}
           </a>
-          <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>
+          <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open}
+                  aria-controls="nav-mobile" onClick={() => setOpen(!open)}>
             <span></span><span></span>
           </button>
         </div>
       </div>
+    </header>
 
-      <div className={"nav__mobile" + (open ? " is-open" : "")}>
-        {links.map((l) => navLink(l, "nav__mlink", () => setOpen(false)))}
-        <Link to="/cv" className="nav__mlink" onClick={() => setOpen(false)}>{t.nav.cv}</Link>
+      {/* <nav> et non <div> : hors du <header>, le menu doit porter
+          son propre point de repère pour les lecteurs d'écran. */}
+      <nav className={"nav__mobile" + (open ? " is-open" : "")} id="nav-mobile"
+           aria-label={lang === "fr" ? "Menu principal" : "Main menu"}
+           {...(open ? {} : ({ inert: "" } as object))}>
+        {links.map((l, i) => navLink(l, "nav__mlink", () => setOpen(false), String(i + 1).padStart(2, "0")))}
+        <Link to="/cv" className="nav__mlink" onClick={() => setOpen(false)} data-n={String(links.length + 1).padStart(2, "0")}>{t.nav.cv}</Link>
         <div className="nav__mfoot">
           <LangToggle lang={lang} setLang={setLang} />
           <a href={"mailto:" + t.contact.email} className="btn btn-primary">{t.nav.cta}</a>
         </div>
-      </div>
-    </header>
+      </nav>
+    </>
   );
 }
