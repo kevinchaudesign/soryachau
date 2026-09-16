@@ -307,7 +307,7 @@ export function Journal({ t }: { t: Messages }) {
           </Link>
         </div>
         <div className="journalt__grid">
-          <Link to={"/journal#" + feat.id} className="jcard jcard--feat reveal" data-cursor>
+          <Link to={"/journal/" + feat.id} className="jcard jcard--feat reveal" data-cursor>
             <div className="jcard__media" aria-hidden="true" {...({ inert: "" } as object)}>
               <image-slot id={"jslot-" + feat.id} shape="rect" placeholder={feat.cat} src={slots["jslot-" + feat.id] || undefined}></image-slot>
               <span className="jcard__veil"></span>
@@ -322,7 +322,7 @@ export function Journal({ t }: { t: Messages }) {
           </Link>
           <div className="journalt__list">
             {rest.map((a, i) => (
-              <Link to={"/journal#" + a.id} className="jrow reveal" key={a.id} style={{ "--rd": (i + 1) * 90 + "ms" }} data-cursor>
+              <Link to={"/journal/" + a.id} className="jrow reveal" key={a.id} style={{ "--rd": (i + 1) * 90 + "ms" }} data-cursor>
                 <span className="jrow__n">{String(i + 2).padStart(2, "0")}</span>
                 <div className="jrow__main">
                   <div className="jcard__meta"><span className="jcard__cat">{a.cat}</span><span className="jcard__dot">·</span><span>{a.read} {j.minRead}</span></div>

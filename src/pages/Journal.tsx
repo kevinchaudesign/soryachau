@@ -1,11 +1,11 @@
 /* ============================================================
-   Journal page — editorial magazine: featured + grid, in-page
-   article reader driven by the URL hash (#article-id).
+   Journal — sommaire éditorial : une à la une, puis la grille.
+   Chaque article a sa page (/journal/:slug, cf. pages/Article).
    Reuses Nav, Experience, Contact — la barre de montage est là
    comme sur les autres pages ; le lecteur d'article passe devant.
    ============================================================ */
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useMemo } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/blog.css";
 import type { Article, Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
@@ -32,96 +32,25 @@ function ArticleMeta({ a, j }: { a: Article; j: JournalT }) {
   );
 }
 
-function Reader({ a, idx, all, j, lang, onClose, onNext }: { a: Article; idx: number; all: Article[]; j: JournalT; lang: Lang; onClose: () => void; onNext: () => void }) {
-  const { slots } = useLang();
-  const closeRef = React.useRef<HTMLButtonElement>(null);
-  const lastFocusRef = React.useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    lastFocusRef.current = document.activeElement as HTMLElement;
-    closeRef.current?.focus();
-    return () => { lastFocusRef.current?.focus?.(); };
-  }, []);
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    const el = document.querySelector(".reader__scroll");
-    if (el) el.scrollTop = 0;
-    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
-  }, [a.id]);
-
-  return (
-    <div className="reader" role="dialog" aria-modal="true" aria-label={a.title}>
-      <div className="reader__backdrop" onClick={onClose}></div>
-      <article className="reader__sheet">
-        <div className="reader__bar">
-          <button ref={closeRef} className="reader__close" onClick={onClose} data-cursor aria-label={j.back}>
-            <span className="reader__close-x">←</span>{j.back}
-          </button>
-          <span className="reader__bar-meta">{j.kicker} · {String(idx + 1).padStart(2, "0")} / {String(all.length).padStart(2, "0")}</span>
-        </div>
-
-        <div className="reader__scroll">
-          <header className="reader__head">
-            <ArticleMeta a={a} j={j} />
-            <h1 className="reader__title">{a.title}</h1>
-            <p className="reader__dek">{a.dek}</p>
-            <div className="reader__byline">
-              <span className="reader__avatar" aria-hidden="true">SC</span>
-              <div>
-                <b>{j.by}</b>
-                <span>{lang === "fr" ? "Directrice de Production" : "Production Director"}</span>
-              </div>
-            </div>
-          </header>
-
-          <div className="reader__media" aria-hidden="true" {...({ inert: "" } as object)}>
-            <image-slot id={"rslot-" + a.id} shape="rect" placeholder={a.cat} src={slots["rslot-" + a.id] || undefined}></image-slot>
-            <span className="reader__media-cap">{a.cat}</span>
-          </div>
-
-          <div className="reader__body">
-            {a.body.map((b, i) => {
-              if (b.t === "h") return <h2 className="reader__h" key={i}>{b.c}</h2>;
-              if (b.t === "quote") return <blockquote className="reader__quote" key={i}>{b.c}</blockquote>;
-              return <p className="reader__p" key={i}>{b.c}</p>;
-            })}
-          </div>
-
-          <footer className="reader__foot">
-            <button className="reader__next" onClick={onNext} data-cursor>
-              <span className="reader__next-l">{j.next}</span>
-              <span className="reader__next-t">{all[(idx + 1) % all.length].title}</span>
-            </button>
-          </footer>
-        </div>
-      </article>
-    </div>
-  );
-}
-
 export default function JournalPage() {
   const { lang, t, slots } = useLang();
   const scenes = useMemo(() => BP_SCENES(lang), [lang]);
   const j = t.journal;
   const location = useLocation();
 
-  const idFromHash = () => (window.location.hash || "").replace(/^#/, "");
-  const [openId, setOpenId] = useState(idFromHash());
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = lang === "fr" ? "Journal — Sorya Chau" : "Journal — Sorya Chau";
   }, [lang]);
 
-  /* Hash → open article. The router location covers client-side navigations
-     (nav links, teaser cards); hashchange covers manual edits / back-forward. */
-  useEffect(() => { setOpenId(idFromHash()); }, [location]);
+  /* Anciens liens /journal#article : on renvoie vers la page de
+     l'article, pour ne pas casser ce qui a déjà été partagé. */
   useEffect(() => {
-    const onHash = () => setOpenId(idFromHash());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+    const id = (window.location.hash || "").replace(/^#/, "");
+    if (id && j.articles.some((a) => a.id === id)) navigate("/journal/" + id, { replace: true });
+    // eslint-disable-next-line
+  }, [location]);
 
   // scroll reveal
   useEffect(() => {
@@ -136,10 +65,6 @@ export default function JournalPage() {
   }, [lang]);
 
   const articles = j.articles;
-  const openIdx = articles.findIndex((a) => a.id === openId);
-  const open = openIdx >= 0 ? articles[openIdx] : null;
-
-  const goTo = (id: string) => { history.replaceState(null, "", id ? "#" + id : window.location.pathname); setOpenId(id || ""); };
   const feat = articles[0];
   const grid = articles.slice(1);
 
@@ -163,7 +88,7 @@ export default function JournalPage() {
         <div className="container">
           {/* liens de hash natifs : le listener hashchange ouvre le lecteur,
               la sémantique et le clavier sont ceux d'un vrai lien */}
-          <a className="bp__feat reveal" href={"#" + feat.id} data-cursor>
+          <Link className="bp__feat reveal" to={"/journal/" + feat.id} data-cursor>
             <div className="bp__feat-media" aria-hidden="true" {...({ inert: "" } as object)}>
               <image-slot id={"bslot-" + feat.id} shape="rect" placeholder={feat.cat} src={slots["bslot-" + feat.id] || undefined}></image-slot>
               <span className="bp__feat-veil"></span>
@@ -175,11 +100,11 @@ export default function JournalPage() {
               <p className="bp__feat-dek">{feat.dek}</p>
               <span className="jcard__cta">{j.readArticle}<ArrowUR /></span>
             </div>
-          </a>
+          </Link>
 
           <div className="bp__grid">
             {grid.map((a, i) => (
-              <a className="bp__card reveal" key={a.id} href={"#" + a.id} data-cursor
+              <Link className="bp__card reveal" key={a.id} to={"/journal/" + a.id} data-cursor
                  style={{ "--rd": (i % 3) * 80 + "ms" }}>
                 <div className="bp__card-media" aria-hidden="true" {...({ inert: "" } as object)}>
                   <image-slot id={"bgslot-" + a.id} shape="rect" placeholder={a.cat} src={slots["bgslot-" + a.id] || undefined}></image-slot>
@@ -191,7 +116,7 @@ export default function JournalPage() {
                   <p className="bp__card-dek">{a.dek}</p>
                   <span className="jcard__cta">{j.readMore}<ArrowUR /></span>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -199,11 +124,6 @@ export default function JournalPage() {
 
       <Contact t={t} />
 
-      {open ? (
-        <Reader a={open} idx={openIdx} all={articles} j={j} lang={lang}
-                onClose={() => goTo("")}
-                onNext={() => goTo(articles[(openIdx + 1) % articles.length].id)} />
-      ) : null}
     </React.Fragment>
   );
 }

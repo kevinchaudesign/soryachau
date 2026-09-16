@@ -19,6 +19,7 @@ const ApprochePage = lazy(() => import("./pages/Approche"));
 const ExpertisesPage = lazy(() => import("./pages/Expertises"));
 const WorkPage = lazy(() => import("./pages/Work"));
 const JournalPage = lazy(() => import("./pages/Journal"));
+const ArticlePage = lazy(() => import("./pages/Article"));
 const AProposPage = lazy(() => import("./pages/APropos"));
 const CVPage = lazy(() => import("./pages/CV"));
 const AdminPage = lazy(() => import("./pages/Admin"));
@@ -57,6 +58,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/expertises" element={<ExpertisesPage />} />
           <Route path="/projets" element={<WorkPage />} />
           <Route path="/journal" element={<JournalPage />} />
+          <Route path="/journal/:slug" element={<ArticlePage />} />
           <Route path="/a-propos" element={<AProposPage />} />
           {/* anciennes adresses : on ne casse pas les liens déjà partagés */}
           <Route path="/profil" element={<Navigate to="/approche" replace />} />
