@@ -42,7 +42,7 @@
 
 /* — Dark islands: the screen-like layers keep the darkroom palette.
      Same token names, re-scoped — the single red accent stays global. — */
-.hero, .intro, .editbar, .lightbox, .work-card,
+.hero, .intro, .editbar, .lightbox, .work-card, .band,
 .filmrow__media, .jcard__media, .bp__feat-media, .bp__card-media {
   --bg:        oklch(0.158 0.006 56);
   --bg-deep:   oklch(0.138 0.006 54);
@@ -57,7 +57,7 @@
   color: var(--txt);
 }
 /* red reads brighter on the dark islands */
-.hero, .intro, .editbar, .lightbox, .work-card,
+.hero, .intro, .editbar, .lightbox, .work-card, .band,
 .filmrow__media, .jcard__media, .bp__feat-media, .bp__card-media {
   --accent:      oklch(0.635 0.205 25);
   --accent-soft: oklch(0.700 0.160 26);

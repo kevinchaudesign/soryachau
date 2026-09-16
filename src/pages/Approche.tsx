@@ -8,6 +8,7 @@ import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
+import { ShootBand } from "../components/band";
 import { Contact, Approche } from "../components/sections";
 
 export default function ApprochePage() {
@@ -34,6 +35,7 @@ export default function ApprochePage() {
         </div>
 
         <Approche t={t} h1 />
+        <ShootBand id="band-approche" label={lang === "fr" ? "Préparation" : "Preparation"} tc="00:12:04:08" />
       </main>
 
       <Contact t={t} />

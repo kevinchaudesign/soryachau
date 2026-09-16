@@ -9,6 +9,7 @@ import "../styles/blog.css"; /* Journal teaser reuses jcard classes */
 import { useLang } from "../lang";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
+import { ShootBand } from "../components/band";
 import { Hero } from "../components/hero";
 import { AProposTeaser, ApprocheTeaser, CVBand, Clients, Contact, Journal, Work } from "../components/sections";
 
@@ -70,6 +71,7 @@ export default function Home() {
       <main id="main">
         <Hero t={t} lang={lang} />
         <ApprocheTeaser t={t} lang={lang} />
+        <ShootBand id="band-accueil" label={lang === "fr" ? "Plan de travail" : "Shooting schedule"} tc="00:04:37:12" />
         <Work t={t} lang={lang} />
         <Journal t={t} />
         <AProposTeaser t={t} lang={lang} />
