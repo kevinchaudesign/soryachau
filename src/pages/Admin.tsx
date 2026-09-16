@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import "../styles/admin.css";
 import { supabase } from "../lib/supabase";
+import { convertToAvif, slugify } from "../lib/avif";
 import type { Lang } from "../i18n";
 import MediaTab from "./AdminMedia";
 
@@ -469,17 +470,27 @@ function SlotCard({ id, url, onChanged, setStatus }: { id: string; url: string |
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
+  /* Comme la médiathèque : conversion AVIF dans le navigateur, et
+     c'est elle seule qui part au stockage. Si l'encodage échoue,
+     rien n'est envoyé — jamais le fichier d'origine. */
   const upload = async (file: File) => {
     setBusy(true);
-    const ext = (file.name.split(".").pop() || "img").toLowerCase();
-    const path = `slots/${id}/${Date.now()}.${ext}`;
-    const up = await supabase.storage.from("media").upload(path, file, { cacheControl: "31536000" });
+    let blob: Blob;
+    try {
+      ({ blob } = await convertToAvif(file));
+    } catch (e) {
+      setBusy(false);
+      setStatus(e instanceof Error ? e.message : "Conversion AVIF impossible.", true);
+      return;
+    }
+    const path = `slots/${id}/${slugify(file.name)}-${Date.now()}.avif`;
+    const up = await supabase.storage.from("media").upload(path, blob, { contentType: "image/avif", cacheControl: "31536000" });
     if (up.error) { setBusy(false); setStatus("Upload impossible : " + up.error.message, true); return; }
     const pub = supabase.storage.from("media").getPublicUrl(path);
     const { error } = await supabase.from("image_slots").upsert({ id, url: pub.data.publicUrl, updated_at: new Date().toISOString() });
     setBusy(false);
     if (error) { setStatus("Erreur : " + error.message, true); return; }
-    clearPublicCache(); setStatus("Image publiée."); onChanged();
+    clearPublicCache(); setStatus("Image convertie en AVIF et publiée."); onChanged();
   };
 
   const clear = async () => {
@@ -499,7 +510,7 @@ function SlotCard({ id, url, onChanged, setStatus }: { id: string; url: string |
       <div className="adm-slot__row">
         <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp,image/avif"
                onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ""; }} />
-        <button className="adm-btn adm-btn--sm" disabled={busy} onClick={() => fileRef.current?.click()}>{busy ? "…" : url ? "Remplacer" : "Téléverser"}</button>
+        <button className="adm-btn adm-btn--sm" disabled={busy} onClick={() => fileRef.current?.click()}>{busy ? "Conversion…" : url ? "Remplacer" : "Téléverser"}</button>
         {url ? <button className="adm-btn adm-btn--sm adm-btn--ghost adm-btn--danger" disabled={busy} onClick={clear}>Retirer</button> : null}
       </div>
     </div>
@@ -521,7 +532,7 @@ function ImagesTab() {
 
   return (
     <div>
-      <p className="adm-note">Chaque emplacement correspond à un visuel du site. Sans image, le site affiche le placeholder d'origine.</p>
+      <p className="adm-note">Chaque emplacement correspond à un visuel du site. Sans image, le site affiche le placeholder d'origine. Les fichiers sont convertis en AVIF dans ton navigateur avant l'envoi — seul l'AVIF est stocké.</p>
       {status}
       <div className="adm-slots">
         {rows.map((s) => <SlotCard key={s.id} id={s.id} url={s.url} onChanged={load} setStatus={setStatus} />)}
