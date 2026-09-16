@@ -105,3 +105,15 @@ html.has-reticle .filmrow--film { cursor: none; }
   .filmrow__n { display: none; }
   .filmrow__cta { margin-left: 0; }
 }
+
+/* Récit du projet : le défi, mon rôle, le résultat. */
+.story { margin-top: clamp(20px, 2.2vw, 28px); display: grid; gap: 16px; max-width: 78ch; }
+.story__b { display: grid; grid-template-columns: 130px 1fr; gap: clamp(12px, 1.6vw, 22px); align-items: baseline; }
+.story__b dt {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); padding-top: 3px;
+}
+.story__b dd { font-size: 14.5px; line-height: 1.62; color: var(--txt-3); }
+@media (max-width: 760px) {
+  .story__b { grid-template-columns: 1fr; gap: 6px; }
+}

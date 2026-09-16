@@ -13,23 +13,34 @@ import { Contact } from "../components/sections";
 import { ArrowUR, PlayGlyph } from "../components/icons";
 
 const WP_CATS: Record<Lang, [string, string][]> = {
-  fr: [["all", "Tout"], ["brand", "Film de marque"], ["doc", "Documentaire"], ["post", "Post-production"], ["vfx", "3D & VFX"], ["ai", "IA"]],
-  en: [["all", "All"], ["brand", "Brand film"], ["doc", "Documentary"], ["post", "Post-production"], ["vfx", "3D & VFX"], ["ai", "AI"]],
+  fr: [["all", "Tout"], ["brand", "Film de marque"], ["corp", "Film institutionnel"], ["doc", "Documentaire"], ["post", "Post-production"], ["vfx", "3D"], ["clip", "Clip"]],
+  en: [["all", "All"], ["brand", "Brand film"], ["corp", "Corporate film"], ["doc", "Documentary"], ["post", "Post-production"], ["vfx", "3D"], ["clip", "Music video"]],
 };
 /* Fallback for content cached before the category column existed */
-const WP_CATMAP: Record<string, string> = { kinder: "brand", tagheuer: "brand", krys: "brand", avene: "post", asics: "doc", fiat: "vfx", pmu: "ai" };
+const WP_CATMAP: Record<string, string> = { kinder: "brand", petitballon: "brand", tagheuer: "brand", krys: "corp", avene: "post", asics: "doc", fiat: "vfx", universal: "clip" };
 const catOf = (p: Project) => p.category || WP_CATMAP[p.id] || "brand";
 
 /* Piste de montage de la page : en-tête, filmographie, contact */
 const WP_SCENES = (lang: Lang) => [scene(lang, "01", ".wp__head"), scene(lang, "04", ".wp__list"), scene(lang, "07", "#contact")];
 
-function FilmRow({ p, lang, n }: { p: Project; t: Messages; lang: Lang; n: number }) {
+function FilmRow({ p, t, lang, n }: { p: Project; t: Messages; lang: Lang; n: number }) {
   const { slots } = useLang();
-  const hasFilm = !!p.vimeo;
+  const film = p.youtube || p.vimeo;
+  const hasFilm = !!film;
   const isPending = !!p.pending && !hasFilm;
   const watch = lang === "fr" ? "Regarder le film" : "Watch the film";
   const dropTxt = lang === "fr" ? "Déposer un visuel" : "Drop a still";
-  const open = () => window.dispatchEvent(new CustomEvent("sorya:play", { detail: { id: p.vimeo, client: p.client, title: p.title } }));
+  const open = () => window.dispatchEvent(new CustomEvent("sorya:play", {
+    detail: { id: film, client: p.client, title: p.title, source: p.youtube ? "youtube" : "vimeo" },
+  }));
+  /* Récit du projet : l'anglais retombe sur le français tant qu'il
+     n'est pas traduit, plutôt que d'afficher un bloc vide. */
+  const story = (f?: Record<Lang, string>) => (f ? f[lang] || f.fr : "");
+  /* Le contenu vient de Supabase : une clé absente en base ne doit
+     jamais vider la page, d'où ces libellés de repli. */
+  const L = t.work.labels || (lang === "fr"
+    ? { challenge: "Le défi", contribution: "Mon rôle", outcome: "Le résultat" }
+    : { challenge: "The challenge", contribution: "My role", outcome: "The outcome" });
   return (
     <article
       className={"filmrow reveal" + (hasFilm ? " filmrow--film" : "") + (isPending ? " filmrow--pending" : "")}
@@ -59,9 +70,23 @@ function FilmRow({ p, lang, n }: { p: Project; t: Messages; lang: Lang; n: numbe
             <span className="filmrow__year">{p.year}</span>
           </div>
           <p className="filmrow__desc">{p.desc[lang]}</p>
+
+          {story(p.challenge) || story(p.contribution) || story(p.outcome) ? (
+            <dl className="story">
+              {story(p.challenge) ? (
+                <div className="story__b"><dt>{L.challenge}</dt><dd>{story(p.challenge)}</dd></div>
+              ) : null}
+              {story(p.contribution) ? (
+                <div className="story__b"><dt>{L.contribution}</dt><dd>{story(p.contribution)}</dd></div>
+              ) : null}
+              {story(p.outcome) ? (
+                <div className="story__b"><dt>{L.outcome}</dt><dd>{story(p.outcome)}</dd></div>
+              ) : null}
+            </dl>
+          ) : null}
+
           <div className="filmrow__foot">
-            <span className={"chip" + (p.ai ? " chip-ai" : "")}>{p.ai ? "◇ " : ""}{p.tag[lang]}</span>
-            <span className="filmrow__role">{p.role[lang]}</span>
+            <span className="chip">{p.tag[lang]}</span>
             <span className="filmrow__cta">
               {hasFilm ? <React.Fragment>{watch} <ArrowUR /></React.Fragment> : (isPending ? "+ " + dropTxt : null)}
             </span>

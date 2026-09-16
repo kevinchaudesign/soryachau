@@ -212,16 +212,20 @@ function TextesTab() {
 type ProjectRow = {
   id: string; sort_order: number; client: string; title: string; year: string;
   featured: boolean; pending: boolean; ai: boolean;
-  vimeo: string | null; still: string | null; category: string;
+  vimeo: string | null; youtube: string | null; still: string | null; category: string;
   tag: Record<Lang, string>; role: Record<Lang, string>; descr: Record<Lang, string>;
+  challenge: Record<Lang, string>; contribution: Record<Lang, string>; outcome: Record<Lang, string>;
 };
 
-const CATS: [string, string][] = [["brand", "Film de marque"], ["doc", "Documentaire"], ["post", "Post-production"], ["vfx", "3D & VFX"], ["ai", "IA"]];
+/* Doit rester aligné sur la contrainte projects_category_check
+   (migration 20260916030000) et sur les filtres de /projets. */
+const CATS: [string, string][] = [["brand", "Film de marque"], ["corp", "Film institutionnel"], ["doc", "Documentaire"], ["post", "Post-production"], ["vfx", "3D"], ["clip", "Clip"]];
 
 const NEW_PROJECT: ProjectRow = {
   id: "", sort_order: 99, client: "", title: "", year: String(new Date().getFullYear()),
-  featured: false, pending: true, ai: false, vimeo: null, still: null, category: "brand",
+  featured: false, pending: true, ai: false, vimeo: null, youtube: null, still: null, category: "brand",
   tag: { fr: "", en: "" }, role: { fr: "", en: "" }, descr: { fr: "", en: "" },
+  challenge: { fr: "", en: "" }, contribution: { fr: "", en: "" }, outcome: { fr: "", en: "" },
 };
 
 function ProjetsTab() {
@@ -306,12 +310,13 @@ function ProjetsTab() {
             <Field label="Client"><input type="text" value={sel.client} onChange={(e) => set({ client: e.target.value })} /></Field>
             <Field label="Titre"><input type="text" value={sel.title} onChange={(e) => set({ title: e.target.value })} /></Field>
             <Field label="Année"><input type="text" value={sel.year} onChange={(e) => set({ year: e.target.value })} /></Field>
-            <Field label="Catégorie (filtre Réalisations)">
+            <Field label="Catégorie (filtre Projets)">
               <select value={sel.category} onChange={(e) => set({ category: e.target.value })}>
                 {CATS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
               </select>
             </Field>
-            <Field label="ID Vimeo (vide = pas de film)"><input type="text" value={sel.vimeo || ""} onChange={(e) => set({ vimeo: e.target.value.trim() || null })} /></Field>
+            <Field label="ID YouTube (vide = pas de film)"><input type="text" value={sel.youtube || ""} onChange={(e) => set({ youtube: e.target.value.trim() || null })} /></Field>
+            <Field label="ID Vimeo (ancien hébergement)"><input type="text" value={sel.vimeo || ""} onChange={(e) => set({ vimeo: e.target.value.trim() || null })} /></Field>
             <Field label="URL du visuel (vide = slot image)"><input type="text" value={sel.still || ""} onChange={(e) => set({ still: e.target.value.trim() || null })} /></Field>
           </div>
           <div>
@@ -324,13 +329,20 @@ function ProjetsTab() {
             <Field label="Tag"><input type="text" value={sel.tag.fr} onChange={(e) => set({ tag: { ...sel.tag, fr: e.target.value } })} /></Field>
             <Field label="Rôle"><input type="text" value={sel.role.fr} onChange={(e) => set({ role: { ...sel.role, fr: e.target.value } })} /></Field>
           </div>
-          <Field label="Description"><Txt long value={sel.descr.fr} onChange={(v) => set({ descr: { ...sel.descr, fr: v } })} /></Field>
+          <Field label="Description (grille de l'accueil)"><Txt long value={sel.descr.fr} onChange={(v) => set({ descr: { ...sel.descr, fr: v } })} /></Field>
+          <Field label="Le défi"><Txt long value={sel.challenge.fr} onChange={(v) => set({ challenge: { ...sel.challenge, fr: v } })} /></Field>
+          <Field label="Mon rôle"><Txt long value={sel.contribution.fr} onChange={(v) => set({ contribution: { ...sel.contribution, fr: v } })} /></Field>
+          <Field label="Le résultat"><Txt long value={sel.outcome.fr} onChange={(v) => set({ outcome: { ...sel.outcome, fr: v } })} /></Field>
           <div className="adm-h">English</div>
           <div className="adm-cols">
             <Field label="Tag"><input type="text" value={sel.tag.en} onChange={(e) => set({ tag: { ...sel.tag, en: e.target.value } })} /></Field>
             <Field label="Rôle"><input type="text" value={sel.role.en} onChange={(e) => set({ role: { ...sel.role, en: e.target.value } })} /></Field>
           </div>
           <Field label="Description"><Txt long value={sel.descr.en} onChange={(v) => set({ descr: { ...sel.descr, en: v } })} /></Field>
+          <Field label="The challenge"><Txt long value={sel.challenge.en} onChange={(v) => set({ challenge: { ...sel.challenge, en: v } })} /></Field>
+          <Field label="My role"><Txt long value={sel.contribution.en} onChange={(v) => set({ contribution: { ...sel.contribution, en: v } })} /></Field>
+          <Field label="The outcome"><Txt long value={sel.outcome.en} onChange={(v) => set({ outcome: { ...sel.outcome, en: v } })} /></Field>
+          <p className="adm-note">Laisser vide en anglais : la page affiche alors le texte français.</p>
           <div className="adm-actions">
             <button className="adm-btn adm-btn--primary" onClick={save} disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
             {!isNew ? <button className="adm-btn adm-btn--ghost adm-btn--danger" onClick={remove} disabled={busy}>Supprimer</button> : null}

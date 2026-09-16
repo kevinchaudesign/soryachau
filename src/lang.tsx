@@ -50,8 +50,11 @@ function initialContent(): Content {
 type ProjectRow = {
   id: string; sort_order: number; client: string; title: string; year: string;
   featured: boolean; pending: boolean; ai: boolean;
-  vimeo: string | null; still: string | null; category: string;
+  vimeo: string | null; youtube: string | null; still: string | null; category: string;
   tag: Record<Lang, string>; role: Record<Lang, string>; descr: Record<Lang, string>;
+  challenge: Record<Lang, string> | null;
+  contribution: Record<Lang, string> | null;
+  outcome: Record<Lang, string> | null;
 };
 type ArticleRow = { id: string; sort_order: number; fr: Record<string, unknown>; en: Record<string, unknown> };
 
@@ -77,8 +80,11 @@ async function fetchContent(): Promise<Content | null> {
   const projects: Project[] = (pr.data as ProjectRow[]).map((r) => ({
     id: r.id, client: r.client, title: r.title, year: r.year,
     featured: r.featured, pending: r.pending || undefined, ai: r.ai,
-    vimeo: r.vimeo || undefined, still: r.still || undefined,
+    vimeo: r.vimeo || undefined, youtube: r.youtube || undefined, still: r.still || undefined,
     category: r.category, tag: r.tag, role: r.role, desc: r.descr,
+    challenge: r.challenge || undefined,
+    contribution: r.contribution || undefined,
+    outcome: r.outcome || undefined,
   }));
 
   const slots: Slots = Object.fromEntries((sl.data || []).map((s) => [s.id, s.url]));

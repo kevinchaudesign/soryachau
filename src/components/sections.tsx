@@ -1,9 +1,9 @@
 /* ============================================================
    Sections de contenu. Deux usages :
-   · version pleine (Profile, Workflow, Parcours) → pages dédiées
+   · version pleine (Approche, Expertises, APropos) → pages dédiées
    · version aperçu (…Teaser) → accueil, avec lien vers la page
    Work et Journal n'existent que comme aperçus ; leur version
-   pleine vit dans les pages Work et Journal.
+   pleine vit dans les pages Projets et Journal.
    ============================================================ */
 import React from "react";
 import { Link } from "react-router-dom";
@@ -203,13 +203,14 @@ export const CLIP_DUR: Record<string, string> = { kinder: "01:12", tagheuer: "00
 
 export function WorkCard({ p, t, lang, span }: { p: Project; t: Messages; lang: Lang; span: string }) {
   const { slots } = useLang();
-  const hasFilm = !!p.vimeo;
+  const film = p.youtube || p.vimeo;
+  const hasFilm = !!film;
   const isPending = !!p.pending && !hasFilm;
   const watch = lang === "fr" ? "Regarder le film" : "Watch the film";
   const dropTxt = lang === "fr" ? "Déposer un visuel" : "Drop a still";
   const openFilm = () => {
     window.dispatchEvent(new CustomEvent("sorya:play", {
-      detail: { id: p.vimeo, client: p.client, title: p.title },
+      detail: { id: film, client: p.client, title: p.title, source: p.youtube ? "youtube" : "vimeo" },
     }));
   };
   return (

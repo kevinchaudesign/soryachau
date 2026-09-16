@@ -15,12 +15,19 @@ export interface Project {
   featured: boolean;
   pending?: boolean;
   ai: boolean;
-  vimeo?: string;
+  vimeo?: string;   // historique : anciens films hébergés sur Vimeo
+  youtube?: string; // identifiant YouTube — source actuelle
   still?: string;
   category?: string; // work-page filter: brand | doc | post | vfx | ai
   tag: Record<Lang, string>;
   role: Record<Lang, string>;
   desc: Record<Lang, string>;
+  /* Récit du projet, tel que Sorya l'a écrit. L'anglais peut être
+     vide tant qu'il n'est pas traduit : l'affichage retombe alors
+     sur le français. */
+  challenge?: Record<Lang, string>;
+  contribution?: Record<Lang, string>;
+  outcome?: Record<Lang, string>;
 }
 
 export const I18N = {
@@ -166,6 +173,7 @@ export const I18N = {
       title: "Des productions supervisées de bout en bout.",
       lead: "Une sélection de projets pilotés de la préparation à la livraison — film, campagne, shooting, post-production.",
       roleLabel: "Rôle",
+      labels: { challenge: "Le défi", contribution: "Mon rôle", outcome: "Le résultat" },
       dropHint: "Déposez votre visuel",
     },
     apropos: {
@@ -364,6 +372,7 @@ export const I18N = {
       title: "Productions supervised end to end.",
       lead: "A selection of projects steered from preparation to delivery — film, campaign, photo shoot, post-production.",
       roleLabel: "Role",
+      labels: { challenge: "The challenge", contribution: "My role", outcome: "The outcome" },
       dropHint: "Drop your visual",
     },
     apropos: {
@@ -427,78 +436,91 @@ export const I18N = {
 export const PROJECTS: Project[] = [
   {
     id: "kinder", client: "Kinder", title: "La Magie de Noël",
-    year: "2023", featured: true,
-    vimeo: "1037503208", still: "https://vumbnail.com/1037503208.jpg",
-    tag: { fr: "Film TV & Digital", en: "TV & Digital film" }, ai: false,
-    role: { fr: "Direction de production", en: "Production direction" },
-    desc: {
-      fr: "Pour les fêtes, célébrer la magie de Noël à travers des films diffusés en TV et digital. La magie simple d'un geste, un moment de complicité entre parents et enfants où l'amour se traduit sans paroles.",
-      en: "For the holidays, celebrating the magic of Christmas across TV and digital films. The simple magic of a gesture — a moment of closeness between parents and children, where love needs no words.",
-    },
+    year: "2023", featured: true, category: "brand",
+    youtube: "rYsz7y2RcwE", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/kinder-e1013d.avif",
+    tag: { fr: "Campagne publicitaire : TV, digital et réseaux sociaux", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Campagne de Noël déclinée en TV, digital et réseaux sociaux, tournée avec des enfants sur un planning de diffusion non négociable.", en: "" },
+    challenge: { fr: "Kinder avait besoin de lancer sa campagne de Noël simultanément en TV, digital et réseaux sociaux, avec de nombreux livrables à produire sur un planning de diffusion non négociable et l'exigence que l'émotion reste sincère malgré l'ampleur du dispositif et la présence d'enfants sur le plateau.", en: "" },
+    contribution: { fr: "J'ai défini et coordonné les équipes créatives, la production et la post-production sur l'ensemble des livrables, en construisant le plan de tournage autour du rythme des enfants plutôt que l'inverse et en restant sur le plateau à chaque étape, pour préserver la spontanéité de l'émotion sans jamais menacer la qualité des livrables.", en: "" },
+    outcome: { fr: "Un ensemble de livrables cohérent sur tous les formats, prêt pour le lancement au moment stratégique des fêtes, sans compromis sur la qualité, l'authenticité de l'émotion ni sur le planning.", en: "" },
   },
   {
-    id: "tagheuer", client: "TAG Heuer", title: "Baselworld",
-    year: "2020", featured: true,
-    vimeo: "407069287", still: "https://super-motion.com/wp-content/uploads/2020/03/01_tag_heuer.jpg",
-    tag: { fr: "Film de marque", en: "Brand film" }, ai: false,
-    role: { fr: "Direction de production", en: "Production direction" },
-    desc: {
-      fr: "Cinq garde-temps iconiques dévoilés pour Baselworld, premier salon mondial de l'horlogerie et de la joaillerie. Un travail précis du cadre, de la lumière et du rythme, à la hauteur du savoir-faire avant-gardiste de la maison.",
-      en: "Five iconic timepieces unveiled for Baselworld, the world's leading watch and jewellery show. Precise work on framing, light and pacing — matching the maison's avant-garde savoir-faire.",
-    },
+    id: "petitballon", client: "Le Petit Ballon", title: "L'Accordeur de vin",
+    year: "", featured: true, category: "brand",
+    youtube: "xq5rWblQWBc", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/le-petit-ballon-8487a7.avif",
+    tag: { fr: "Film de marque", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Film de marque décalé sur un marché du vin très codifié, où l'humour du concept devait survivre aux arbitrages de production.", en: "" },
+    challenge: { fr: "Le Petit Ballon voulait affirmer une identité de marque décalée sur un marché du vin très codifié, sans que les contraintes de production ne diluent l'humour et l'originalité du concept.", en: "" },
+    contribution: { fr: "J'ai organisé et piloté les équipes créatives, la production et la post-production, en choisissant une équipe de tournage habituée aux formats décalés, du casting au repérage. Je suis restée présente sur le plateau pour que le ton du film soit respecté malgré les arbitrages de production et de budget.", en: "" },
+    outcome: { fr: "Un film fidèle à l'identité décalée de la marque, livré sans compromis sur le ton ni sur le planning et le budget, renforçant sa singularité face aux codes plus classiques du secteur.", en: "" },
   },
   {
     id: "avene", client: "Avène", title: "Comedomed",
-    year: "2023", featured: true, pending: true,
-    tag: { fr: "Post-production", en: "Post-production" }, ai: false,
-    role: { fr: "Direction post-production", en: "Post-production direction" },
-    desc: {
-      fr: "Sur la campagne digitale d'Avène, accompagnement de Leo Burnett sur l'ensemble de la post-production. Un travail minutieux sur la couleur, la texture de la peau et la justesse des retouches, pour un rendu naturel et premium.",
-      en: "On Avène's digital campaign, supporting Leo Burnett across the full post-production. Meticulous work on colour, skin texture and retouching precision, for a result both natural and premium.",
-    },
+    year: "2023", featured: false, category: "post",
+    youtube: "qFs1pP2rshg", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/avene-56021f.avif",
+    tag: { fr: "Post-production", en: "" }, ai: false,
+    role: { fr: "Direction de post-production", en: "" },
+    desc: { fr: "Campagne internationale dermo-cosmétique : un rendu premium où le moindre écart de retouche engageait la confiance envers la marque.", en: "" },
+    challenge: { fr: "Avène et Saatchi avaient besoin d'un rendu premium et crédible dermatologiquement pour une campagne internationale, avec un renfort d'experts en post-production. L'enjeu était de taille : le moindre écart de retouche pouvait nuire à la confiance envers la marque.", en: "" },
+    contribution: { fr: "J'ai défini et coordonné une équipe d'experts en post-production (monteur, motion designer, 3D, retoucheur, comédiens voix off multilingues), en cadrant chaque étape et en m'intégrant au rythme et au budget du projet.", en: "" },
+    outcome: { fr: "Un rendu naturel et premium, conforme aux standards dermo-cosmétiques sur l'ensemble des marchés de la campagne, livré dans le respect du planning et du budget.", en: "" },
   },
   {
-    id: "krys", client: "Krys Group", title: "CODIR",
-    year: "2025", featured: true,
-    vimeo: "1073273597", still: "https://vumbnail.com/1073273597.jpg",
-    tag: { fr: "Film de marque", en: "Brand film" }, ai: false,
-    role: { fr: "Direction de production", en: "Production direction" },
-    desc: {
-      fr: "Pour la modernisation du centre de production CODIR, un film dédié à la fabrication des verres. À travers les gestes de celles et ceux qui les créent, un hommage à la précision et au savoir-faire Made in France.",
-      en: "For the modernisation of the CODIR production centre, a film dedicated to lens-making. Through the gestures of those who craft them, a tribute to precision and Made-in-France savoir-faire.",
-    },
+    id: "krys", client: "Krys Group", title: "L'art de bien voir",
+    year: "2025", featured: false, category: "corp",
+    youtube: "-_Ri0Re0Ees", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/krys-63102b.avif",
+    tag: { fr: "Film institutionnel", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Film tourné dans le centre de production CODIR, au plus près de celles et ceux qui fabriquent les verres.", en: "" },
+    challenge: { fr: "Réalisé à l'occasion de l'agrandissement du centre de production CODIR, le film avait pour enjeu de valoriser le savoir-faire et de mettre en lumière celles et ceux qui fabriquent, dans l'ombre du site, les verres qui améliorent la vision de millions de personnes.", en: "" },
+    contribution: { fr: "J'ai piloté la production et la post-production, en concevant un plan de tournage discret calé sur les temps morts de la ligne de production du CODIR et en restant sur place pour laisser aux équipes le temps de s'habituer à la caméra avant le premier clap.", en: "" },
+    outcome: { fr: "Un film institutionnel qui valorise la précision du savoir-faire et la fierté d'un groupe engagé, diffusé en interne, auprès des associés et du grand public.", en: "" },
   },
   {
-    id: "asics", client: "ASICS", title: "Bouge ton esprit",
-    year: "2023", featured: false,
-    vimeo: "887208456", still: "https://vumbnail.com/887208456.jpg",
-    tag: { fr: "Documentaire", en: "Documentary" }, ai: false,
-    role: { fr: "Direction de production longue durée", en: "Long-form production direction" },
-    desc: {
-      fr: "Avec la Ville de Paris, ASICS rend le sport plus accessible et inclusif pour la santé physique et mentale des Parisiens. Un film documentaire pensé comme un manifeste du mouvement.",
-      en: "With the City of Paris, ASICS makes sport more accessible and inclusive for Parisians' physical and mental health. A documentary film conceived as a manifesto for movement.",
-    },
+    id: "asics", client: "ASICS × Ville de Paris", title: "Paris, Bouge ton esprit",
+    year: "2023", featured: true, category: "doc",
+    youtube: "0h6t_rdsIxM", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/asics-283852.avif",
+    tag: { fr: "Documentaire", en: "" }, ai: false,
+    role: { fr: "Coordination de production", en: "" },
+    desc: { fr: "Mini-documentaire sur le lien entre sport et santé mentale, tourné sur plusieurs mois d'interviews.", en: "" },
+    challenge: { fr: "Produire pour Asics et la Ville de Paris un mini-documentaire sur le lien entre sport et santé mentale. Plusieurs mois de tournage et d'interviews pour capter des récits authentiques et lancer le programme Paris, Bouge ton esprit.", en: "" },
+    contribution: { fr: "J'ai mis en place et suivi les équipes de production sur des phases clés du projet, en assurant un point de coordination de la pré-production au livrable.", en: "" },
+    outcome: { fr: "Un film porté par des récits humains forts, qui a contribué à générer un fort engagement dès le lancement du programme.", en: "" },
+  },
+  {
+    id: "tagheuer", client: "TAG Heuer", title: "Iconic watches",
+    year: "2020", featured: false, category: "brand",
+    youtube: "lj0Cwl0w8FE", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/tag-heuer-cadf4c.avif",
+    tag: { fr: "Contenus social media et salon", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Modèles emblématiques filmés pour les réseaux sociaux et le salon Baselworld, à cadence resserrée.", en: "" },
+    challenge: { fr: "TAG Heuer cherchait à présenter plusieurs modèles emblématiques sur les réseaux sociaux et lors du salon de l'horlogerie Baselworld, où la fenêtre d'attention est courte et chaque contenu doit servir l'image haut de gamme de la marque.", en: "" },
+    contribution: { fr: "J'ai constitué les équipes de production et de post-production, en choisissant des experts de la haute horlogerie. J'ai été présente à chaque tournage pour tenir une cadence resserrée sans sacrifier le niveau de finition attendu d'une marque horlogère haut de gamme.", en: "" },
+    outcome: { fr: "Une série de contenus livrée au rythme du plan média, renforçant la présence et l'image premium de la marque.", en: "" },
   },
   {
     id: "fiat", client: "Fiat", title: "Abarth 500e",
-    year: "2023", featured: false,
-    vimeo: "887222473", still: "https://vumbnail.com/887222473.jpg",
-    tag: { fr: "3D & VFX", en: "3D & VFX" }, ai: false,
-    role: { fr: "Production 3D & post", en: "3D & post production" },
-    desc: {
-      fr: "Abarth pique au scorpion la nouvelle Fiat 500e, qui sillonne les rues de Rome dans une course contre la montre. Plans 3D et post-production assurant la transition entre film de campagne et film produit.",
-      en: "Abarth stings the new Fiat 500e with its scorpion as it races through the streets of Rome against the clock. 3D shots and post bridging the campaign film and the product film.",
-    },
+    year: "2023", featured: false, category: "vfx",
+    youtube: "TW012v6R5gE", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/fiat-b12572.avif",
+    tag: { fr: "3D et post-production", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Séquence 3D pour le lancement international, avec une transition invisible entre film de campagne et film produit.", en: "" },
+    challenge: { fr: "Fiat visait une séquence 3D irréprochable pour le lancement international de l'Abarth 500e, avec une transition invisible entre film de campagne et film produit, sans marge sur le planning.", en: "" },
+    contribution: { fr: "J'ai défini et coordonné une équipe de talents 3D en structurant chaque étape de validation, de l'animatique au rendu final, pour un rendu premium et naturel.", en: "" },
+    outcome: { fr: "Une séquence 3D réaliste livrée dans les délais du lancement international, avec une transition fluide au service de la cohérence de la campagne.", en: "" },
   },
   {
-    id: "pmu", client: "PMU", title: "Play",
-    year: "2024", featured: false, pending: true,
-    tag: { fr: "Supervision IA", en: "AI supervision" }, ai: true,
-    role: { fr: "Direction de production · Supervision IA", en: "Production direction · AI supervision" },
-    desc: {
-      fr: "Une narrative tape intégralement réalisée en IA — direction artistique, visuels et montage — pour tester l'efficacité du film avant le premier jour de tournage. Validation du concept en conditions réelles.",
-      en: "A narrative tape entirely produced with AI — art direction, visuals and edit — to test the film's effectiveness before day one of the shoot. Concept validated in real conditions.",
-    },
+    id: "universal", client: "Universal", title: "Petit Jeu",
+    year: "", featured: false, category: "clip",
+    youtube: "SMyb3qNe3z0", still: "https://nlgfcrkmeslbkqqgatzq.supabase.co/storage/v1/object/public/media/lib/petit-jeu-9619ba.avif",
+    tag: { fr: "Clip", en: "" }, ai: false,
+    role: { fr: "Direction de production", en: "" },
+    desc: { fr: "Clip d'Ours en featuring avec -M-, entre décor fait maison et motion design inspiré des jeux vidéo des années 90.", en: "" },
+    challenge: { fr: "Universal voulait un clip qui illustre de manière singulière le titre Petit Jeu, interprété par Ours, en featuring avec -M-.", en: "" },
+    contribution: { fr: "J'ai constitué les équipes de création et de production ainsi que le casting enfant, pour créer un clip unique mêlant tournage dans un décor fait maison et séquences en motion design rappelant les jeux vidéo des années 90.", en: "" },
+    outcome: { fr: "Un clip fidèle à l'univers des deux artistes, chaleureux et plein de vie.", en: "" },
   },
 ];
 

@@ -390,7 +390,7 @@ export function Reticle() {
 }
 
 /* ---------------- Film lightbox (real Vimeo reels) ---------------- */
-type Film = { id: string; client: string; title: string };
+type Film = { id: string; client: string; title: string; source?: "youtube" | "vimeo" };
 
 export function Lightbox({ lang }: { lang: Lang }) {
   const [film, setFilm] = useState<Film | null>(null);
@@ -416,7 +416,11 @@ export function Lightbox({ lang }: { lang: Lang }) {
   }, []);
   useEffect(() => { if (film) closeRef.current?.focus(); }, [film]);
   if (!film) return null;
-  const src = `https://player.vimeo.com/video/${film.id}?autoplay=1&color=d98b4e&byline=0&title=0&portrait=0&dnt=1`;
+  /* Les films sont sur YouTube depuis la refonte ; `vimeo` reste
+     reconnu pour les anciennes fiches non migrées. */
+  const src = film.source === "vimeo"
+    ? `https://player.vimeo.com/video/${film.id}?autoplay=1&byline=0&title=0&portrait=0&dnt=1`
+    : `https://www.youtube-nocookie.com/embed/${film.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
   return (
     <div className="lightbox" onClick={close} role="dialog" aria-modal="true" aria-label={film.client + " — " + film.title}>
       <div className="lightbox__bar" onClick={(e) => e.stopPropagation()}>
