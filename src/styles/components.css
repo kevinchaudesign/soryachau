@@ -171,7 +171,9 @@ html.has-reticle .card-hit { cursor: none; }
 .hero__stat + .hero__stat { padding-left: clamp(28px, 4vw, 56px); }
 .hero__stat + .hero__stat::before { content: ""; position: absolute; left: 0; top: 30px; bottom: 8px; width: 1px; background: var(--line-soft); }
 .hero__stat-n { font-family: var(--serif); font-size: clamp(34px, 3.8vw, 50px); font-weight: 400; letter-spacing: -0.01em; line-height: 1; }
-.hero__stat-l { font-size: 12.5px; color: var(--txt-3); font-family: var(--mono); letter-spacing: 0.04em; }
+/* --txt-2 et non --txt-3 : sur l'image, le gris moyen ne tenait pas
+   le rapport de contraste, même sur voile dense. */
+.hero__stat-l { font-size: 12.5px; color: var(--txt-2); font-family: var(--mono); letter-spacing: 0.04em; }
 
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
