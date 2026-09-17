@@ -106,8 +106,6 @@ export function Nav({ page = "home" }: { page?: string }) {
       <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open}
               aria-controls="nav-mobile" onClick={() => setOpen(!open)}>
         <span className="nav__burger-bars" aria-hidden="true"><span></span><span></span></span>
-        {/* Le mot ne sert qu'à se faire repérer : une fois le menu
-            ouvert, la croix se suffit à elle-même. */}
         <span className="nav__burger-l" aria-hidden="true">Menu</span>
       </button>
 
