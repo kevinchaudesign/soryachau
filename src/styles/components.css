@@ -260,9 +260,13 @@ html.has-reticle .card-hit { cursor: none; }
 .workflow--teaser .wstep__top { margin-bottom: clamp(26px, 3vw, 40px); }
 
 /* Bandeau CV de l'accueil */
+/* Îlot sombre : il coupe la longue suite de sections claires et donne
+   du poids à l'appel vers le CV. Tokens re-scopés dans styles.css, le
+   bouton primaire s'inverse donc tout seul. */
 .cvband {
   display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 4vw, 56px);
-  flex-wrap: wrap; padding: clamp(28px, 3.4vw, 46px); border: 1px solid var(--line-soft);
+  flex-wrap: wrap; padding: clamp(32px, 3.8vw, 52px); border: 1px solid var(--line-soft);
+  background: var(--bg-deep);
 }
 .cvband__title { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.05; letter-spacing: -0.01em; }
 .cvband__role { margin-top: 10px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--txt-3); }
