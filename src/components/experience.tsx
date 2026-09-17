@@ -274,7 +274,10 @@ export function ProductionHUD({ lang, scenes: pageScenes }: { lang: Lang; scenes
       }
       if (["arrowup", "arrowdown", "pageup", "pagedown", "home", "end"].includes(k)) { if (playingRef.current) setPlaying(false); return; }
       if (k === "g") setGuides((v) => !v);
-      else if (k === "t") setExpanded((v) => !v);
+      /* Sous 1100 px la piste est masquée : déplier ne montrerait
+         rien, le raccourci reste donc sans effet (cf. le bouton,
+         masqué au même seuil dans experience.css). */
+      else if (k === "t") { if (matchMedia("(min-width: 1101px)").matches) setExpanded((v) => !v); }
       else if (k === "j") { setPlaying(false); jump(-1); }
       else if (k === "l") { setPlaying(false); jump(1); }
     };
@@ -284,7 +287,9 @@ export function ProductionHUD({ lang, scenes: pageScenes }: { lang: Lang; scenes
 
   const goClip = (sel: string) => { const el = document.querySelector(sel); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 1, behavior: "smooth" }); };
   const rewind = () => { setPlaying(false); window.scrollTo({ top: 0, behavior: "smooth" }); };
-  const hint = lang === "fr" ? "Espace lecture · J / L coupe · G repères · T timeline" : "Space play · J / L cut · G guides · T timeline";
+  const hints = lang === "fr"
+    ? ["Espace lecture", "J / L coupe", "G repères", "T timeline"]
+    : ["Space play", "J / L cut", "G guides", "T timeline"];
 
   return (
     <React.Fragment>
@@ -297,11 +302,15 @@ export function ProductionHUD({ lang, scenes: pageScenes }: { lang: Lang; scenes
           <button className="editbar__btn editbar__btn--play" onClick={() => setPlaying((v) => !v)} aria-label={playing ? "Pause" : "Lecture"} title={lang === "fr" ? "Lecture / Pause (Espace)" : "Play / Pause (Space)"}>{playing ? "❚❚" : "▶"}</button>
           <button className="editbar__btn" onClick={rewind} aria-label={lang === "fr" ? "Retour début" : "To start"} title="⏮">⏮</button>
           <span className="editbar__chip">25 FPS · NDF</span>
-          <span className="editbar__hint">{hint}</span>
+          <span className="editbar__hint">
+            {hints.map((h, i) => (
+              <span key={h} className={"editbar__hint-i" + (i === hints.length - 1 ? " editbar__hint-i--tl" : "")}>{h}</span>
+            ))}
+          </span>
           <span className="editbar__spacer"></span>
           <span className="editbar__scene" ref={sceneRef}>SC {scenes[0].n} · {scenes[0].t}</span>
           <button className="editbar__btn" onClick={() => setGuides((v) => !v)} aria-label="Guides (G)" title="G">▣</button>
-          <button className="editbar__btn" onClick={() => setExpanded((v) => !v)} aria-label="Timeline (T)" title="T">{expanded ? "▾" : "▴"}</button>
+          <button className="editbar__btn editbar__btn--tl" onClick={() => setExpanded((v) => !v)} aria-label="Timeline (T)" title="T">{expanded ? "▾" : "▴"}</button>
         </div>
 
         <div className="editbar__tl" aria-hidden="true">
