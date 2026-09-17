@@ -51,11 +51,12 @@
 /* ---------- Nav ----------
    Permanent ivory backdrop: the light theme needs legible ink text
    even over the dark hero monitor. */
+/* Fond transparent au repos : il n'apparaît qu'au défilement. Sur
+   l'accueil, le hero passe donc entier sous la barre. */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   transition: background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s var(--ease);
-  background: oklch(0.965 0.008 85 / 0.82);
-  backdrop-filter: blur(14px) saturate(1.1);
+  background: transparent;
   border-bottom: 1px solid transparent;
 }
 .nav--scrolled {
@@ -63,6 +64,25 @@
   backdrop-filter: blur(18px) saturate(1.15);
   border-bottom-color: var(--line-soft);
 }
+/* Posée sur le hero, la barre passe en clair — mêmes noms de tokens
+   re-scopés, comme les autres îlots sombres. Sur petit écran elle
+   n'est plus fixe et vit sur le papier : la règle ne s'y applique pas. */
+@media (min-width: 1001px) {
+  .nav--over {
+    --bg:        oklch(0.158 0.006 56);
+    --surface:   oklch(0.196 0.007 56);
+    --line:      oklch(0.315 0.009 58);
+    --txt:       oklch(0.948 0.012 82);
+    --txt-2:     oklch(0.770 0.012 76);
+    --txt-3:     oklch(0.605 0.012 70);
+    --txt-faint: oklch(0.470 0.011 64);
+    --accent:    oklch(0.635 0.205 25);
+    color: var(--txt);
+  }
+}
+/* Le basculement suit le fond plutôt que de claquer. */
+.logo__name, .logo__baseline { transition: color .4s var(--ease); }
+.logo-mono__bg, .logo-mono__sc { transition: fill .4s var(--ease); }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
 .nav__brand { display: flex; align-items: center; gap: 13px; }
 

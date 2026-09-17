@@ -78,7 +78,9 @@ export function Nav({ page = "home" }: { page?: string }) {
        enfant en position fixed — le menu se serait limité à la
        hauteur de la barre. */
     <>
-    <header className={"nav" + (scrolled ? " nav--scrolled" : "")}>
+    {/* Avant tout défilement, l'accueil laisse passer son hero sous
+        la barre : fond transparent, contenus en clair. */}
+    <header className={"nav" + (scrolled ? " nav--scrolled" : (home ? " nav--over" : ""))}>
       <div className="nav__inner container">
         {home ? (
           <a href="#top" className="nav__brand" aria-label="Sorya Chau">
