@@ -41,14 +41,15 @@ export function Nav({ page = "home" }: { page?: string }) {
 
   const home = page === "home";
   /* Site multi-pages : chaque entrée de nav est une route à part entière.
-     Seul Contact reste une ancre — le footer #contact est présent sur
-     toutes les pages, on scrolle donc vers celui de la page courante. */
+     Le footer #contact reste présent en bas de chaque page ; la nav, elle,
+     mène à la page Contact. */
   const ROUTES: Record<string, string> = {
     approche: "/approche",
     expertises: "/expertises",
     projets: "/projets",
     apropos: "/a-propos",
     journal: "/journal",
+    contact: "/contact",
   };
 
   const links = [

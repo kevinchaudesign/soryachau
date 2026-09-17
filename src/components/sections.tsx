@@ -438,9 +438,15 @@ export function Clients({ t }: { t: Messages }) {
   );
 }
 
-/* — 07 · Contact / Footer — */
-export function Contact({ t }: { t: Messages }) {
+/* — 07 · Contact / Footer —
+   Bloc unique, deux emplois : pied de page sur toutes les pages, et
+   contenu principal de /contact. En page (h1), il devient le <main>
+   du document et porte le titre principal ; ailleurs il reste le
+   <footer> ancré en #contact. */
+export function Contact({ t, h1 }: { t: Messages; h1?: boolean }) {
   const c = t.contact;
+  const Shell = h1 ? "main" : "footer";
+  const H = h1 ? "h1" : "h2";
   const { lang } = useLang(); /* le PDF servi suit la langue affichée */
   const LINKEDIN = "https://www.linkedin.com/in/soryachau/";
   const rows = [
@@ -450,10 +456,10 @@ export function Contact({ t }: { t: Messages }) {
     { l: c.labels.social, v: c.linkedin, href: LINKEDIN, ext: true },
   ];
   return (
-    <footer className="contact" id="contact">
+    <Shell className="contact" id={h1 ? "main" : "contact"}>
       <div className="container contact__inner">
         <span className="eyebrow reveal"><span className="idx">07</span>{c.eyebrow}</span>
-        <h2 className="contact__title display reveal" style={{ "--rd": "80ms" }}>{c.title}</h2>
+        <H className="contact__title display reveal" style={{ "--rd": "80ms" }}>{c.title}</H>
 
         <p className="contact__lead reveal" style={{ "--rd": "110ms" }}>{c.lead}</p>
 
@@ -486,6 +492,6 @@ export function Contact({ t }: { t: Messages }) {
           <span className="contact__built">© {new Date().getFullYear()} — {t.footer.built}</span>
         </div>
       </div>
-    </footer>
+    </Shell>
   );
 }

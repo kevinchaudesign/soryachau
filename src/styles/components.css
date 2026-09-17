@@ -20,6 +20,9 @@
 .pg-back__arrow { display: inline-block; transition: transform .3s var(--ease); }
 .pg-back:hover .pg-back__arrow { transform: translateX(-3px); }
 .pg-head + .section { padding-top: clamp(40px, 5vw, 64px); }
+/* Contact en page : sa respiration de pied de page ferait un trou
+   sous le lien de retour, on l'aligne sur les autres pages. */
+.pg-head + .contact { padding-top: clamp(40px, 5vw, 64px); }
 .sec-head { max-width: 880px; margin-bottom: clamp(52px, 7vw, 96px); }
 .sec-head .section-title { margin-top: 22px; }
 .sec-head__title--wide { max-width: 17ch; }
