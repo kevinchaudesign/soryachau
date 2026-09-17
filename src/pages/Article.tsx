@@ -14,6 +14,7 @@ import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact } from "../components/sections";
 import { ArrowUR } from "../components/icons";
 
@@ -48,13 +49,10 @@ export default function ArticlePage() {
       <Nav page="journal" />
 
       <main id="main">
-        <div className="pg-head">
-          <div className="container">
-            <Link to="/journal" className="pg-back" data-cursor>
-              <span className="pg-back__arrow">←</span>{j.back}
-            </Link>
-          </div>
-        </div>
+        {/* Un article porte son propre en-tête éditorial (rubrique,
+            date, chapeau, signature) : seul le bandeau de retour est
+            commun aux autres pages. */}
+        <PageHead back={j.back} to="/journal" />
 
         <article className="article container">
           <header className="reader__head">

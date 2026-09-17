@@ -6,11 +6,11 @@
    peine de dire deux fois la même chose.
    ============================================================ */
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact } from "../components/sections";
 
 export default function ContactPage() {
@@ -24,8 +24,8 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Le bloc porte ici l'id « main » : la piste de montage vise
-          donc sa classe plutôt que l'ancre #contact des autres pages. */}
+      {/* Le bloc n'est pas ancré en #contact ici : la piste de montage
+          vise sa classe plutôt que l'ancre des autres pages. */}
       <Experience
         lang={lang}
         intro={false}
@@ -33,15 +33,12 @@ export default function ContactPage() {
       />
       <Nav page="contact" />
 
-      <div className="pg-head">
-        <div className="container">
-          <Link to="/" className="pg-back" data-cursor>
-            <span className="pg-back__arrow">←</span>{lang === "fr" ? "Accueil" : "Home"}
-          </Link>
-        </div>
-      </div>
+      <main id="main">
+        <PageHead idx="07" eyebrow={t.contact.eyebrow} title={t.contact.title} lead={t.contact.lead}
+                  back={lang === "fr" ? "Accueil" : "Home"} />
 
-      <Contact t={t} h1 />
+        <Contact t={t} headless />
+      </main>
     </>
   );
 }

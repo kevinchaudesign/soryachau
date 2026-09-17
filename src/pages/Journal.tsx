@@ -11,6 +11,7 @@ import type { Article, Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
 import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact } from "../components/sections";
 import { ArrowUR } from "../components/icons";
 
@@ -18,7 +19,7 @@ type JournalT = Messages["journal"];
 
 /* Piste de montage de la page : en-tête, sommaire, contact.
    Le lecteur d'article passe au-dessus (z-index 130 > 60). */
-const BP_SCENES = (lang: Lang) => [scene(lang, "01", ".bp__head"), scene(lang, "05", ".bp__feat"), scene(lang, "07", "#contact")];
+const BP_SCENES = (lang: Lang) => [scene(lang, "01", ".pg-head"), scene(lang, "05", ".bp__feat"), scene(lang, "07", "#contact")];
 
 function ArticleMeta({ a, j }: { a: Article; j: JournalT }) {
   return (
@@ -74,16 +75,8 @@ export default function JournalPage() {
       <Nav page="journal" />
 
       <main id="main" className="bp">
-        <header className="bp__head">
-          <div className="container">
-            <Link to="/" className="bp__back" data-cursor>
-              <span className="bp__back-arrow">←</span>{lang === "fr" ? "Accueil" : "Home"}
-            </Link>
-            <span className="eyebrow bp__eyebrow"><span className="idx">{String(articles.length).padStart(2, "0")}</span>{j.eyebrow}</span>
-            <h1 className="bp__title display">{j.kicker}</h1>
-            <p className="bp__lead">{j.lead}</p>
-          </div>
-        </header>
+        <PageHead idx="05" eyebrow={j.eyebrow} title={j.kicker} lead={j.lead}
+                  back={lang === "fr" ? "Accueil" : "Home"} />
 
         <div className="container">
           {/* liens de hash natifs : le listener hashchange ouvre le lecteur,

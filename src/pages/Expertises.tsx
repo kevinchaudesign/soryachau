@@ -3,11 +3,11 @@
    de productions et de projets, l'encart pratique.
    ============================================================ */
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact, Expertises } from "../components/sections";
 
 export default function ExpertisesPage() {
@@ -25,15 +25,10 @@ export default function ExpertisesPage() {
       <Nav page="expertises" />
 
       <main id="main">
-        <div className="pg-head">
-          <div className="container">
-            <Link to="/" className="pg-back" data-cursor>
-              <span className="pg-back__arrow">←</span>{lang === "fr" ? "Accueil" : "Home"}
-            </Link>
-          </div>
-        </div>
+        <PageHead idx="03" eyebrow={t.expertises.eyebrow} title={t.expertises.title}
+                  back={lang === "fr" ? "Accueil" : "Home"} />
 
-        <Expertises t={t} h1 />
+        <Expertises t={t} />
       </main>
 
       <Contact t={t} />

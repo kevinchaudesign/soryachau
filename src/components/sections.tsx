@@ -12,33 +12,27 @@ import { useLang } from "../lang";
 import { CV_PDF } from "../lib/assets";
 import { ArrowUR, DownloadIcon, PlayGlyph } from "./icons";
 
-export function SectionHead({ idx, eyebrow, title, lead, light, h1 }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean; h1?: boolean }) {
-  /* h1 : la section porte le titre principal d'une page dédiée
-     (même classe, donc même rendu — seul le niveau change). */
-  const H = h1 ? "h1" : "h2";
+export function SectionHead({ idx, eyebrow, title, lead, light }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean }) {
+  /* Aperçus de l'accueil uniquement : sur une page dédiée, le titre
+     principal est porté par l'en-tête commun (cf. PageHead). */
   return (
     <div className="sec-head">
       <span className="eyebrow reveal"><span className="idx">{idx}</span>{eyebrow}</span>
-      <H className={"section-title reveal" + (light ? " sec-head__title--wide" : "")} style={{ "--rd": "80ms" }}>{title}</H>
+      <h2 className={"section-title reveal" + (light ? " sec-head__title--wide" : "")} style={{ "--rd": "80ms" }}>{title}</h2>
       {lead ? <p className="sec-head__lead reveal" style={{ "--rd": "140ms" }}>{lead}</p> : null}
     </div>
   );
 }
 
-/* — 02 · Approche (page /approche) — */
-export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
+/* — 02 · Approche (page /approche) —
+   Eyebrow et titre vivent dans l'en-tête de page : la section
+   commence donc au corps du texte. */
+export function Approche({ t }: { t: Messages }) {
   const a = t.approche;
   const { slots } = useLang();
-  const H = h1 ? "h1" : "h2";
-  const HSub = h1 ? "h2" : "h3";
   return (
     <section className="section profile" id="approche">
       <div className="container">
-        <div className="sec-head">
-          <span className="eyebrow reveal"><span className="idx">02</span>{a.eyebrow}</span>
-          <H className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{a.title}</H>
-        </div>
-
         <div className="profile__top">
           <div className="profile__text">
             <p className="profile__lead reveal">{a.lead}</p>
@@ -62,7 +56,7 @@ export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
         </div>
 
         <div className="method">
-          <HSub className="method__title reveal">{a.methodTitle}</HSub>
+          <h2 className="method__title reveal">{a.methodTitle}</h2>
           <p className="method__lead reveal" style={{ "--rd": "80ms" }}>{a.methodLead}</p>
           {a.methodLead2 ? <p className="method__lead reveal" style={{ "--rd": "110ms" }}>{a.methodLead2}</p> : null}
           <ol className="method__list">
@@ -86,21 +80,16 @@ export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
 }
 
 /* — 03 · Expertises (page /expertises) — */
-export function Expertises({ t, h1 }: { t: Messages; h1?: boolean }) {
+export function Expertises({ t }: { t: Messages }) {
   const e = t.expertises;
-  /* cf. Approche : sur la page dédiée le titre monte en h1, les
-     cartes suivent en h2 pour garder l'ordre des titres continu. */
-  const HCard = h1 ? "h2" : "h3";
   return (
     <section className="section expertises" id="expertises">
       <div className="container">
-        <SectionHead idx="03" eyebrow={e.eyebrow} title={e.title} h1={h1} />
-
         <div className="xp-grid">
           {e.items.map((it, i) => (
             <article className="xp reveal" key={it.k} style={{ "--rd": i * 90 + "ms" }}>
               <span className="xp__k">{it.k}</span>
-              <HCard className="xp__t">{it.t}</HCard>
+              <h2 className="xp__t">{it.t}</h2>
               <p className="xp__hook">{it.hook}</p>
               <p className="xp__d">{it.d}</p>
               <p className="xp__out">{it.out}</p>
@@ -343,13 +332,12 @@ export function Journal({ t }: { t: Messages }) {
 }
 
 /* — 06 · À propos (page /a-propos) — */
-export function APropos({ t, h1 }: { t: Messages; h1?: boolean }) {
+export function APropos({ t }: { t: Messages }) {
   const a = t.apropos;
   const { slots } = useLang();
   return (
     <section className="section" id="apropos">
       <div className="container">
-        <SectionHead idx="06" eyebrow={a.eyebrow} title={a.title} h1={h1} />
         <div className="apropos">
           <div className="apropos__text">
             {a.body.map((para, i) => (
@@ -440,13 +428,11 @@ export function Clients({ t }: { t: Messages }) {
 
 /* — 07 · Contact / Footer —
    Bloc unique, deux emplois : pied de page sur toutes les pages, et
-   contenu principal de /contact. En page (h1), il devient le <main>
-   du document et porte le titre principal ; ailleurs il reste le
-   <footer> ancré en #contact. */
-export function Contact({ t, h1 }: { t: Messages; h1?: boolean }) {
+   corps de /contact. En page (headless), eyebrow, titre et accroche
+   sont déjà dans l'en-tête commun : le bloc n'en garde que la suite. */
+export function Contact({ t, headless }: { t: Messages; headless?: boolean }) {
   const c = t.contact;
-  const Shell = h1 ? "main" : "footer";
-  const H = h1 ? "h1" : "h2";
+  const Shell = headless ? "section" : "footer";
   const { lang } = useLang(); /* le PDF servi suit la langue affichée */
   const LINKEDIN = "https://www.linkedin.com/in/soryachau/";
   const rows = [
@@ -456,12 +442,15 @@ export function Contact({ t, h1 }: { t: Messages; h1?: boolean }) {
     { l: c.labels.social, v: c.linkedin, href: LINKEDIN, ext: true },
   ];
   return (
-    <Shell className="contact" id={h1 ? "main" : "contact"}>
+    <Shell className={"contact" + (headless ? " contact--page" : "")} id={headless ? undefined : "contact"}>
       <div className="container contact__inner">
-        <span className="eyebrow reveal"><span className="idx">07</span>{c.eyebrow}</span>
-        <H className="contact__title display reveal" style={{ "--rd": "80ms" }}>{c.title}</H>
-
-        <p className="contact__lead reveal" style={{ "--rd": "110ms" }}>{c.lead}</p>
+        {headless ? null : (
+          <>
+            <span className="eyebrow reveal"><span className="idx">07</span>{c.eyebrow}</span>
+            <h2 className="contact__title display reveal" style={{ "--rd": "80ms" }}>{c.title}</h2>
+            <p className="contact__lead reveal" style={{ "--rd": "110ms" }}>{c.lead}</p>
+          </>
+        )}
 
         <div className="contact__status reveal" style={{ "--rd": "140ms" }}>
           <span className="avail-mark"></span>{c.status}

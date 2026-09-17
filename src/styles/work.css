@@ -1,31 +1,12 @@
 /* ============================================================
-   Work page — filmography: header, category filters, film-strip rows
+   Work page — filmography: category filters, film-strip rows.
+   L'en-tête (retour, eyebrow, titre, accroche) est celui de
+   toutes les pages, cf. .pg-head dans components.css.
    Loaded after components.css + experience.css
    ============================================================ */
 
-.wp { padding-top: 76px; }
-
-/* ---------- Header ---------- */
-.wp__head {
-  padding: clamp(46px, 8vw, 104px) 0 clamp(30px, 4vw, 48px);
-  border-bottom: 1px solid var(--line-soft);
-}
-.wp__back {
-  /* flex + fit-content, comme le retour du Journal : en inline-flex,
-     le lien partageait sa ligne avec l'eyebrow qui suit, et sa marge
-     basse ne les séparait pas. */
-  display: flex; width: fit-content; align-items: center; gap: 9px;
-  font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--txt-3);
-  margin-bottom: clamp(28px, 5vw, 52px); transition: color .25s var(--ease);
-}
-.wp__back:hover { color: var(--txt); }
-.wp__back-arrow { transition: transform .3s var(--ease); }
-.wp__back:hover .wp__back-arrow { transform: translateX(-3px); }
-.wp__eyebrow { display: inline-flex; margin-bottom: 22px; }
-.wp__title { font-size: clamp(52px, 9vw, 132px); line-height: 0.92; }
-.wp__lead { margin-top: clamp(20px, 2.5vw, 30px); max-width: 56ch; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.62; color: var(--txt-2); }
-
 /* ---------- Filters ---------- */
+/* Les filtres vivent dans l'en-tête commun, sous l'accroche. */
 .wp__filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(32px, 4vw, 48px); }
 .wp__filter {
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;

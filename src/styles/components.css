@@ -7,10 +7,15 @@
 /* ---------- Section base ---------- */
 .section { padding: clamp(88px, 13vh, 180px) 0; position: relative; }
 
-/* Pages de contenu (Profil, Parcours) : bandeau de retour partagé.
-   La nav fixe fait 76px — on la dégage, puis la première section
-   reprend un rythme vertical plus court qu'en pleine page. */
+/* En-tête commun à toutes les pages sauf l'accueil : retour,
+   eyebrow, titre, accroche. La nav fixe fait 76px — on la dégage,
+   puis la première section reprend un rythme vertical plus court
+   qu'en pleine page. */
 .pg-head { padding: calc(76px + clamp(26px, 4vw, 44px)) 0 0; }
+.pg-head__main { max-width: 880px; margin-top: clamp(28px, 5vw, 52px); }
+.pg-head__eyebrow { display: inline-flex; }
+.pg-head__title { margin-top: 22px; }
+.pg-head__lead { margin-top: 26px; color: var(--txt-2); font-size: clamp(16px, 1.5vw, 19px); line-height: 1.62; max-width: 58ch; }
 .pg-back {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase;
@@ -19,9 +24,9 @@
 .pg-back:hover { color: var(--accent); }
 .pg-back__arrow { display: inline-block; transition: transform .3s var(--ease); }
 .pg-back:hover .pg-back__arrow { transform: translateX(-3px); }
-.pg-head + .section { padding-top: clamp(40px, 5vw, 64px); }
-/* Contact en page : sa respiration de pied de page ferait un trou
-   sous le lien de retour, on l'aligne sur les autres pages. */
+/* Le contenu suit l'en-tête sur un rythme plus court : la
+   respiration pleine page ferait un trou sous le titre. */
+.pg-head + .section,
 .pg-head + .contact { padding-top: clamp(40px, 5vw, 64px); }
 .sec-head { max-width: 880px; margin-bottom: clamp(52px, 7vw, 96px); }
 .sec-head .section-title { margin-top: 22px; }
@@ -323,6 +328,8 @@ html.has-reticle .card-hit { cursor: none; }
 /* ---------- Contact ---------- */
 .contact { position: relative; padding: clamp(96px, 15vh, 200px) 0 60px; overflow: hidden; background: var(--bg-deep); }
 .contact__inner { position: relative; z-index: 2; }
+/* En page, le statut ouvre le bloc : il n'a plus de titre au-dessus. */
+.contact--page .contact__status { margin-top: 0; }
 .contact__title { font-size: clamp(34px, 5vw, 76px); line-height: 1.02; max-width: 18ch; margin: 26px 0 0; }
 .contact__status { display: inline-flex; align-items: center; gap: 11px; margin-top: 36px; font-size: 15px; color: var(--txt-2); border: 1px solid var(--line-soft); padding: 10px 19px; background: var(--surface); }
 .contact__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }

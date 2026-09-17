@@ -3,11 +3,11 @@
    le CV détaillé reste téléchargeable sur /cv.
    ============================================================ */
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact, APropos } from "../components/sections";
 
 export default function AProposPage() {
@@ -25,15 +25,10 @@ export default function AProposPage() {
       <Nav page="apropos" />
 
       <main id="main">
-        <div className="pg-head">
-          <div className="container">
-            <Link to="/" className="pg-back" data-cursor>
-              <span className="pg-back__arrow">←</span>{lang === "fr" ? "Accueil" : "Home"}
-            </Link>
-          </div>
-        </div>
+        <PageHead idx="06" eyebrow={t.apropos.eyebrow} title={t.apropos.title}
+                  back={lang === "fr" ? "Accueil" : "Home"} />
 
-        <APropos t={t} h1 />
+        <APropos t={t} />
       </main>
 
       <Contact t={t} />

@@ -3,12 +3,12 @@
    category filters. Reuses Nav, Experience, Contact, PlayGlyph.
    ============================================================ */
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import "../styles/work.css";
 import type { Lang, Messages, Project } from "../i18n";
 import { useLang } from "../lang";
 import { Experience, scene } from "../components/experience";
 import { Nav } from "../components/nav";
+import { PageHead } from "../components/page-head";
 import { Contact } from "../components/sections";
 import { ArrowUR, PlayGlyph } from "../components/icons";
 
@@ -21,7 +21,7 @@ const WP_CATMAP: Record<string, string> = { kinder: "brand", petitballon: "brand
 const catOf = (p: Project) => p.category || WP_CATMAP[p.id] || "brand";
 
 /* Piste de montage de la page : en-tête, filmographie, contact */
-const WP_SCENES = (lang: Lang) => [scene(lang, "01", ".wp__head"), scene(lang, "04", ".wp__list"), scene(lang, "07", "#contact")];
+const WP_SCENES = (lang: Lang) => [scene(lang, "01", ".pg-head"), scene(lang, "04", ".wp__list"), scene(lang, "07", "#contact")];
 
 function FilmRow({ p, t, lang, n }: { p: Project; t: Messages; lang: Lang; n: number }) {
   const { slots } = useLang();
@@ -127,27 +127,19 @@ export default function WorkPage() {
       <Nav page="projets" />
 
       <main id="main" className="wp">
-        <header className="wp__head">
-          <div className="container">
-            <Link to="/" className="wp__back" data-cursor>
-              <span className="wp__back-arrow">←</span>{lang === "fr" ? "Retour" : "Back"}
-            </Link>
-            <span className="eyebrow wp__eyebrow"><span className="idx">{String(count).padStart(2, "0")}</span>{t.work.eyebrow}</span>
-            <h1 className="wp__title display">{t.nav.projets}</h1>
-            <p className="wp__lead">{t.work.lead}</p>
-
-            <div className="wp__filters" role="tablist" aria-label={t.work.eyebrow}>
-              {WP_CATS[lang].map(([k, label]) => {
-                const c = k === "all" ? count : projects.filter((p) => catOf(p) === k).length;
-                return (
-                  <button key={k} className={"wp__filter" + (cat === k ? " is-on" : "")} onClick={() => setCat(k)} role="tab" aria-selected={cat === k}>
-                    {label}<sup>{c}</sup>
-                  </button>
-                );
-              })}
-            </div>
+        <PageHead idx="04" eyebrow={t.work.eyebrow} title={t.nav.projets} lead={t.work.lead}
+                  back={lang === "fr" ? "Accueil" : "Home"}>
+          <div className="wp__filters" role="tablist" aria-label={t.work.eyebrow}>
+            {WP_CATS[lang].map(([k, label]) => {
+              const c = k === "all" ? count : projects.filter((p) => catOf(p) === k).length;
+              return (
+                <button key={k} className={"wp__filter" + (cat === k ? " is-on" : "")} onClick={() => setCat(k)} role="tab" aria-selected={cat === k}>
+                  {label}<sup>{c}</sup>
+                </button>
+              );
+            })}
           </div>
-        </header>
+        </PageHead>
 
         <div className="container wp__list">
           {list.map((p) => <FilmRow key={p.id} p={p} t={t} lang={lang} n={projects.indexOf(p)} />)}
