@@ -133,25 +133,18 @@ html.has-reticle .card-hit { cursor: none; }
 /* film-frame hairline inset + corner marks live in .hero__frame */
 .hero__frame { position: absolute; inset: clamp(16px, 2.4vw, 34px); border: 1px solid var(--line-soft); z-index: 1; pointer-events: none; }
 
-/* vertical timecode rail (right edge) */
-.hero__rail {
-  position: absolute; right: clamp(20px, 2.8vw, 44px); top: 50%; transform: translateY(-50%);
-  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 14px;
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; color: var(--txt-faint);
-  writing-mode: vertical-rl; text-transform: uppercase;
-}
-.hero__rail-line { writing-mode: horizontal-tb; width: 1px; height: 56px; background: linear-gradient(var(--accent), transparent); }
-
-.hero__inner { position: relative; z-index: 2; transform: translateZ(0); padding-top: clamp(44px, 8vh, 96px); padding-bottom: clamp(60px, 9vh, 116px); }
+.hero__inner { position: relative; z-index: 2; transform: translateZ(0); padding-top: clamp(36px, 6vh, 76px); /* On dégage la barre de montage sans lui réserver toute sa hauteur :
+   dépliée elle fait 132 px, et le hero se retrouverait à l'étroit. */
+  padding-bottom: calc(min(var(--editbar-h, 0px), 48px) + clamp(44px, 6vh, 84px)); }
 .hero__inner .hero__title, .hero__inner .hero__sub { text-shadow: 0 2px 36px oklch(0.10 0.006 54 / 0.7), 0 1px 4px oklch(0.10 0.006 54 / 0.5); }
-.hero__top { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-bottom: clamp(30px, 4.4vw, 52px); }
+.hero__top { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-bottom: clamp(22px, 3vw, 36px); }
 .hero__avail { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--txt-2); border: 1px solid var(--line-soft); padding: 7px 15px; background: var(--surface); }
 
-.hero__title { font-size: clamp(52px, 10.5vw, 158px); margin-bottom: clamp(30px, 4vw, 44px); }
+.hero__title { font-size: clamp(52px, 10.5vw, 158px); margin-bottom: clamp(24px, 3vw, 36px); }
 .hero__line { display: block; }
 .hero__accent { display: block; font-style: italic; color: var(--accent); }
-.hero__sub { max-width: 54ch; font-size: clamp(17px, 1.55vw, 21px); line-height: 1.62; color: var(--txt-2); margin-bottom: clamp(36px, 4.5vw, 52px); }
-.hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: clamp(52px, 7vw, 84px); }
+.hero__sub { max-width: 54ch; font-size: clamp(17px, 1.55vw, 21px); line-height: 1.62; color: var(--txt-2); margin-bottom: clamp(28px, 3.5vw, 40px); }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: clamp(36px, 5vw, 56px); }
 
 .hero__stats { display: flex; gap: 0; flex-wrap: wrap; border-top: 1px solid var(--line-soft); }
 .hero__stat { display: flex; flex-direction: column; gap: 8px; padding: 30px clamp(28px, 4vw, 56px) 4px 0; position: relative; }
@@ -394,7 +387,6 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
   .cred--wide { grid-column: span 2; order: 3; }
   .workflow__head { grid-template-columns: 1fr; align-items: start; }
   .workflow__steps { grid-template-columns: repeat(2, 1fr); }
-  .hero__rail { display: none; }
 }
 /* Six rubriques, le lockup et les actions : au-delà de 1000 px la
    barre ne tient plus sur une ligne, on bascule sur le menu. */
@@ -406,6 +398,9 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
   .nav, .nav--scrolled {
     position: static; background: none; backdrop-filter: none; border-bottom-color: transparent;
   }
+  /* L'ardoise « à l'image » passe en bas à gauche sur petit écran :
+     le bas du hero lui laisse la place, en plus de la barre. */
+  .hero__inner { padding-bottom: calc(var(--editbar-h, 0px) + clamp(104px, 20vw, 148px)); }
   .hero { min-height: calc(100svh - 76px); padding-top: 0; }
   .pg-head { padding-top: clamp(40px, 6vw, 76px); }
   /* Mobile et tablette : le bouton quitte la barre et se pose en bas

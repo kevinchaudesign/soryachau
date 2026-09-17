@@ -219,12 +219,8 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 /* burn-in HUD on the monitor */
 .hmon__burn { position: absolute; z-index: 2; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: oklch(0.95 0.012 82 / 0.82); text-transform: uppercase; }
 .hmon__burn--tl { top: clamp(30px, 4vw, 56px); left: clamp(30px, 5vw, 70px); }
-.hmon__burn--tr { top: clamp(30px, 4vw, 56px); right: clamp(56px, 7vw, 104px); }
 .hmon__tally { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); }
 .hmon__tally b { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); animation: rec-blink 1.3s steps(1) infinite; }
-.hmon__pgm { border: 1px solid oklch(1 0 0 / 0.32); padding: 3px 8px; }
-.hmon__src { color: oklch(0.95 0.012 82 / 0.45); }
-.hmon__tc { color: oklch(0.95 0.012 82 / 0.85); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
 
 /* now-playing slate (bottom-right of monitor) */
 .hmon__slate {
@@ -233,15 +229,10 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
   font-family: var(--mono); max-width: 60vw;
 }
 .hmon__slate-k { font-size: 9.5px; letter-spacing: 0.22em; color: var(--accent); }
-.hmon__slate-bars { display: flex; gap: 5px; margin: 1px 0 2px; }
-.hmon__slate-bars i { width: 14px; height: 3px; background: oklch(1 0 0 / 0.2); transition: background .5s var(--ease), width .5s var(--ease); }
-.hmon__slate-bars i.is-on { background: var(--accent); width: 22px; }
 .hmon__slate-name { font-size: clamp(13px, 1.3vw, 16px); letter-spacing: 0.08em; text-transform: uppercase; color: var(--txt); }
 .hmon__slate-name em { font-style: normal; color: var(--txt-3); }
-.hmon__slate-yr { font-size: 10.5px; color: var(--txt-faint); letter-spacing: 0.1em; }
 
 @media (max-width: 760px) {
-  .hmon__burn--tr, .hmon__slate-yr { display: none; }
   .hmon__slate { right: clamp(20px, 5vw, 40px); bottom: clamp(96px, 18vw, 130px); max-width: 70vw; }
   .hmon__grade { background:
     linear-gradient(105deg, oklch(0.138 0.006 54 / 0.96) 0%, oklch(0.138 0.006 54 / 0.84) 55%, oklch(0.138 0.006 54 / 0.9) 100%),
@@ -266,17 +257,6 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 }
 
 /* ---------------- Hero monitor ambience ---------------- */
-.hero__scan {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
-  -webkit-mask: radial-gradient(ellipse 80% 70% at 50% 50%, #000, transparent 85%);
-  mask: radial-gradient(ellipse 80% 70% at 50% 50%, #000, transparent 85%);
-}
-.hero__scan::after {
-  content: ""; position: absolute; left: 0; right: 0; height: 140px;
-  background: linear-gradient(180deg, transparent, oklch(0.635 0.205 25 / 0.05) 50%, transparent);
-  animation: scan 7.5s var(--ease) infinite;
-}
-@keyframes scan { 0% { top: -160px; } 100% { top: 100%; } }
 .hero::after { /* subtle vignette to read as a monitor */
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   box-shadow: inset 0 0 220px oklch(0.10 0.006 54 / 0.6);
@@ -290,7 +270,7 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 @keyframes title-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .leader__sweep, .hud__tc b::before, .intro__rec b, .hero__scan::after { animation: none !important; }
+  .leader__sweep, .hud__tc b::before, .intro__rec b { animation: none !important; }
 }
 
 /* ---------------- Work-card clip scrubber (immersive) ---------------- */

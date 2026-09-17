@@ -1,46 +1,24 @@
 /* ============================================================
    Hero + HeroMonitor (animated control-room monitor)
    ============================================================ */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
 import { CV_PDF } from "../lib/assets";
 import { ArrowUR, DownloadIcon } from "./icons";
 
-const pad2 = (x: number) => String(x).padStart(2, "0");
-
 export function HeroMonitor({ lang }: { lang: Lang }) {
   const { projects } = useLang();
   const reel = useMemo(() => projects.filter((p) => p.still), [projects]);
   const [idx, setIdx] = useState(0);
-  const tcRef = useRef<HTMLSpanElement>(null);
-  const baseRef = useRef(reel.map(() => Math.floor(Math.random() * 90 + 5)));
-  useEffect(() => { baseRef.current = reel.map(() => Math.floor(Math.random() * 90 + 5)); setIdx(0); }, [reel]);
+  useEffect(() => { setIdx(0); }, [reel]);
 
   useEffect(() => {
     if (reel.length < 2) return;
     const id = setInterval(() => setIdx((v) => (v + 1) % reel.length), 4400);
     return () => clearInterval(id);
   }, [reel.length]);
-
-  // running source timecode burn-in — throttled interval (no per-frame churn)
-  useEffect(() => {
-    const fps = 25; const start = performance.now();
-    const write = () => {
-      const elapsed = (performance.now() - start) / 1000;
-      const base = baseRef.current[idx] || 0;
-      const total = base + elapsed;
-      const ff = Math.floor((total * fps) % fps);
-      const s = Math.floor(total) % 60;
-      const m = Math.floor(total / 60) % 60;
-      const h = (idx + 1);
-      if (tcRef.current) tcRef.current.textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}:${pad2(ff)}`;
-    };
-    write();
-    const id = setInterval(write, 90);
-    return () => clearInterval(id);
-  }, [idx]);
 
   const cur = reel[idx] || ({} as (typeof reel)[number]);
   return (
@@ -64,19 +42,12 @@ export function HeroMonitor({ lang }: { lang: Lang }) {
 
       <div className="hmon__burn hmon__burn--tl">
         <span className="hmon__tally"><b></b>REC</span>
-        <span className="hmon__pgm">PGM</span>
       </div>
-      <div className="hmon__burn hmon__burn--tr">
-        <span className="hmon__src">SRC</span>
-        <span className="hmon__tc" ref={tcRef}>01:00:00:00</span>
-      </div>
+      {/* L'ardoise ne garde que ce qu'elle seule apprend : le film à
+          l'image. Le timecode vit dans la barre de montage. */}
       <div className="hmon__slate">
         <span className="hmon__slate-k">{lang === "fr" ? "À L'IMAGE" : "NOW PLAYING"}</span>
-        <span className="hmon__slate-bars" aria-hidden="true">
-          {reel.map((_, n) => <i key={n} className={n === idx ? "is-on" : ""}></i>)}
-        </span>
         <span className="hmon__slate-name">{cur.client} <em>— {cur.title}</em></span>
-        <span className="hmon__slate-yr">{cur.year}</span>
       </div>
     </div>
   );
@@ -98,12 +69,6 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
         <span className="regmark regmark--bl"></span>
         <span className="regmark regmark--br"></span>
       </div>
-      <div className="hero__rail" aria-hidden="true">
-        <span>Paris · Île-de-France</span>
-        <span className="hero__rail-line"></span>
-        <span>48.8566° N</span>
-      </div>
-      <div className="hero__scan" aria-hidden="true"></div>
 
       <div className="container hero__inner">
         <div className="hero__top reveal">
