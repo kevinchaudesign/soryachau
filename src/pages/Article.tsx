@@ -68,7 +68,13 @@ export default function ArticlePage() {
             <h1 className="reader__title">{a.title}</h1>
             <p className="reader__dek">{a.dek}</p>
             <div className="reader__byline">
-              <span className="reader__avatar" aria-hidden="true">SC</span>
+              {/* Portrait de Sorya en médaillon. Le monogramme reste le
+                  repli quand l'emplacement n'a pas encore d'image. */}
+              {slots["sorya-portrait"] ? (
+                <img className="reader__avatar reader__avatar--photo" src={slots["sorya-portrait"]} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+              ) : (
+                <span className="reader__avatar" aria-hidden="true">SC</span>
+              )}
               <div>
                 <b>{j.by}</b>
                 <span>{t.hero.role}</span>
