@@ -108,7 +108,10 @@ export function Nav({ page = "home" }: { page?: string }) {
           sur le bas de la barre au lieu du bas de l'écran. */}
       <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open}
               aria-controls="nav-mobile" onClick={() => setOpen(!open)}>
-        <span></span><span></span>
+        <span className="nav__burger-bars" aria-hidden="true"><span></span><span></span></span>
+        {/* Le mot ne sert qu'à se faire repérer : une fois le menu
+            ouvert, la croix se suffit à elle-même. */}
+        <span className="nav__burger-l" aria-hidden="true">Menu</span>
       </button>
 
       {/* <nav> et non <div> : hors du <header>, le menu doit porter
@@ -118,9 +121,10 @@ export function Nav({ page = "home" }: { page?: string }) {
            {...(open ? {} : ({ inert: "" } as object))}>
         {links.map((l, i) => navLink(l, "nav__mlink", () => setOpen(false), String(i + 1).padStart(2, "0")))}
         <Link to="/cv" className="nav__mlink" onClick={() => setOpen(false)} data-n={String(links.length + 1).padStart(2, "0")}>{t.nav.cv}</Link>
+        {/* Pas de bouton de contact ici : la rubrique Contact est déjà
+            dans la liste, juste au-dessus. */}
         <div className="nav__mfoot">
           <LangToggle lang={lang} setLang={setLang} />
-          <a href={"mailto:" + t.contact.email} className="btn btn-primary">{t.nav.cta}</a>
         </div>
       </nav>
     </>

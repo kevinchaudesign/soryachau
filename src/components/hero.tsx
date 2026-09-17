@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import type { Lang, Messages } from "../i18n";
 import { useLang } from "../lang";
 import { CV_PDF } from "../lib/assets";
-import { ArrowDown, ArrowUR, DownloadIcon } from "./icons";
+import { ArrowUR, DownloadIcon } from "./icons";
 
 const pad2 = (x: number) => String(x).padStart(2, "0");
 
@@ -141,10 +141,6 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
         </div>
       </div>
 
-      <a href="#profil" className="hero__scroll reveal" style={{ "--rd": "380ms" }} aria-label={h.scroll}>
-        <span>{h.scroll}</span>
-        <ArrowDown />
-      </a>
     </section>
   );
 }

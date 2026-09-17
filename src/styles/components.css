@@ -111,12 +111,13 @@
 .lang-toggle button:hover { color: var(--txt-2); }
 .lang-sep { color: var(--txt-faint); }
 
-.nav__burger { display: none; width: 38px; height: 38px; border: 1px solid var(--line); background: var(--surface); position: relative; }
-.nav__burger span { position: absolute; left: 10px; right: 10px; height: 1.5px; background: var(--txt); transition: transform .3s var(--ease), opacity .3s; }
-.nav__burger span:nth-child(1) { top: 15px; }
-.nav__burger span:nth-child(2) { bottom: 15px; }
-.nav__burger.is-open span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
-.nav__burger.is-open span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
+.nav__burger { display: none; }
+.nav__burger-bars { position: relative; display: block; width: 22px; height: 14px; flex: none; }
+.nav__burger-bars span { position: absolute; left: 0; right: 0; height: 2px; background: var(--bg); transition: transform .3s var(--ease); }
+.nav__burger-bars span:nth-child(1) { top: 0; }
+.nav__burger-bars span:nth-child(2) { bottom: 0; }
+.nav__burger.is-open .nav__burger-bars span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav__burger.is-open .nav__burger-bars span:nth-child(2) { transform: translateY(-6px) rotate(-45deg); }
 
 .nav__mobile { display: none; }
 
@@ -160,9 +161,6 @@ html.has-reticle .card-hit { cursor: none; }
 .hero__stat-n { font-family: var(--serif); font-size: clamp(34px, 3.8vw, 50px); font-weight: 400; letter-spacing: -0.01em; line-height: 1; }
 .hero__stat-l { font-size: 12.5px; color: var(--txt-3); font-family: var(--mono); letter-spacing: 0.04em; }
 
-.hero__scroll { position: absolute; bottom: calc(var(--editbar-h, 0px) + clamp(22px, 3vw, 40px)); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 11px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--txt-3); transition: color .3s; }
-.hero__scroll:hover { color: var(--txt); }
-.hero__scroll svg { animation: bob 2.4s var(--ease) infinite; }
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
 /* ---------- Profile ---------- */
@@ -403,32 +401,47 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
    barre ne tient plus sur une ligne, on bascule sur le menu. */
 @media (max-width: 1000px) {
   .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
+  /* La barre ne colle plus : la navigation vit dans le bouton
+     flottant, la barre peut donc défiler avec la page. Sans elle en
+     surimpression, les retraits qui la dégageaient disparaissent. */
+  .nav, .nav--scrolled {
+    position: static; background: none; backdrop-filter: none; border-bottom-color: transparent;
+  }
+  .hero { min-height: calc(100svh - 76px); padding-top: 0; }
+  .pg-head { padding-top: clamp(40px, 6vw, 76px); }
   /* Mobile et tablette : le bouton quitte la barre et se pose en bas
      à droite, à portée de pouce. Il reste au-dessus du menu plein
      écran (z-index 90) et de la barre de montage (60), et se cale
      au-dessus de celle-ci comme les autres éléments d'angle. */
   .nav__burger {
-    display: block; position: fixed; z-index: 110;
+    display: inline-flex; align-items: center; gap: 12px;
+    position: fixed; z-index: 110;
     right: var(--pad);
     bottom: calc(var(--editbar-h, 0px) + env(safe-area-inset-bottom, 0px) + clamp(16px, 3.5vw, 28px));
-    width: 52px; height: 52px;
-    background: var(--txt); border-color: var(--txt);
-    box-shadow: 0 12px 30px -14px oklch(0 0 0 / 0.55);
-    transition: background .3s var(--ease), border-color .3s var(--ease);
+    height: 56px; padding: 0 20px; border: 0;
+    background: var(--accent); color: var(--bg);
+    /* Le halo ivoire découpe le bouton des îlots sombres — hero,
+       bandeaux — où l'encre se serait fondue. Sur le papier, il ne
+       se voit pas. */
+    box-shadow: 0 0 0 3px oklch(0.965 0.008 85 / 0.55), 0 16px 34px -14px oklch(0 0 0 / 0.6);
+    transition: background .3s var(--ease), transform .3s var(--ease);
   }
-  .nav__burger span { left: 15px; right: 15px; background: var(--bg); }
-  .nav__burger span:nth-child(1) { top: 22px; }
-  .nav__burger span:nth-child(2) { bottom: 22px; }
-  .nav__burger.is-open { background: var(--accent); border-color: var(--accent); }
-  .nav__burger.is-open span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
-  .nav__burger.is-open span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
+  .nav__burger:active { transform: scale(0.97); }
+  .nav__burger-l {
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--bg);
+  }
+  /* Menu ouvert : la croix se suffit, le bouton revient à l'encre
+     pour ne pas concurrencer le rouge de la rubrique courante. */
+  .nav__burger.is-open { background: var(--txt); padding: 0; width: 56px; justify-content: center; }
+  .nav__burger.is-open .nav__burger-l { display: none; }
   /* Menu plein écran. Il s'arrête sous la barre (z-index 90 < 100)
      pour que la marque et la croix restent visibles et cliquables. */
   .nav__mobile {
     display: flex; flex-direction: column;
     position: fixed; inset: 0; z-index: 90;
-    padding: calc(76px + clamp(20px, 5vh, 48px)) var(--pad)
-             calc(var(--editbar-h, 0px) + env(safe-area-inset-bottom, 0px) + 52px + clamp(30px, 6vh, 56px));
+    padding: clamp(30px, 7vh, 72px) var(--pad)
+             calc(var(--editbar-h, 0px) + env(safe-area-inset-bottom, 0px) + 56px + clamp(30px, 6vh, 56px));
     background: var(--bg);
     opacity: 0; transform: translateY(-10px); pointer-events: none;
     transition: opacity .34s var(--ease), transform .34s var(--ease);
