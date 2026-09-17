@@ -3,6 +3,7 @@
    et la phrase signature. Contenu validé par Sorya (Textes def).
    ============================================================ */
 import { useEffect } from "react";
+import "../styles/approche.css";
 import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";

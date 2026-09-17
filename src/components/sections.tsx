@@ -5,7 +5,7 @@
    Work et Journal n'existent que comme aperçus ; leur version
    pleine vit dans les pages Projets et Journal.
    ============================================================ */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import type { Lang, Messages, Project } from "./../i18n";
 import { useLang } from "../lang";
@@ -24,12 +24,67 @@ export function SectionHead({ idx, eyebrow, title, lead, light }: { idx: string;
   );
 }
 
+/* Timecode courant du portrait-moniteur. Écrit dans un ref à
+   10 images par seconde : pas de rendu React par frame. */
+const p2 = (n: number) => String(n).padStart(2, "0");
+function PortraitTC() {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const fps = 25, start = performance.now(), base = 12 * 60 + 4;
+    const write = () => {
+      const total = base + (performance.now() - start) / 1000;
+      if (ref.current) {
+        ref.current.textContent =
+          "02:" + p2(Math.floor(total / 60) % 60) + ":" + p2(Math.floor(total) % 60) + ":" + p2(Math.floor((total * fps) % fps));
+      }
+    };
+    write();
+    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(write, 100);
+    return () => clearInterval(id);
+  }, []);
+  return <span className="portrait__tc" ref={ref}>02:12:04:08</span>;
+}
+
 /* — 02 · Approche (page /approche) —
    Eyebrow et titre vivent dans l'en-tête de page : la section
    commence donc au corps du texte. */
 export function Approche({ t }: { t: Messages }) {
   const a = t.approche;
   const { slots } = useLang();
+
+  /* Piste de montage des principes : la jauge du rail suit le
+     défilement et le clip qui passe le playhead s'allume. Tout est
+     posé en CSS custom property / classe, jamais en état React,
+     pour ne pas rendre à chaque frame. */
+  useEffect(() => {
+    const list = document.querySelector<HTMLElement>(".method__list");
+    if (!list) return;
+    const items = Array.from(list.querySelectorAll<HTMLElement>(".method__item"));
+    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      list.style.setProperty("--pr", "1");
+      items.forEach((el) => el.classList.add("is-on"));
+      return;
+    }
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const r = list.getBoundingClientRect();
+      const head = window.innerHeight * 0.58;
+      list.style.setProperty("--pr", String(Math.min(1, Math.max(0, (head - r.top) / (r.height || 1)))));
+      items.forEach((el) => el.classList.toggle("is-on", el.getBoundingClientRect().top <= head));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    tick();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [a]);
+
   return (
     <section className="section profile" id="approche">
       <div className="container">
@@ -41,12 +96,18 @@ export function Approche({ t }: { t: Messages }) {
             ))}
           </div>
 
+          {/* Le portrait est traité comme le moniteur du hero :
+              grade chaud, lignes de balayage, tally et timecode. */}
           <figure className="profile__portrait reveal" style={{ "--rd": "180ms" }}>
-            <div className="portrait">
+            <div className="portrait portrait--live">
               <image-slot id="sorya-portrait" shape="rect" placeholder={a.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+              <span className="portrait__grade" aria-hidden="true"></span>
+              <span className="portrait__scan" aria-hidden="true"></span>
+              <span className="portrait__sweep" aria-hidden="true"></span>
               <span className="regmark regmark--tr"></span>
               <span className="regmark regmark--bl"></span>
               <span className="portrait__tally"><b></b>PORTRAIT</span>
+              <PortraitTC />
             </div>
             <figcaption className="portrait__cap">
               <b>{a.portraitName}</b>
@@ -56,23 +117,32 @@ export function Approche({ t }: { t: Messages }) {
         </div>
 
         <div className="method">
-          <h2 className="method__title reveal">{a.methodTitle}</h2>
-          <p className="method__lead reveal" style={{ "--rd": "80ms" }}>{a.methodLead}</p>
-          {a.methodLead2 ? <p className="method__lead reveal" style={{ "--rd": "110ms" }}>{a.methodLead2}</p> : null}
-          <ol className="method__list">
-            {a.principles.map((pr, i) => (
-              <li className="method__item reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
-                <span className="method__n">{String(i + 1).padStart(2, "0")}</span>
-                <span className="method__t">{pr}</span>
-              </li>
-            ))}
-          </ol>
+          <div className="method__cols">
+            <div className="method__head">
+              <h2 className="method__title reveal">{a.methodTitle}</h2>
+              <p className="method__lead reveal" style={{ "--rd": "80ms" }}>{a.methodLead}</p>
+              {a.methodLead2 ? <p className="method__lead reveal" style={{ "--rd": "110ms" }}>{a.methodLead2}</p> : null}
+            </div>
+            <ol className="method__list">
+              {a.principles.map((pr, i) => (
+                <li className="method__item reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
+                  <span className="method__n">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="method__t">{pr}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
+        {/* Carton : la phrase signature encadrée, repères de recadrage
+            aux quatre coins comme une amorce de film. */}
         <figure className="profile__quote approche__signature reveal" style={{ "--rd": "120ms" }}>
           <span className="profile__quote-mark" aria-hidden="true">“</span>
           <blockquote>{a.signature}<span className="profile__quote-close" aria-hidden="true">”</span></blockquote>
           <figcaption><span className="profile__quote-rule"></span>{a.signatureBy}</figcaption>
+          <span className="regmark regmark--tr" aria-hidden="true"></span>
+          <span className="regmark regmark--bl" aria-hidden="true"></span>
+          <span className="regmark regmark--br" aria-hidden="true"></span>
         </figure>
       </div>
     </section>
