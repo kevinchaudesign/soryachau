@@ -245,9 +245,12 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
      moins la sienne. Le moniteur doit suivre le bloc et non l'écran,
      sinon ses incrustations passent sous le pli. */
   .hmon { height: auto; bottom: 0; }
+  /* Le témoin d'enregistrement quitte le petit écran : la barre de
+     montage en porte déjà un, et le haut du hero se dégage. */
+  .hmon__burn--tl { display: none; }
   .hmon__slate {
     left: var(--pad); right: auto;
-    bottom: calc(var(--editbar-h, 0px) + clamp(26px, 6vw, 48px));
+    bottom: clamp(22px, 5vw, 40px);
     align-items: flex-start; text-align: left; max-width: 62vw;
   }
 }

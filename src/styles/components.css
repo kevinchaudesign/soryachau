@@ -404,8 +404,13 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
   }
   /* L'ardoise « à l'image » passe en bas à gauche sur petit écran :
      le bas du hero lui laisse la place, en plus de la barre. */
-  .hero__inner { padding-bottom: calc(var(--editbar-h, 0px) + clamp(104px, 20vw, 148px)); }
-  .hero { min-height: calc(100svh - 76px); padding-top: 0; }
+  /* Le hero ne touche plus le bas de l'écran : plus besoin d'y
+     réserver la barre de montage, seule l'ardoise demande la place. */
+  .hero__inner { padding-top: clamp(26px, 4vh, 44px);
+                 padding-bottom: clamp(88px, 18vw, 128px); }
+  /* Le hero ne réserve plus un écran entier : il fait la hauteur de
+     son contenu, et la section suivante remonte d'autant. */
+  .hero { min-height: 0; padding-top: 0; }
   .pg-head { padding-top: clamp(40px, 6vw, 76px); }
   /* Mobile et tablette : le bouton quitte la barre et se pose en bas
      à droite, à portée de pouce. Il reste au-dessus du menu plein
