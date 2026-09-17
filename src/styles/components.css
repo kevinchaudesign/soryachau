@@ -283,20 +283,19 @@ html.has-reticle .card-hit { cursor: none; }
 .work-cell--md { grid-column: span 6; }
 .work-cell--third { grid-column: span 4; }
 
-/* Lien « voir la page » : .work-all à l'origine, partagé depuis par
-   tous les aperçus de l'accueil sous le nom .sec-all. */
-.sec-all,
-.work-all {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  margin-top: clamp(28px, 3vw, 44px); padding: clamp(22px, 2.4vw, 30px);
-  border: 1px solid var(--line-soft); color: var(--txt-2);
-  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
-  transition: border-color .35s var(--ease), color .35s var(--ease), background .35s var(--ease);
+/* En-tête de section : le titre à gauche, le lien vers la page pleine
+   à droite, calé sur sa ligne de base. Un seul motif pour Approche,
+   Expertises, Projets, Journal et À propos — ils en avaient trois. */
+.sec-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(52px, 7vw, 96px); }
+.sec-top .sec-head { margin-bottom: 0; }
+.sec-link {
+  display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--txt-2); padding-bottom: 7px; border-bottom: 1px solid var(--line);
+  transition: color .3s var(--ease), border-color .3s var(--ease);
 }
-.sec-all:hover,
-.work-all:hover { border-color: var(--accent-line); color: var(--txt); background: var(--surface); }
-.sec-all:hover .arrow,
-.work-all:hover .arrow { transform: translate(3px, -3px); }
+.sec-link:hover { color: var(--accent); border-color: var(--accent-line); }
+.sec-link:hover .arrow { transform: translate(3px, -3px); }
 
 .work-card { position: relative; height: 100%; min-height: 360px; overflow: hidden; border: 1px solid var(--line-soft); isolation: isolate; transition: border-color .5s var(--ease), transform .5s var(--ease); }
 .work-cell--lg .work-card { min-height: clamp(440px, 47vw, 600px); }
@@ -616,6 +615,7 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
   .profile__creds { grid-template-columns: 1fr; gap: 32px; }
   .cred--wide { grid-column: span 1; order: 0; }
   .profile__portrait { max-width: none; }
+  .apropos--teaser .apropos__text { grid-template-columns: 1fr; gap: 22px; }
   .contact__grid { grid-template-columns: repeat(2, 1fr); gap: 30px 22px; }
   .contact--page .contact__grid { grid-template-columns: 1fr; gap: 0; }
   .hero__frame { inset: 12px; }
@@ -664,6 +664,13 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
 .apropos { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: clamp(36px, 5vw, 72px); align-items: start; }
 .apropos__p { color: var(--txt-2); font-size: clamp(15px, 1.4vw, 17.5px); line-height: 1.7; max-width: 64ch; }
 .apropos__p + .apropos__p { margin-top: 22px; }
+/* Aperçu de l'accueil : sans portrait, la seconde colonne restait
+   vide sur un tiers de la largeur. Les deux paragraphes la prennent,
+   côte à côte, comme deux colonnes de journal. */
+.apropos--teaser { grid-template-columns: 1fr; }
+.apropos--teaser .apropos__text { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 4vw, 72px); }
+.apropos--teaser .apropos__p { max-width: 52ch; }
+.apropos--teaser .apropos__p + .apropos__p { margin-top: 0; }
 .apropos__portrait { margin: 0; }
 
 /* — Contact — */

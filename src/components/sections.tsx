@@ -12,14 +12,25 @@ import { useLang } from "../lang";
 import { CV_PDF } from "../lib/assets";
 import { ArrowUR, DownloadIcon, PlayGlyph } from "./icons";
 
-export function SectionHead({ idx, eyebrow, title, lead, light }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean }) {
+export function SectionHead({ idx, eyebrow, title, lead, light, to, linkLabel }: { idx: string; eyebrow: string; title: string; lead?: string; light?: boolean; to?: string; linkLabel?: string }) {
   /* Aperçus de l'accueil uniquement : sur une page dédiée, le titre
-     principal est porté par l'en-tête commun (cf. PageHead). */
-  return (
+     principal est porté par l'en-tête commun (cf. PageHead).
+     Le lien vers la page pleine vit dans l'en-tête, aligné sur la
+     ligne de base du titre, plutôt qu'en pavé au pied de la section. */
+  const head = (
     <div className="sec-head">
       <span className="eyebrow reveal"><span className="idx">{idx}</span>{eyebrow}</span>
       <h2 className={"section-title reveal" + (light ? " sec-head__title--wide" : "")} style={{ "--rd": "80ms" }}>{title}</h2>
       {lead ? <p className="sec-head__lead reveal" style={{ "--rd": "140ms" }}>{lead}</p> : null}
+    </div>
+  );
+  if (!to) return head;
+  return (
+    <div className="sec-top">
+      {head}
+      <Link to={to} className="sec-link reveal" style={{ "--rd": "180ms" }} data-cursor>
+        <span>{linkLabel}</span><ArrowUR />
+      </Link>
     </div>
   );
 }
@@ -191,16 +202,6 @@ export function Expertises({ t }: { t: Messages }) {
   );
 }
 
-/* — Lien « voir la page » commun aux aperçus de l'accueil — */
-export function SecAll({ to, label }: { to: string; label: string }) {
-  return (
-    <Link to={to} className="sec-all reveal" data-cursor>
-      <span>{label}</span>
-      <ArrowUR />
-    </Link>
-  );
-}
-
 /* — 02+03 · Aperçu Approche & Expertises → /approche, /expertises — */
 export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
   const a = t.approche;
@@ -210,9 +211,14 @@ export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
     <>
       <section className="section profile" id="approche">
         <div className="container">
-          <div className="sec-head">
-            <span className="eyebrow reveal"><span className="idx">02</span>{a.eyebrow}</span>
-            <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{a.title}</h2>
+          <div className="sec-top">
+            <div className="sec-head">
+              <span className="eyebrow reveal"><span className="idx">02</span>{a.eyebrow}</span>
+              <h2 className="section-title reveal profile__title" style={{ "--rd": "80ms" }}>{a.title}</h2>
+            </div>
+            <Link to="/approche" className="sec-link reveal" style={{ "--rd": "180ms" }} data-cursor>
+              <span>{lang === "fr" ? "Voir mon approche" : "See my approach"}</span><ArrowUR />
+            </Link>
           </div>
 
           <div className="profile__top">
@@ -237,13 +243,13 @@ export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
             </figure>
           </div>
 
-          <SecAll to="/approche" label={lang === "fr" ? "Voir mon approche" : "See my approach"} />
         </div>
       </section>
 
       <section className="section expertises" id="expertises">
         <div className="container">
-          <SectionHead idx="03" eyebrow={e.eyebrow} title={e.title} />
+          <SectionHead idx="03" eyebrow={e.eyebrow} title={e.title}
+                       to="/expertises" linkLabel={lang === "fr" ? "Voir les expertises" : "See the services"} />
           <div className="xp-grid xp-grid--teaser">
             {e.items.map((it, i) => (
               <article className="xp reveal" key={it.k} style={{ "--rd": i * 90 + "ms" }}>
@@ -253,7 +259,6 @@ export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
               </article>
             ))}
           </div>
-          <SecAll to="/expertises" label={lang === "fr" ? "Voir les expertises" : "See the services"} />
         </div>
       </section>
     </>
@@ -336,7 +341,8 @@ export function Work({ t, lang }: { t: Messages; lang: Lang }) {
   return (
     <section className="section" id="work">
       <div className="container">
-        <SectionHead idx="04" eyebrow={t.work.eyebrow} title={t.work.title} lead={t.work.lead} light />
+        <SectionHead idx="04" eyebrow={t.work.eyebrow} title={t.work.title} lead={t.work.lead} light
+                     to="/projets" linkLabel={lang === "fr" ? "Voir toutes les réalisations" : "View all work"} />
         <div className="work-grid">
           {projects.map((p, i) => (
             <div className={"work-cell work-cell--" + spans[i % spans.length] + " reveal"} key={p.id} style={{ "--rd": (i % 3) * 90 + "ms" }}>
@@ -344,10 +350,6 @@ export function Work({ t, lang }: { t: Messages; lang: Lang }) {
             </div>
           ))}
         </div>
-        <Link to="/work" className="work-all reveal">
-          <span>{lang === "fr" ? "Voir toutes les réalisations" : "View all work"}</span>
-          <ArrowUR />
-        </Link>
       </div>
     </section>
   );
@@ -362,12 +364,8 @@ export function Journal({ t }: { t: Messages }) {
   return (
     <section className="section journalt" id="journal">
       <div className="container">
-        <div className="journalt__head">
-          <SectionHead idx="05" eyebrow={j.eyebrow} title={j.title} lead={j.lead} light />
-          <Link to="/journal" className="journalt__all reveal" data-cursor>
-            <span>{j.all}</span><ArrowUR />
-          </Link>
-        </div>
+        <SectionHead idx="05" eyebrow={j.eyebrow} title={j.title} lead={j.lead} light
+                     to="/journal" linkLabel={j.all} />
         <div className="journalt__grid">
           <Link to={"/journal/" + feat.id} className="jcard jcard--feat reveal" data-cursor>
             <div className="jcard__media" aria-hidden="true" {...({ inert: "" } as object)}>
@@ -437,15 +435,17 @@ export function AProposTeaser({ t, lang }: { t: Messages; lang: Lang }) {
   return (
     <section className="section" id="apropos">
       <div className="container">
-        <SectionHead idx="06" eyebrow={a.eyebrow} title={a.title} />
-        <div className="apropos">
+        <SectionHead idx="06" eyebrow={a.eyebrow} title={a.title}
+                     to="/a-propos" linkLabel={lang === "fr" ? "En savoir plus" : "Read more"} />
+        {/* Pas de portrait ici : il est déjà dans l'aperçu Approche,
+            plus haut sur la même page. */}
+        <div className="apropos apropos--teaser">
           <div className="apropos__text">
             {a.body.slice(0, 2).map((para, i) => (
               <p className="apropos__p reveal" key={i} style={{ "--rd": i * 80 + "ms" }}>{para}</p>
             ))}
           </div>
         </div>
-        <SecAll to="/a-propos" label={lang === "fr" ? "En savoir plus" : "Read more"} />
       </div>
     </section>
   );
