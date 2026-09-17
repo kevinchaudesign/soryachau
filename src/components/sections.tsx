@@ -385,7 +385,6 @@ export function Journal({ t }: { t: Messages }) {
           <div className="journalt__list">
             {rest.map((a, i) => (
               <Link to={"/journal/" + a.id} className="jrow reveal" key={a.id} style={{ "--rd": (i + 1) * 90 + "ms" }} data-cursor>
-                <span className="jrow__n">{String(i + 2).padStart(2, "0")}</span>
                 <div className="jrow__main">
                   <div className="jcard__meta"><span className="jcard__cat">{a.cat}</span><span className="jcard__dot">·</span><span>{a.read} {j.minRead}</span></div>
                   <h3 className="jrow__title">{a.title}</h3>

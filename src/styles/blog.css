@@ -31,12 +31,11 @@
 
 /* teaser side list */
 .journalt__list { display: flex; flex-direction: column; }
-.jrow { display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: start; padding: clamp(22px, 2.4vw, 30px) 0; border-top: 1px solid var(--line-soft); transition: border-color .4s var(--ease); }
+.jrow { display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: start; padding: clamp(22px, 2.4vw, 30px) 0; border-top: 1px solid var(--line-soft); transition: border-color .4s var(--ease); }
 .journalt__list .jrow:last-child { border-bottom: 1px solid var(--line-soft); }
 .jrow:hover { border-top-color: var(--accent-line); }
 .jrow > svg { color: var(--txt-3); margin-top: 6px; transition: transform .35s var(--ease), color .35s var(--ease); }
 .jrow:hover > svg { transform: translate(3px, -3px); color: var(--accent); }
-.jrow__n { font-family: var(--mono); font-size: 12px; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums; }
 .jrow__main { display: flex; flex-direction: column; gap: 9px; }
 .jrow__title { font-family: var(--serif); font-weight: 400; font-size: clamp(19px, 1.8vw, 25px); line-height: 1.12; letter-spacing: -0.01em; }
 .jrow__dek { color: var(--txt-3); font-size: 13.5px; line-height: 1.55; max-width: 46ch; }
@@ -129,7 +128,7 @@
   .journalt__grid { gap: 32px; }
   .bp__grid { grid-template-columns: 1fr; }
   .reader__sheet { width: 100%; border-left: 0; }
-  .jrow { grid-template-columns: auto 1fr; }
+  .jrow { grid-template-columns: 1fr; }
   .jrow > svg { display: none; }
 }
 
