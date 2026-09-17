@@ -64,6 +64,7 @@ export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
         <div className="method">
           <HSub className="method__title reveal">{a.methodTitle}</HSub>
           <p className="method__lead reveal" style={{ "--rd": "80ms" }}>{a.methodLead}</p>
+          {a.methodLead2 ? <p className="method__lead reveal" style={{ "--rd": "110ms" }}>{a.methodLead2}</p> : null}
           <ol className="method__list">
             {a.principles.map((pr, i) => (
               <li className="method__item reveal" key={i} style={{ "--rd": 120 + i * 70 + "ms" }}>
@@ -76,7 +77,7 @@ export function Approche({ t, h1 }: { t: Messages; h1?: boolean }) {
 
         <figure className="profile__quote approche__signature reveal" style={{ "--rd": "120ms" }}>
           <span className="profile__quote-mark" aria-hidden="true">“</span>
-          <blockquote>{a.signature}</blockquote>
+          <blockquote>{a.signature}<span className="profile__quote-close" aria-hidden="true">”</span></blockquote>
           <figcaption><span className="profile__quote-rule"></span>{a.signatureBy}</figcaption>
         </figure>
       </div>
@@ -158,7 +159,9 @@ export function ApprocheTeaser({ t, lang }: { t: Messages; lang: Lang }) {
           <div className="profile__top">
             <div className="profile__text">
               <p className="profile__lead reveal">{a.lead}</p>
-              <p className="approche__p reveal" style={{ "--rd": "90ms" }}>{a.body[1]}</p>
+              {a.body.map((para, i) => (
+                <p className="approche__p reveal" key={i} style={{ "--rd": 90 + i * 70 + "ms" }}>{para}</p>
+              ))}
             </div>
 
             <figure className="profile__portrait reveal" style={{ "--rd": "180ms" }}>
@@ -439,7 +442,7 @@ export function Clients({ t }: { t: Messages }) {
 export function Contact({ t }: { t: Messages }) {
   const c = t.contact;
   const { lang } = useLang(); /* le PDF servi suit la langue affichée */
-  const LINKEDIN = "https://www.linkedin.com/in/sorya-chau/";
+  const LINKEDIN = "https://www.linkedin.com/in/soryachau/";
   const rows = [
     { l: c.labels.email, v: c.email, href: "mailto:" + c.email },
     { l: c.labels.phone, v: c.phone, href: "tel:" + c.phoneHref },

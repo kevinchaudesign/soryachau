@@ -161,6 +161,7 @@ html.has-reticle .card-hit { cursor: none; }
 .profile__quote-mark { position: absolute; left: -6px; top: -18px; font-family: var(--serif); font-size: 96px; line-height: 1; color: var(--accent); opacity: 0.5; }
 .profile__quote blockquote { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 32px); line-height: 1.28; letter-spacing: -0.01em; color: var(--txt); text-wrap: balance; }
 .profile__quote figcaption { display: flex; align-items: center; gap: 14px; margin-top: 22px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--txt-3); }
+.profile__quote-close { font-family: var(--serif); color: var(--accent); opacity: 0.5; margin-left: 0.06em; }
 .profile__quote-rule { width: 34px; height: 1px; background: var(--accent); }
 
 /* — Portrait — */
@@ -411,7 +412,7 @@ a.cdetail__v:hover { color: var(--accent); }
    ============================================================ */
 
 /* — Approche — */
-.approche__p { margin-top: 20px; color: var(--txt-2); font-size: clamp(15px, 1.35vw, 17px); line-height: 1.68; max-width: 62ch; }
+.approche__p { margin-top: 20px; color: var(--txt-2); font-size: clamp(16px, 1.45vw, 19px); line-height: 1.72; max-width: 62ch; }
 .approche__signature { margin-top: clamp(56px, 7vw, 88px); max-width: 74ch; }
 
 .method { margin-top: clamp(56px, 7vw, 88px); padding-top: clamp(36px, 4vw, 48px); border-top: 1px solid var(--line); }

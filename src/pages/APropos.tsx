@@ -8,7 +8,7 @@ import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
-import { Contact, APropos, Clients } from "../components/sections";
+import { Contact, APropos } from "../components/sections";
 
 export default function AProposPage() {
   const { lang, t } = useLang();
@@ -34,7 +34,6 @@ export default function AProposPage() {
         </div>
 
         <APropos t={t} h1 />
-        <Clients t={t} />
       </main>
 
       <Contact t={t} />

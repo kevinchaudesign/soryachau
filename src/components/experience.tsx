@@ -17,7 +17,7 @@ export type Scene = { sel: string; n: string; t: string };
    ancres de l'accueil — cf. scene() juste en dessous. */
 const SCENES: Record<Lang, Scene[]> = {
   fr: [
-    { sel: "#top", n: "01", t: "Ouverture" },
+    { sel: "#top", n: "01", t: "Accueil" },
     { sel: "#approche", n: "02", t: "Approche" },
     { sel: "#expertises", n: "03", t: "Expertises" },
     { sel: "#work", n: "04", t: "Projets" },
@@ -26,7 +26,7 @@ const SCENES: Record<Lang, Scene[]> = {
     { sel: "#contact", n: "07", t: "Contact" },
   ],
   en: [
-    { sel: "#top", n: "01", t: "Opening" },
+    { sel: "#top", n: "01", t: "Home" },
     { sel: "#approche", n: "02", t: "Approach" },
     { sel: "#expertises", n: "03", t: "Services" },
     { sel: "#work", n: "04", t: "Projects" },
@@ -188,6 +188,10 @@ export function ProductionHUD({ lang, scenes: pageScenes }: { lang: Lang; scenes
   // scroll → timecode, playhead, active clip
   useEffect(() => {
     const fps = 25, runtime = 232; let raf = 0;
+    /* Au changement de langue la scène active ne bouge pas : sans
+       cette remise à zéro, le libellé garderait celui de l'autre
+       langue jusqu'au prochain changement de scène. */
+    activeRef.current = -1;
     const tick = () => {
       raf = 0;
       const total = document.documentElement.scrollHeight || 1;

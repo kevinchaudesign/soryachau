@@ -11,7 +11,7 @@ import { Experience } from "../components/experience";
 import { Nav } from "../components/nav";
 import { ShootBand } from "../components/band";
 import { Hero } from "../components/hero";
-import { AProposTeaser, ApprocheTeaser, CVBand, Clients, Contact, Journal, Work } from "../components/sections";
+import { AProposTeaser, ApprocheTeaser, CVBand, Contact, Journal, Work } from "../components/sections";
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -75,7 +75,6 @@ export default function Home() {
         <Work t={t} lang={lang} />
         <Journal t={t} />
         <AProposTeaser t={t} lang={lang} />
-        <Clients t={t} />
         <CVBand t={t} lang={lang} />
       </main>
       <Contact t={t} />
