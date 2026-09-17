@@ -31,6 +31,10 @@
    respiration pleine page ferait un trou sous le titre. */
 .pg-head + .section,
 .pg-head + .contact { padding-top: clamp(40px, 5vw, 64px); }
+/* Contact : le bloc change de fond, son bord se voit. Un rembourrage
+   ne descendrait que son contenu — c'est au-dessus du bord qu'il faut
+   de l'air, sur le fond clair de la page. */
+.pg-head + .contact { margin-top: clamp(56px, 7vw, 96px); }
 .sec-head { max-width: 880px; margin-bottom: clamp(52px, 7vw, 96px); }
 .sec-head .section-title { margin-top: 22px; }
 .sec-head__title--wide { max-width: 17ch; }
