@@ -40,9 +40,6 @@ export function HeroMonitor({ lang }: { lang: Lang }) {
       <div className="hmon__sweep"></div>
       <div className="hmon__veil-fade"></div>
 
-      <div className="hmon__burn hmon__burn--tl">
-        <span className="hmon__tally"><b></b>REC</span>
-      </div>
       {/* L'ardoise ne garde que ce qu'elle seule apprend : le film à
           l'image. Le timecode vit dans la barre de montage. */}
       <div className="hmon__slate">

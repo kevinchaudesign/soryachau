@@ -220,11 +220,6 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 .hmon__sweep { position: absolute; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent, oklch(1 0 0 / 0.025) 50%, transparent); animation: hmon-roll 9s linear infinite; }
 @keyframes hmon-roll { 0% { top: -40%; } 100% { top: 100%; } }
 
-/* burn-in HUD on the monitor */
-.hmon__burn { position: absolute; z-index: 2; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: oklch(0.95 0.012 82 / 0.82); text-transform: uppercase; }
-.hmon__burn--tl { top: clamp(30px, 4vw, 56px); left: clamp(30px, 5vw, 70px); }
-.hmon__tally { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); }
-.hmon__tally b { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); animation: rec-blink 1.3s steps(1) infinite; }
 
 /* now-playing slate (bottom-right of monitor) */
 .hmon__slate {
@@ -249,9 +244,6 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
      moins la sienne. Le moniteur doit suivre le bloc et non l'écran,
      sinon ses incrustations passent sous le pli. */
   .hmon { height: auto; bottom: 0; }
-  /* Le témoin d'enregistrement quitte le petit écran : la barre de
-     montage en porte déjà un, et le haut du hero se dégage. */
-  .hmon__burn--tl { display: none; }
   .hmon__slate {
     left: var(--pad); right: auto;
     bottom: clamp(22px, 5vw, 40px);
@@ -260,7 +252,7 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hmon__frame { transition: opacity 1s var(--ease) !important; transform: none !important; }
-  .hmon__sweep, .hmon__tally b { animation: none !important; }
+  .hmon__sweep { animation: none !important; }
 }
 
 /* ---------------- Hero monitor ambience ---------------- */
