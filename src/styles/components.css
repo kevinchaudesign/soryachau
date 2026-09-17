@@ -405,7 +405,12 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
   /* L'ardoise « à l'image » passe en bas à gauche sur petit écran :
      le bas du hero lui laisse la place, en plus de la barre. */
   /* Les deux chiffres se passent de filet : le retrait qui les sépare
-     suffit, et une barre de moins allège d'autant. */
+     suffit, et une barre de moins allège d'autant. Deux colonnes
+     égales plutôt qu'un retrait dicté par la largeur du premier
+     bloc : les chiffres et leurs légendes partent du même point. */
+  .hero__stats { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 5vw, 34px); }
+  .hero__stat { padding: clamp(22px, 4vw, 30px) 0 4px; }
+  .hero__stat + .hero__stat { padding-left: 0; }
   .hero__stat + .hero__stat::before { display: none; }
   /* Le hero ne touche plus le bas de l'écran : plus besoin d'y
      réserver la barre de montage, seule l'ardoise demande la place. */
