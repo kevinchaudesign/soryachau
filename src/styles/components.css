@@ -150,8 +150,9 @@ html.has-reticle .card-hit { cursor: none; }
    le texte clair de l'îlot doit toujours reposer sur du sombre */
 .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-top: 76px; overflow: hidden; isolation: isolate; background: var(--bg-deep); }
 
-/* film-frame hairline inset + corner marks live in .hero__frame */
-.hero__frame { position: absolute; inset: clamp(16px, 2.4vw, 34px); border: 1px solid var(--line-soft); z-index: 1; pointer-events: none; }
+/* Plus de filet de cadre : .hero__frame ne sert plus qu'à poser les
+   repères de recadrage à ses angles. */
+.hero__frame { position: absolute; inset: clamp(16px, 2.4vw, 34px); z-index: 1; pointer-events: none; }
 
 .hero__inner { position: relative; z-index: 2; transform: translateZ(0); padding-top: clamp(36px, 6vh, 76px); /* On dégage la barre de montage sans lui réserver toute sa hauteur :
    dépliée elle fait 132 px, et le hero se retrouverait à l'étroit. */
