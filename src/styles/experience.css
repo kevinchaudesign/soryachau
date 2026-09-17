@@ -76,7 +76,10 @@ html.edit-expanded body, html.edit-collapsed body { padding-bottom: var(--editba
 .editbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
   background: oklch(0.138 0.006 54 / 0.92); backdrop-filter: blur(18px) saturate(1.15);
-  border-top: 1px solid var(--line-soft);
+  /* Le liseré rouge tient le bas de la barre : le haut tranche donc
+     par la clarté. Un filet sombre se perdait dès que le contenu
+     au-dessus l'était aussi — hero, bandeaux, cartes de films. */
+  border-top: 2px solid var(--txt-faint);
   font-family: var(--mono); color: var(--txt-3);
   transition: transform .5s var(--ease);
 }
