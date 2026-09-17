@@ -71,9 +71,9 @@ export function Hero({ t, lang }: { t: Messages; lang: Lang }) {
       </div>
 
       <div className="container hero__inner">
+        {/* « Paris » puis l'eyebrow retirés de l'accroche à la demande
+            de Sorya : l'eyebrow répétait le titre juste en dessous. */}
         <div className="hero__top reveal">
-          {/* « Paris » retiré de l'accroche à la demande de Sorya */}
-          <span className="eyebrow"><span className="idx">00</span>{h.role}</span>
           <span className="hero__avail">
             <span className="avail-mark"></span>{t.avail}
           </span>
