@@ -1,10 +1,10 @@
 /* ============================================================
    Nav + LangToggle
    ============================================================ */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLang } from "../lang";
-import { Logo } from "./logo";
+import { Logo, Monogram } from "./logo";
 import type { Lang } from "../i18n";
 
 export function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
@@ -61,13 +61,15 @@ export function Nav({ page = "home" }: { page?: string }) {
     { id: "contact", label: t.nav.contact },
   ];
 
-  const navLink = (l: { id: string; label: string }, cls: string, onClick?: () => void, n?: string) => {
+  const navLink = (l: { id: string; label: string }, cls: string, onClick?: () => void, n?: string, i?: number) => {
     const cur = page === l.id ? "page" : undefined;
     const to = ROUTES[l.id];
+    /* --n : rang du clip, pour que les lignes s'ouvrent en cascade. */
+    const style = i === undefined ? undefined : ({ "--n": i } as React.CSSProperties);
     if (!to) {
-      return <a key={l.id} href={"#" + l.id} className={cls} aria-current={cur} onClick={onClick} data-n={n}>{l.label}</a>;
+      return <a key={l.id} href={"#" + l.id} className={cls} aria-current={cur} onClick={onClick} data-n={n} style={style}>{l.label}</a>;
     }
-    return <Link key={l.id} to={to} className={cls} aria-current={cur} onClick={onClick} data-n={n}>{l.label}</Link>;
+    return <Link key={l.id} to={to} className={cls} aria-current={cur} onClick={onClick} data-n={n} style={style}>{l.label}</Link>;
   };
 
   return (
@@ -114,11 +116,29 @@ export function Nav({ page = "home" }: { page?: string }) {
       <nav className={"nav__mobile" + (open ? " is-open" : "")} id="nav-mobile"
            aria-label={lang === "fr" ? "Menu principal" : "Main menu"}
            {...(open ? {} : ({ inert: "" } as object))}>
-        {links.map((l, i) => navLink(l, "nav__mlink", () => setOpen(false), String(i + 1).padStart(2, "0")))}
-        <Link to="/cv" className="nav__mlink" onClick={() => setOpen(false)} data-n={String(links.length + 1).padStart(2, "0")}>{t.nav.cv}</Link>
+        {/* Cadre d'amorce et repères de recadrage : l'écran de
+            navigation est un écran de plus, pas une page à part. */}
+        <span className="nav__mframe" aria-hidden="true"></span>
+        <span className="regmark regmark--tr nav__mreg" aria-hidden="true"></span>
+        <span className="regmark regmark--bl nav__mreg" aria-hidden="true"></span>
+        <span className="regmark regmark--br nav__mreg" aria-hidden="true"></span>
+
+        <div className="nav__mhead">
+          <Monogram inverse />
+          <span className="nav__mtally"><b></b>Navigation</span>
+        </div>
+
+        <div className="nav__mlist">
+          {links.map((l, i) => navLink(l, "nav__mlink", () => setOpen(false), String(i + 1).padStart(2, "0"), i))}
+          <Link to="/cv" className="nav__mlink" onClick={() => setOpen(false)}
+                data-n={String(links.length + 1).padStart(2, "0")}
+                style={{ "--n": links.length } as React.CSSProperties}>{t.nav.cv}</Link>
+        </div>
+
         {/* Pas de bouton de contact ici : la rubrique Contact est déjà
             dans la liste, juste au-dessus. */}
         <div className="nav__mfoot">
+          <span className="nav__mavail"><span className="avail-mark"></span>{t.avail}</span>
           <LangToggle lang={lang} setLang={setLang} />
         </div>
       </nav>
