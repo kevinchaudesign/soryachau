@@ -9,6 +9,7 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import "../styles/blog.css";
+import type { Block } from "../i18n";
 import { useLang } from "../lang";
 import { useReveal } from "../lib/reveal";
 import { Experience, scene } from "../components/experience";
@@ -81,9 +82,18 @@ export default function ArticlePage() {
           </div>
 
           <div className="reader__body">
-            {a.body.map((b, i) => {
+            {a.body.map((raw, i) => {
+              /* Le contenu vient de Supabase : on lit le bloc au travers
+                 du type, alt et cap n'existant que sur les visuels. */
+              const b = raw as Block;
               if (b.t === "h") return <h2 className="reader__h" key={i}>{b.c}</h2>;
               if (b.t === "quote") return <blockquote className="reader__quote" key={i}>{b.c}</blockquote>;
+              if (b.t === "img") return (
+                <figure className="reader__fig" key={i}>
+                  <img className="reader__fig-img" src={b.c} alt={b.alt || ""} loading="lazy" decoding="async" />
+                  {b.cap ? <figcaption className="reader__fig-cap">{b.cap}</figcaption> : null}
+                </figure>
+              );
               return <p className="reader__p" key={i}>{b.c}</p>;
             })}
           </div>
