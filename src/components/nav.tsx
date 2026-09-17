@@ -95,9 +95,6 @@ export function Nav({ page = "home" }: { page?: string }) {
         <div className="nav__right">
           <Link to="/cv" className="nav__cv" aria-current={page === "cv" ? "page" : undefined}>{t.nav.cv}</Link>
           <LangToggle lang={lang} setLang={setLang} />
-          <a href={"mailto:" + t.contact.email} className="btn btn-primary nav__cta">
-            {t.nav.cta}
-          </a>
         </div>
       </div>
     </header>

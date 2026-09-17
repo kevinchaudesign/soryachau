@@ -103,7 +103,6 @@
 .nav__right { display: flex; align-items: center; gap: 20px; }
 .nav__cv { font-size: 14px; color: var(--txt-2); transition: color .25s; }
 .nav__cv:hover { color: var(--txt); }
-.nav__cta { --btn-pad-y: 10px; padding-block: 10px; font-size: 12.5px; letter-spacing: 0.02em; }
 
 .lang-toggle { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; }
 .lang-toggle button { background: none; border: 0; color: var(--txt-faint); padding: 2px; transition: color .25s; letter-spacing: 0.05em; }
@@ -400,7 +399,7 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
 /* Six rubriques, le lockup et les actions : au-delà de 1000 px la
    barre ne tient plus sur une ligne, on bascule sur le menu. */
 @media (max-width: 1000px) {
-  .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
+  .nav__links, .nav__cv, .nav__right .lang-toggle { display: none; }
   /* La barre ne colle plus : la navigation vit dans le bouton
      flottant, la barre peut donc défiler avec la page. Sans elle en
      surimpression, les retraits qui la dégageaient disparaissent. */
