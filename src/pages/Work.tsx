@@ -127,8 +127,7 @@ export default function WorkPage() {
       <Nav page="projets" />
 
       <main id="main" className="wp">
-        <PageHead idx="04" eyebrow={t.work.eyebrow} title={t.nav.projets} lead={t.work.lead}
-                  back={lang === "fr" ? "Accueil" : "Home"}>
+        <PageHead idx="04" eyebrow={t.work.eyebrow} title={t.nav.projets} lead={t.work.lead}>
           <div className="wp__filters" role="tablist" aria-label={t.work.eyebrow}>
             {WP_CATS[lang].map(([k, label]) => {
               const c = k === "all" ? count : projects.filter((p) => catOf(p) === k).length;

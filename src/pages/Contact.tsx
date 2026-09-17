@@ -34,8 +34,7 @@ export default function ContactPage() {
       <Nav page="contact" />
 
       <main id="main">
-        <PageHead idx="07" eyebrow={t.contact.eyebrow} title={t.contact.title} lead={t.contact.lead}
-                  back={lang === "fr" ? "Accueil" : "Home"} />
+        <PageHead idx="07" eyebrow={t.contact.eyebrow} title={t.contact.title} lead={t.contact.lead} />
 
         <Contact t={t} headless />
       </main>

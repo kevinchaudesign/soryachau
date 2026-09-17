@@ -11,15 +11,18 @@
    eyebrow, titre, accroche. La nav fixe fait 76px — on la dégage,
    puis la première section reprend un rythme vertical plus court
    qu'en pleine page. */
-.pg-head { padding: calc(76px + clamp(26px, 4vw, 44px)) 0 0; }
-.pg-head__main { max-width: 880px; margin-top: clamp(28px, 5vw, 52px); }
+.pg-head { padding: calc(76px + clamp(40px, 6vw, 76px)) 0 0; }
+.pg-head__main { max-width: 880px; }
 .pg-head__eyebrow { display: inline-flex; }
 .pg-head__title { margin-top: 22px; }
 .pg-head__lead { margin-top: 26px; color: var(--txt-2); font-size: clamp(16px, 1.5vw, 19px); line-height: 1.62; max-width: 58ch; }
+/* flex + fit-content : le lien garde sa ligne et sa marge basse
+   sépare vraiment le titre qui suit. Absent, il ne laisse rien. */
 .pg-back {
-  display: inline-flex; align-items: center; gap: 9px;
+  display: flex; width: fit-content; align-items: center; gap: 9px;
   font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--txt-2); transition: color .25s var(--ease);
+  margin-bottom: clamp(28px, 5vw, 52px);
 }
 .pg-back:hover { color: var(--accent); }
 .pg-back__arrow { display: inline-block; transition: transform .3s var(--ease); }

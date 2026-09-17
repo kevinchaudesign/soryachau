@@ -75,8 +75,7 @@ export default function JournalPage() {
       <Nav page="journal" />
 
       <main id="main" className="bp">
-        <PageHead idx="05" eyebrow={j.eyebrow} title={j.kicker} lead={j.lead}
-                  back={lang === "fr" ? "Accueil" : "Home"} />
+        <PageHead idx="05" eyebrow={j.eyebrow} title={j.kicker} lead={j.lead} />
 
         <div className="container">
           {/* liens de hash natifs : le listener hashchange ouvre le lecteur,

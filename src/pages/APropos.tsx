@@ -25,8 +25,7 @@ export default function AProposPage() {
       <Nav page="apropos" />
 
       <main id="main">
-        <PageHead idx="06" eyebrow={t.apropos.eyebrow} title={t.apropos.title}
-                  back={lang === "fr" ? "Accueil" : "Home"} />
+        <PageHead idx="06" eyebrow={t.apropos.eyebrow} title={t.apropos.title} />
 
         <APropos t={t} />
       </main>

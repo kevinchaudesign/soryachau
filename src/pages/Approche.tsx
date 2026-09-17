@@ -26,8 +26,7 @@ export default function ApprochePage() {
       <Nav page="approche" />
 
       <main id="main">
-        <PageHead idx="02" eyebrow={t.approche.eyebrow} title={t.approche.title}
-                  back={lang === "fr" ? "Accueil" : "Home"} />
+        <PageHead idx="02" eyebrow={t.approche.eyebrow} title={t.approche.title} />
 
         <Approche t={t} />
         <ShootBand id="band-approche" label={lang === "fr" ? "Préparation" : "Preparation"} tc="00:12:04:08" />

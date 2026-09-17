@@ -1,11 +1,12 @@
 /* ============================================================
    En-tête commun à toutes les pages sauf l'accueil.
-   Même séquence partout : lien de retour, eyebrow numérotée
-   comme la barre de montage, titre principal, accroche, puis
-   d'éventuels contrôles (les filtres de la page Projets).
-   Les pages éditoriales (un article du Journal) n'ont pas de
-   titre de section : elles n'en passent pas, et seul le lien
-   de retour est rendu.
+   Même séquence partout : eyebrow numérotée comme la barre de
+   montage, titre principal, accroche, puis d'éventuels contrôles
+   (les filtres de la page Projets).
+   Le lien de retour est facultatif : les pages de premier niveau
+   s'en passent, la marque de la nav ramenant déjà à l'accueil. Un
+   article du Journal, lui, le garde pour remonter à son sommaire,
+   et n'a pas de titre de section : il n'en passe pas.
    ============================================================ */
 import React from "react";
 import { Link } from "react-router-dom";
@@ -17,16 +18,18 @@ export function PageHead({
   eyebrow?: string;
   title?: string;
   lead?: string;
-  back: string;
+  back?: string;
   to?: string;
   children?: React.ReactNode;
 }) {
   return (
     <header className="pg-head">
       <div className="container">
-        <Link to={to} className="pg-back" data-cursor>
-          <span className="pg-back__arrow">←</span>{back}
-        </Link>
+        {back ? (
+          <Link to={to} className="pg-back" data-cursor>
+            <span className="pg-back__arrow">←</span>{back}
+          </Link>
+        ) : null}
 
         {title ? (
           <div className="pg-head__main">

@@ -25,8 +25,7 @@ export default function ExpertisesPage() {
       <Nav page="expertises" />
 
       <main id="main">
-        <PageHead idx="03" eyebrow={t.expertises.eyebrow} title={t.expertises.title}
-                  back={lang === "fr" ? "Accueil" : "Home"} />
+        <PageHead idx="03" eyebrow={t.expertises.eyebrow} title={t.expertises.title} />
 
         <Expertises t={t} />
       </main>
