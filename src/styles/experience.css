@@ -242,7 +242,8 @@ html.reticle-down .reticle__ring { width: 18px; height: 18px; }
 
 @media (max-width: 760px) {
   .hmon__burn--tr, .hmon__slate-yr { display: none; }
-  .hmon__slate { right: clamp(20px, 5vw, 40px); bottom: clamp(96px, 18vw, 130px); max-width: 70vw; }
+  /* Le bouton de navigation occupe désormais ce coin : l'ardoise remonte. */
+  .hmon__slate { right: clamp(20px, 5vw, 40px); bottom: calc(var(--editbar-h, 0px) + clamp(92px, 20vw, 132px)); max-width: 70vw; }
   .hmon__grade { background:
     linear-gradient(105deg, oklch(0.138 0.006 54 / 0.96) 0%, oklch(0.138 0.006 54 / 0.84) 55%, oklch(0.138 0.006 54 / 0.9) 100%),
     linear-gradient(to top, oklch(0.130 0.006 54 / 0.98) 8%, transparent 54%); }

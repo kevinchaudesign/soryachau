@@ -98,13 +98,18 @@ export function Nav({ page = "home" }: { page?: string }) {
           <a href={"mailto:" + t.contact.email} className="btn btn-primary nav__cta">
             {t.nav.cta}
           </a>
-          <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open}
-                  aria-controls="nav-mobile" onClick={() => setOpen(!open)}>
-            <span></span><span></span>
-          </button>
         </div>
       </div>
     </header>
+
+      {/* Hors du <header> pour la même raison que le menu : le
+          backdrop-filter de la barre ferait d'elle le bloc conteneur
+          d'un enfant en position fixed, et le bouton se serait calé
+          sur le bas de la barre au lieu du bas de l'écran. */}
+      <button className={"nav__burger" + (open ? " is-open" : "")} aria-label="Menu" aria-expanded={open}
+              aria-controls="nav-mobile" onClick={() => setOpen(!open)}>
+        <span></span><span></span>
+      </button>
 
       {/* <nav> et non <div> : hors du <header>, le menu doit porter
           son propre point de repère pour les lecteurs d'écran. */}

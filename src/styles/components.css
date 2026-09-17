@@ -403,13 +403,32 @@ a.cdetail:hover .cdetail__v { color: var(--accent); }
    barre ne tient plus sur une ligne, on bascule sur le menu. */
 @media (max-width: 1000px) {
   .nav__links, .nav__cv, .nav__cta, .nav__right .lang-toggle { display: none; }
-  .nav__burger { display: block; }
+  /* Mobile et tablette : le bouton quitte la barre et se pose en bas
+     à droite, à portée de pouce. Il reste au-dessus du menu plein
+     écran (z-index 90) et de la barre de montage (60), et se cale
+     au-dessus de celle-ci comme les autres éléments d'angle. */
+  .nav__burger {
+    display: block; position: fixed; z-index: 110;
+    right: var(--pad);
+    bottom: calc(var(--editbar-h, 0px) + env(safe-area-inset-bottom, 0px) + clamp(16px, 3.5vw, 28px));
+    width: 52px; height: 52px;
+    background: var(--txt); border-color: var(--txt);
+    box-shadow: 0 12px 30px -14px oklch(0 0 0 / 0.55);
+    transition: background .3s var(--ease), border-color .3s var(--ease);
+  }
+  .nav__burger span { left: 15px; right: 15px; background: var(--bg); }
+  .nav__burger span:nth-child(1) { top: 22px; }
+  .nav__burger span:nth-child(2) { bottom: 22px; }
+  .nav__burger.is-open { background: var(--accent); border-color: var(--accent); }
+  .nav__burger.is-open span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
+  .nav__burger.is-open span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
   /* Menu plein écran. Il s'arrête sous la barre (z-index 90 < 100)
      pour que la marque et la croix restent visibles et cliquables. */
   .nav__mobile {
     display: flex; flex-direction: column;
     position: fixed; inset: 0; z-index: 90;
-    padding: calc(76px + clamp(20px, 5vh, 48px)) var(--pad) clamp(22px, 5vh, 44px);
+    padding: calc(76px + clamp(20px, 5vh, 48px)) var(--pad)
+             calc(var(--editbar-h, 0px) + env(safe-area-inset-bottom, 0px) + 52px + clamp(30px, 6vh, 56px));
     background: var(--bg);
     opacity: 0; transform: translateY(-10px); pointer-events: none;
     transition: opacity .34s var(--ease), transform .34s var(--ease);
