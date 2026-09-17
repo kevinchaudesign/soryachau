@@ -433,7 +433,7 @@ export function Clients({ t }: { t: Messages }) {
 export function Contact({ t, headless }: { t: Messages; headless?: boolean }) {
   const c = t.contact;
   const Shell = headless ? "section" : "footer";
-  const { lang } = useLang(); /* le PDF servi suit la langue affichée */
+  const { lang, slots } = useLang(); /* le PDF servi suit la langue affichée */
   const LINKEDIN = "https://www.linkedin.com/in/soryachau/";
   const rows = [
     { l: c.labels.email, v: c.email, href: "mailto:" + c.email },
@@ -452,6 +452,8 @@ export function Contact({ t, headless }: { t: Messages; headless?: boolean }) {
           </>
         )}
 
+        <div className={headless ? "contact__cols" : undefined}>
+        <div className={headless ? "contact__col" : undefined}>
         <div className="contact__status reveal" style={{ "--rd": "140ms" }}>
           <span className="avail-mark"></span>{c.status}
         </div>
@@ -462,18 +464,41 @@ export function Contact({ t, headless }: { t: Messages; headless?: boolean }) {
         </div>
 
         <div className="contact__grid reveal" style={{ "--rd": "260ms" }}>
-          {rows.map((r, i) => (
-            <div className="cdetail" key={i}>
-              <span className="cdetail__l">{r.l}</span>
-              {r.href ? (
-                <a className="cdetail__v" href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>
-                  {r.v}{r.ext ? <ArrowUR /> : null}
-                </a>
-              ) : (
-                <span className="cdetail__v">{r.v}</span>
-              )}
+          {rows.map((r, i) => {
+            /* Toute la ligne est la cible, pas seulement la valeur :
+               libellé compris, la zone cliquable double. */
+            const inner = (
+              <>
+                <span className="cdetail__l">{r.l}</span>
+                <span className="cdetail__v">{r.v}{r.ext ? <ArrowUR /> : null}</span>
+              </>
+            );
+            return r.href ? (
+              <a className="cdetail" key={i} href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>{inner}</a>
+            ) : (
+              <div className="cdetail" key={i}>{inner}</div>
+            );
+          })}
+        </div>
+        </div>
+
+        {/* Le portrait ne vient qu'en page : un visage à l'endroit
+            où l'on écrit. Même emplacement que sur Approche et À
+            propos, donc remplaçable depuis la régie. */}
+        {headless ? (
+          <figure className="profile__portrait contact__portrait reveal" style={{ "--rd": "300ms" }}>
+            <div className="portrait">
+              <image-slot id="sorya-portrait" shape="rect" placeholder={t.approche.portraitHint} src={slots["sorya-portrait"] || undefined}></image-slot>
+              <span className="regmark regmark--tr"></span>
+              <span className="regmark regmark--bl"></span>
+              <span className="portrait__tally"><b></b>PORTRAIT</span>
             </div>
-          ))}
+            <figcaption className="portrait__cap">
+              <b>{t.approche.portraitName}</b>
+              <span>{t.approche.portraitRole}</span>
+            </figcaption>
+          </figure>
+        ) : null}
         </div>
 
         <div className="contact__foot">
